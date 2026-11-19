@@ -32,6 +32,9 @@
    - Nothing here throws to a blank stage. A pack that cannot be fetched,
      decoded or parsed is recorded (problems, packs[name].error) and the
      others still load; status is ready | partial | error | absent.
+   - loadSweeps reads the vessel and nerve centrelines (ssb/geometry/sweeps.json,
+     the same file the Scope's distance fields are built from); mode-specimen.js
+     draws them as tubes.
    - The gzip is decoded with volume.js's decode(), which checks the magic
      bytes rather than trusting headers (docs/ssb.md 5.3).
    ============================================================= */
@@ -44,6 +47,7 @@ import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=59fdd0b2';
 export const PACKS_FILE = 'ssb/models/packs.json';
 export const LINING_PREFIX = 'lining:';
 export const LANDMARKS_FILE = 'ssb/geometry/landmarks.json';
+export const SWEEPS_FILE = 'ssb/geometry/sweeps.json';
 export const CT_HEADER_FILE = 'ssb/ct/ct.json';
 /* The bony envelope of the region: its graph entity is a `region`, which has
    no material of its own, and it is the one region that is solid bone. */
@@ -349,6 +353,36 @@ export async function loadLandmarks({ graph, fetchFn = (url) => fetch(url), warn
         if (!m || !Array.isArray(ras) || ras.length !== 3 || !ras.every((v) => finite(v) && Math.abs(v) <= LIMIT_MM)) continue;
         if (!graph.has(m[1])) { warn(`SSB specimen: landmark ${key} names ${m[1]}, which is not in the knowledge graph; skipped.`); continue; }
         out.set(key, { id: m[1], side: m[2], ras: ras.slice() });
+    }
+    return out;
+}
+
+/* ---------------- sweeps: vessels and nerves ---------------- */
+
+/* { "<id>.<side>": { pts: [[r, a, s]...], radius: [mm...] | mm } } -> Map("<id>.<side>"
+   -> { id, side, pts, radius }) for the entries whose id is in the graph and
+   whose points are finite, near the head and at least two. A radius that is
+   neither one number nor one per point falls back to 0.5 mm. Absent or
+   unreadable: an empty map (the specimen then draws no vessels). */
+export async function loadSweeps({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+    const out = new Map();
+    let doc;
+    try {
+        const res = await fetchFn(stamped(SWEEPS_FILE));
+        if (!res.ok) return out;
+        doc = await res.json();
+    } catch (e) { return out; }
+    if (!doc || typeof doc !== 'object') return out;
+    const okR = (v) => finite(v) && v > 0 && v < 20;
+    for (const [key, sw] of Object.entries(doc)) {
+        const m = /^([a-z]+\.[a-z0-9-]+)\.(R|L|M)$/.exec(key);
+        const pts = sw && sw.pts;
+        if (!m || !Array.isArray(pts) || pts.length < 2 || pts.length > 400) continue;
+        if (!pts.every((p) => Array.isArray(p) && p.length === 3 && p.every((v) => finite(v) && Math.abs(v) <= LIMIT_MM))) continue;
+        if (!graph.has(m[1])) { warn(`SSB specimen: sweep ${key} names ${m[1]}, which is not in the knowledge graph; skipped.`); continue; }
+        const r = sw.radius;
+        const radius = Array.isArray(r) && r.length === pts.length && r.every(okR) ? r.slice() : pts.map(() => (okR(r) ? r : 0.5));
+        out.set(key, { id: m[1], side: m[2], pts: pts.map((p) => p.slice()), radius });
     }
     return out;
 }

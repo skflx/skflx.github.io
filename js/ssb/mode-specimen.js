@@ -13,9 +13,14 @@
      orientation widget (R/L, A/P, S/I) always says which way is which.
    - Layers: the bone envelope (solid / X-ray ghost / hidden; X-ray by
      default so the air spaces read through it), the air spaces by region,
-     the landmarks. Depth (tier) filters labels only, never orientation
-     geometry: every landmark marker is drawn, a label is drawn for the few
-     whose tier the reader has reached.
+     the landmarks, the vessels and nerves. Depth (tier) filters labels only,
+     never orientation geometry: every landmark marker is drawn, a label is
+     drawn for the few whose tier the reader has reached.
+   - Vessels and nerves: tubes along the centrelines of ssb/geometry/sweeps.json
+     (arteries in --ssb-sweep-artery, nerves and the duct in --ssb-sweep-nerve).
+     The layer shows those whose tier the reader has reached; a selected one is
+     always drawn, glowing, with a faint trace through what hides it. None is
+     drawn while the Scope looks from within (its view is unchanged).
    - Picking: a click raycasts, keeps every hit, and clicking the same spot
      again steps to the next one (dense anatomy is layered). The pick goes
      through the store (panel, tree and URL follow); a tree or search
@@ -36,7 +41,7 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadCtBounds } from './geo-specimen.js?v=485fe2b2';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=45ebbc92';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=59fdd0b2';
 import { PLANES } from './volume.js?v=4837556e';
@@ -91,6 +96,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let problem = '';
     let installed = false;
     let landmarks = new Map();      /* "<id>.<side>" -> { id, side, ras } */
+    let sweeps = new Map();         /* "<id>.<side>" -> { id, side, pts, radius } */
     let ctBounds = null;
     let primaryKey = null;          /* the node of the selected id that is drawn at full strength */
     let focusKey = null;            /* the node a click picked */
@@ -102,7 +108,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let wasActive = false;
     let started = false;
     let framed = false;             /* the default view has been applied */
-    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, mucosa: false, nose: true };
+    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, vessels: false, mucosa: false, nose: true };
     let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
     let liningAsked = false;        /* the deferred lining pack has been requested (ST1c): the first look from within asks once */
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
@@ -120,6 +126,17 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     const markerGeometry = new THREE.SphereGeometry(MARKER_MM, 14, 10);
     const markerFront = new THREE.MeshBasicMaterial();
     const markerBehind = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.3, depthFunc: THREE.GreaterDepth, depthWrite: false });
+
+    const sweepRoot = new THREE.Group();      /* vessels and nerves as tubes along their centrelines, RAS mm */
+    sweepRoot.name = 'sweeps';
+    const tubes = new Map();                  /* key -> { object, behind, sw, kind, mid (RAS), box (RAS) } */
+    const tubeMat = {
+        artery: new THREE.MeshStandardMaterial({ roughness: 0.55, metalness: 0 }),
+        nerve: new THREE.MeshStandardMaterial({ roughness: 0.7, metalness: 0 }),
+    };
+    const tubeSelected = { artery: tubeMat.artery.clone(), nerve: tubeMat.nerve.clone() };
+    const tubeBehind = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.35, depthFunc: THREE.GreaterDepth, depthWrite: false });
+    const tubeMaterials = [tubeMat.artery, tubeMat.nerve, tubeSelected.artery, tubeSelected.nerve, tubeBehind];
 
     const cursorMarker = new THREE.Group();   /* a crosshair that shows through everything */
     cursorMarker.name = 'cursor';
@@ -152,6 +169,15 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         const landmark = token('--ssb-landmark', '#2445B0');
         markerFront.color.set(landmark);
         markerBehind.color.set(landmark);
+        const select = token('--ssb-select', '#FFB000');
+        for (const kind of ['artery', 'nerve']) {
+            const c = kind === 'artery' ? token('--ssb-sweep-artery', '#C0392B') : token('--ssb-sweep-nerve', '#444444');
+            tubeMat[kind].color.set(c);
+            tubeSelected[kind].color.set(c);
+            tubeSelected[kind].emissive.set(select);
+            tubeSelected[kind].emissiveIntensity = 0.45;
+        }
+        tubeBehind.color.set(select);
         const cross = token('--ssb-ct-cross', '#FFB000');
         cursorLineMaterial.color.set(cross);
         cursorDotMaterial.color.set(cross);
@@ -175,6 +201,32 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         }
     }
 
+    /* One tube per sweep, at its mean radius, along a centripetal Catmull-Rom curve through its points. */
+    function buildTubes() {
+        for (const [key, sw] of sweeps) {
+            if (tubes.has(key)) continue;
+            const curve = new THREE.CatmullRomCurve3(sw.pts.map((p) => new THREE.Vector3(...p)), false, 'centripetal');
+            const radius = Math.max(0.25, sw.radius.reduce((a, b) => a + b, 0) / sw.radius.length);
+            const geometry = new THREE.TubeGeometry(curve, Math.min(200, sw.pts.length * 4), radius, 10, false);
+            geometry.computeBoundingBox();
+            const entity = graph.get(sw.id);
+            const kind = entity && entity.kind === 'artery' ? 'artery' : 'nerve';
+            const mesh = new THREE.Mesh(geometry, tubeMat[kind]);
+            mesh.name = key;
+            mesh.userData = { id: sw.id, side: sw.side, key, sweep: true, look: { kind: 'sweep' } };
+            mesh.visible = false;
+            const behind = new THREE.Mesh(geometry, tubeBehind);   /* the selection's trace through what hides it */
+            behind.renderOrder = 20;
+            behind.raycast = () => {};
+            behind.visible = false;
+            mesh.add(behind);
+            sweepRoot.add(mesh);
+            const b = geometry.boundingBox;
+            tubes.set(key, { object: mesh, behind, sw, kind, mid: curve.getPointAt(0.5).toArray(), box: { min: b.min.toArray(), max: b.max.toArray() } });
+        }
+    }
+    const tubeKeysOf = (id) => [...tubes].filter(([, t]) => t.sw.id === id).map(([key]) => key);
+
     /* ---------------- looks, layers, selection ---------------- */
 
     const nodes = () => (specimen ? specimen.nodes : new Map());
@@ -184,6 +236,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     const centreCache = new Map();
     /* A node's centre in RAS mm (its bounding box's). */
     function centreOf(key) {
+        if (tubes.has(key)) return tubes.get(key).mid;      /* a point on the tube, half way along it */
         if (centreCache.has(key)) return centreCache.get(key);
         const mesh = nodes().get(key);
         if (!mesh) return null;
@@ -199,7 +252,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         primaryKey = null;
         const sel = store.get().selection;
         if (!specimen || !sel) return;
-        const mine = specimen.byId(sel).map((m) => m.userData.key);
+        let mine = specimen.byId(sel).map((m) => m.userData.key);
+        if (!mine.length) mine = tubeKeysOf(sel);
         if (!mine.length) return;
         if (focusKey && mine.includes(focusKey)) { primaryKey = focusKey; return; }
         const cam = new THREE.Vector3().copy(stage.camera.position);
@@ -261,13 +315,30 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             m.object.visible = layers.landmarks || mine;
             m.behind.visible = mine;
         }
+        const tier = store.get().tier;
+        for (const [key, t] of tubes) {
+            const mine = !!sel && t.sw.id === sel;
+            t.object.visible = !insideForced && (mine || (layers.vessels && graph.tierOf(t.sw.id) <= tier));
+            t.object.material = mine && key === primaryKey ? tubeSelected[t.kind] : tubeMat[t.kind];
+            t.behind.visible = mine;
+        }
         stage.requestRender();
     }
 
     /* ---------------- camera ---------------- */
 
-    function sphereOf(keys = null, grow = 1) {
+    /* The RAS box of nodes and tubes by key (all nodes when keys is null). */
+    function boundsOf(keys = null) {
         const b = specimen ? specimen.boundsOf(keys) : null;
+        const boxes = keys ? keys.filter((k) => tubes.has(k)).map((k) => tubes.get(k).box) : [];
+        if (!boxes.length) return b;
+        const out = b ? { min: b.min.slice(), max: b.max.slice() } : { min: boxes[0].min.slice(), max: boxes[0].max.slice() };
+        for (const t of boxes) for (let n = 0; n < 3; n++) { out.min[n] = Math.min(out.min[n], t.min[n]); out.max[n] = Math.max(out.max[n], t.max[n]); }
+        return out;
+    }
+
+    function sphereOf(keys = null, grow = 1) {
+        const b = boundsOf(keys);
         if (!b) return null;
         const center = [0, 1, 2].map((n) => (b.min[n] + b.max[n]) / 2);
         const radius = Math.hypot(b.max[0] - b.min[0], b.max[1] - b.min[1], b.max[2] - b.min[2]) / 2;
@@ -292,7 +363,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     function frameSelection(ms = flightMs()) {
         const sel = store.get().selection;
         if (!specimen || !sel) return false;
-        const keys = specimen.byId(sel).map((m) => m.userData.key);
+        let keys = specimen.byId(sel).map((m) => m.userData.key);
+        if (!keys.length) keys = tubeKeysOf(sel);
         const s = keys.length ? sphereOf(keys, 1.25) : null;
         if (!s) return false;
         s.radius = Math.max(s.radius, 9);
@@ -481,6 +553,14 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return true;
     }
 
+    function setVessels(on) {
+        if (!!on === layers.vessels) return false;
+        layers.vessels = !!on;
+        paint();
+        emit();
+        return true;
+    }
+
     function setLandmarks(on) {
         if (!!on === layers.landmarks) return false;
         layers.landmarks = !!on;
@@ -519,7 +599,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     function install() {
         if (installed || !specimen) return;
-        specimen.root.add(markerRoot, cursorMarker);
+        specimen.root.add(markerRoot, sweepRoot, cursorMarker);
+        buildTubes();
         installed = true;
         stage.setSpecimen(specimen.root);
         stage.setHome(home);
@@ -557,7 +638,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             buildMarkers();
             choosePrimary();
             paint();
-            if (pendingFrame && store.get().selection === pendingFrame && specimen.byId(pendingFrame).length && active()) {
+            if (pendingFrame && store.get().selection === pendingFrame && (specimen.byId(pendingFrame).length || tubeKeysOf(pendingFrame).length) && active()) {
                 pendingFrame = null;
                 frameSelection(0);
             }
@@ -586,6 +667,18 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             ctBounds = b;
             store.setCtBounds(b);
             applySection();
+            emit();
+        });
+        loadSweeps({ graph }).then((w) => {
+            sweeps = w;
+            graph.setSurfaces([...w.keys()]);       /* a tube is 3D geometry: the tree and search badge it */
+            if (installed) {
+                buildTubes();
+                choosePrimary();
+                paint();
+                if (pendingFrame && store.get().selection === pendingFrame && tubeKeysOf(pendingFrame).length && active()) { pendingFrame = null; frameSelection(0); }
+            }
+            if (panel) panel.refresh();
             emit();
         });
         loadLandmarks({ graph }).then((l) => {
@@ -662,12 +755,13 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             const skin = (h.part.userData.drawn || (h.part.userData.look || {}).kind) === 'skin';
             return {
                 key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
-                big: envelope || skin, clear: h.clear, yields: (envelope && h.clear) || skin,
+                big: envelope || skin, clear: h.clear, yields: (envelope && h.clear) || skin, tube: !!h.part.userData.sweep,
                 point: sceneToRas(h.point.toArray()), distance: h.distance,
             };
         });
         /* what the section cut away is not there to be picked */
-        const rank = (h) => (h.marker ? 0 : h.yields ? 2 : 1);
+        /* a tube is thin: where the ray meets it, it comes before the surfaces, after a marker */
+        const rank = (h) => (h.marker ? 0 : h.tube ? 0.5 : h.yields ? 2 : 1);
         return out.filter((h) => !clipped(h.point)).sort((a, b) => (rank(a) - rank(b)) || (a.distance - b.distance));
     }
 
@@ -822,14 +916,15 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             if (section.axis) applySection();
             emit();
         }
-        if (state.tier !== prev.tier && now) stage.requestRender();
+        if (state.tier !== prev.tier && now) paint();      /* the vessels layer follows the depth */
     });
     stage.onTheme(() => { colours(); stage.requestRender(); });
     colours();
     /* Everything this stage made on the GPU side, given back (the page going away, or a caller that is done). */
     function dispose() {
         if (cap.plane) { cap.back.material.dispose(); cap.front.material.dispose(); cap.plane.geometry.dispose(); }
-        for (const o of [markerGeometry, markerFront, markerBehind, cursorLineMaterial, cursorDotMaterial]) o.dispose();
+        for (const t of tubes.values()) t.object.geometry.dispose();
+        for (const o of [markerGeometry, markerFront, markerBehind, ...tubeMaterials, cursorLineMaterial, cursorDotMaterial]) o.dispose();
         if (specimen) specimen.dispose();
     }
     window.addEventListener('pagehide', dispose);
@@ -844,6 +939,12 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     function annotate(id) {
         if (!active() || !installed || !specimen || graph.typeOf(id) === 'sources') return null;
         if (specimen.byId(id).length) return null;
+        if (tubeKeysOf(id).length) {
+            const p = el('p', 'ssb-geo-note', 'Drawn as a tube along a traced centreline. Its course is found in the CT only where bone or orbital fat outlines it and is inferred elsewhere; its calibre is a default, not a measurement.');
+            p.setAttribute('role', 'note');
+            p.dataset.geo = 'tube';
+            return p;
+        }
         const pending = [...specimen.packs.values()].some((p) => p.state === 'pending' || p.state === 'loading');
         const marked = [...landmarks.values()].some((l) => l.id === id);
         const text = pending ? 'The reference specimen is still loading; this entry has no geometry so far.'
@@ -868,6 +969,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get bone() { return layers.bone; },
         get hiddenRegions() { return [...layers.hidden]; },
         get landmarksOn() { return layers.landmarks; },
+        get vesselsOn() { return layers.vessels; },
+        get tubes() { return [...tubes].filter(([, t]) => t.object.visible).map(([key]) => key); },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
         get mucosaInside() { return inside; },
@@ -939,10 +1042,10 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             stage.camera.updateMatrixWorld();
             return stage.toClient(new THREE.Vector3(...rasToScene(ras)));
         },
-        hits: (x, y) => collectHits(x, y).map((h) => ({ key: h.key, id: h.id, marker: h.marker, big: h.big, clear: h.clear, yields: h.yields, point: h.point, distance: h.distance })),
+        hits: (x, y) => collectHits(x, y).map((h) => ({ key: h.key, id: h.id, marker: h.marker, tube: h.tube, big: h.big, clear: h.clear, yields: h.yields, point: h.point, distance: h.distance })),
         /* a client point where a click picks `key` first, or null */
         screenOf(key) {
-            const m = nodes().get(key) || (markers.get(key) && markers.get(key).object);
+            const m = nodes().get(key) || (markers.get(key) && markers.get(key).object) || (tubes.get(key) && tubes.get(key).object);
             if (!m || !installed) return null;
             const pts = [];
             const v = new THREE.Vector3();
@@ -952,7 +1055,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
                 const stride = Math.max(1, Math.floor(pos.count / 600));
                 for (let i = 0; i < pos.count; i += stride) pts.push(v.fromBufferAttribute(pos, i).applyMatrix4(m.matrixWorld).clone());
             } else pts.push(new THREE.Vector3().setFromMatrixPosition(m.matrixWorld));
-            const centre = specimen.boundsOf([key]);
+            const centre = boundsOf([key]);
             if (centre) pts.unshift(new THREE.Vector3(...rasToScene([0, 1, 2].map((n) => (centre.min[n] + centre.max[n]) / 2))));
             stage.camera.updateMatrixWorld();
             const r = canvas.getBoundingClientRect();
@@ -968,7 +1071,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSection, setSectionAt, regions, sectionRange, frameSelection,
+        hook, annotate, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setVessels, setSection, setSectionAt, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
@@ -978,6 +1081,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get section() { return { axis: section.axis, at: sectionAt() }; },
         get ready() { return installed; },
         get hasLandmarks() { return landmarks.size > 0; },
+        get vesselsOn() { return layers.vessels; },
+        get hasVessels() { return tubes.size > 0 || sweeps.size > 0; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
         get hasNose() { return !!specimen && [...specimen.nodes.values()].some((m) => m.userData.group === 'nose'); },
