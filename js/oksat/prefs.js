@@ -29,20 +29,24 @@
   function applyFont(id) { showFont(id); set(FONT_KEY, id); }
   showFont(currentFont());
 
-  /* ---- "Aa" popover picker. `host` must be position:relative-able. ---- */
-  function mountFontPicker(host) {
+  /* ---- "Aa" popover: type themes, plus any page actions in `extra`
+     ([{ id, label, hint, onClick }]: the hub's progress and backup dialog),
+     so display and data settings share one control. `host` must be
+     position:relative-able. ---- */
+  function mountFontPicker(host, extra) {
     if (!host) return;
     host.style.position = 'relative';
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ok-roundbtn';
-    btn.setAttribute('aria-label', 'Choose font theme');
+    btn.setAttribute('aria-label', extra && extra.length ? 'Type and settings' : 'Choose font theme');
     btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
     btn.textContent = 'Aa';
     host.appendChild(btn);
 
     var pop = null;
-    function close() { if (pop) { pop.remove(); pop = null; document.removeEventListener('click', onDoc, true); } }
+    function close() { if (pop) { pop.remove(); pop = null; btn.setAttribute('aria-expanded', 'false'); document.removeEventListener('click', onDoc, true); } }
     function onDoc(e) { if (pop && !pop.contains(e.target) && e.target !== btn) close(); }
     function open() {
       pop = document.createElement('div');
@@ -58,6 +62,25 @@
         it.addEventListener('click', function () { applyFont(t.id); close(); });
         pop.appendChild(it);
       });
+      (extra || []).forEach(function (x) {
+        var it = document.createElement('button');
+        it.type = 'button';
+        it.className = 'ok-popover-item ok-popover-item--action';
+        if (x.id) it.id = x.id;
+        var n = document.createElement('span');
+        n.className = 'name';
+        n.textContent = x.label;
+        it.appendChild(n);
+        if (x.hint) {
+          var hn = document.createElement('span');
+          hn.className = 'hint';
+          hn.textContent = x.hint;
+          it.appendChild(hn);
+        }
+        it.addEventListener('click', function () { close(); x.onClick(); });
+        pop.appendChild(it);
+      });
+      btn.setAttribute('aria-expanded', 'true');
       host.appendChild(pop);
       document.addEventListener('click', onDoc, true);
     }
@@ -76,7 +99,31 @@
     btn.setAttribute('aria-pressed', document.documentElement.getAttribute('data-theme') === 'dark' ? 'true' : 'false');
   }
 
+  /* ---- Top bar: the current page as the last crumb, and the sk.oto map link.
+     Text only (textContent); `href` comes from OKSAT_SKOTO, never the URL. ---- */
+  function setCrumb(text) {
+    var li = document.getElementById('ok-crumb-here');
+    if (!li || !text) return;
+    li.textContent = String(text).replace(/\s*\n\s*/g, ' ');
+    li.title = li.textContent;
+    li.hidden = false;
+  }
+  function mountSkoto(subspecialty) {
+    var sk = window.OKSAT_SKOTO, bar = document.querySelector('.ok-topbar-actions');
+    if (!(sk && sk.live === true && sk.maps && sk.maps[subspecialty] && bar)) return;
+    var a = document.createElement('a');
+    a.className = 'ok-topbar-link ok-skoto';
+    a.textContent = 'sk.oto map ↗';
+    a.setAttribute('aria-label', 'Read the map in sk.oto (opens in a new tab)');
+    a.href = sk.base + sk.maps[subspecialty];
+    a.target = '_blank';
+    a.rel = 'noopener';
+    bar.insertBefore(a, bar.firstChild);
+  }
+
   window.OKSATPrefs = {
+    setCrumb: setCrumb,
+    mountSkoto: mountSkoto,
     THEMES: THEMES,
     currentFont: currentFont,
     applyFont: applyFont,

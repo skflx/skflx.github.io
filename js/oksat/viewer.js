@@ -31,19 +31,14 @@
     try { slug = new URLSearchParams(location.search).get('m'); } catch (e) { /* no-op */ }
     var manifest = window.OKSAT_MANIFEST || [];
     var entry = manifest.filter(function (m) { return m.slug === slug; })[0];
-    if (!entry) { notice('Module not found', 'No study module matches “' + (slug || '') + '”.'); return; }
-
-    var sk = window.OKSAT_SKOTO, bar = document.querySelector('.ok-topbar-actions');
-    if (sk && sk.live === true && sk.maps && sk.maps[entry.subspecialty] && bar) {
-        var a = document.createElement('a');
-        a.className = 'ok-back';
-        a.textContent = 'Read the map in sk.oto';
-        a.href = sk.base + sk.maps[entry.subspecialty];
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.style.marginRight = '0.5rem';
-        bar.insertBefore(a, bar.firstChild);
+    if (!entry) {
+        if (!slug) notice('No module named', 'The link did not name a study module. Pick one from the hub.');
+        else notice('Module not found', 'No study module matches “' + slug + '”.');
+        return;
     }
+
+    OKSATPrefs.mountSkoto(entry.subspecialty);
+    OKSATPrefs.setCrumb(entry.title);
     document.title = entry.title + ' · OKSAT | skflx.MD';
     var s = document.createElement('script');
     s.src = entry.data;

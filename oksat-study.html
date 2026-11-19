@@ -16,20 +16,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/oksat.css?v=60fa14b1">
+  <link rel="stylesheet" href="css/oksat.css?v=408fed6c">
 </head>
 <body data-no-hotkey>
-  <nav class="ok-topbar">
-    <a class="ok-back" href="oksat.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Self-Assessment
-    </a>
-    <div class="ok-topbar-actions">
-      <span id="font-picker"></span>
-      <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Night mode" aria-pressed="false">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
-      </button>
-    </div>
+  <nav class="ok-topbar" aria-label="Site">
+      <a class="ok-brand" href="index.html">skflx<span class="ok-brand-md">.MD</span></a>
+      <ol class="ok-crumbs">
+          <li><a href="oksat.html"><span class="ok-crumb-long">Self-Assessment</span><span class="ok-crumb-short" aria-hidden="true">OKSAT</span></a></li>
+          <li id="ok-crumb-here" aria-current="page" hidden></li>
+      </ol>
+      <div class="ok-topbar-actions">
+          <a class="ok-topbar-link" href="search.html">Search</a>
+          <span id="font-picker"></span>
+          <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Night mode" aria-pressed="false">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+          </button>
+      </div>
   </nav>
 
   <div id="root" style="padding-top:52px"></div>
@@ -41,9 +43,9 @@
 
   <script src="js/oksat/manifest.js?v=e914fc26"></script>
   <script src="js/oksat/store.js?v=546e210f"></script>
-  <script src="js/oksat/prefs.js?v=c9c374f2"></script>
-  <script src="js/oksat/engine.js?v=10633668"></script>
+  <script src="js/oksat/prefs.js?v=6b2da9f4"></script>
+  <script src="js/oksat/engine.js?v=1b50a709"></script>
 
-  <script src="js/oksat/viewer.js?v=d4ae771a"></script>
+  <script src="js/oksat/viewer.js?v=f1bb20d0"></script>
 </body>
 </html>

@@ -344,6 +344,7 @@ async function main() {
     page.on('dialog', (d) => d.accept());
     await page.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#modules .module-card', { timeout: 8000 });
+    await page.click('#font-picker .ok-roundbtn');
     await page.click('#settings-btn');
     const [dl] = await Promise.all([page.waitForEvent('download'), page.click('#export-progress')]);
     const fs = await import('node:fs');
@@ -357,6 +358,7 @@ async function main() {
     await page.waitForTimeout(1800); // the import reloads the hub
     await page.waitForSelector('#modules .module-card', { timeout: 8000 });
     await page.evaluate(() => localStorage.clear());
+    await page.click('#font-picker .ok-roundbtn');
     await page.click('#settings-btn');
     const bad = [{ 'sk_theme': 'x' }, { 'oksat:x': 5 }, [1], 'nope'];
     for (const [i, b] of bad.entries()) {

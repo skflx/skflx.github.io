@@ -51,7 +51,7 @@ async function open(browser, base, url, seed) {
   await page.goto(base + '/' + url, { waitUntil: 'domcontentloaded' });
   return { context, page, errors };
 }
-const chapterReady = (page) => page.waitForFunction(() => document.querySelector('.lr-chapter .lr-sec, .lr-chapter .lr-card'), null, { timeout: 12000 });
+const chapterReady = (page) => page.waitForFunction(() => document.querySelector('.lr-chapter .lr-sec, .lr-chapter .lr-card, .lr-chapter .lr-how'), null, { timeout: 12000 });
 
 /* ---- fixture for section 10: a route-served guide; nothing is written into the repo ---- */
 const FX_SLUG = 'fx-anat';
@@ -478,9 +478,9 @@ async function main() {
       return { links, want, errors };
     };
     const g = await skLink('oksat-learn.html?g=ar-crs-aerd&c=start');
-    check('11a: a guide with a mapped subspecialty shows one sk.oto link with the exact href', g.links.length === 1 && g.links[0].href === g.want.base + g.want.rhinology && g.links[0].text === 'Read the map in sk.oto' && g.links[0].target === '_blank' && /noopener/.test(g.links[0].rel), JSON.stringify(g.links));
+    check('11a: a guide with a mapped subspecialty shows one sk.oto link with the exact href', g.links.length === 1 && g.links[0].href === g.want.base + g.want.rhinology && g.links[0].text === 'sk.oto map ↗' && g.links[0].target === '_blank' && /noopener/.test(g.links[0].rel), JSON.stringify(g.links));
     const m = await skLink('oksat-study.html?m=vestibular-schwannoma');
-    check('11b: a module with a mapped subspecialty shows one sk.oto link with the exact href', m.links.length === 1 && m.links[0].href === m.want.base + m.want.otology && m.links[0].text === 'Read the map in sk.oto' && /noopener/.test(m.links[0].rel), JSON.stringify(m.links));
+    check('11b: a module with a mapped subspecialty shows one sk.oto link with the exact href', m.links.length === 1 && m.links[0].href === m.want.base + m.want.otology && m.links[0].text === 'sk.oto map ↗' && /noopener/.test(m.links[0].rel), JSON.stringify(m.links));
     const n = await skLink('oksat-study.html?m=dtc-risk-stratification');
     check('11c: a module whose subspecialty has no map shows no sk.oto link', n.links.length === 0, JSON.stringify(n.links));
     const off1 = await skLink('oksat-learn.html?g=ar-crs-aerd&c=start', false);

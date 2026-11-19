@@ -29,7 +29,6 @@
 
   const ChevronLeft = makeIcon(['m15 18-6-6 6-6']);
   const ChevronRight = makeIcon(['m9 18 6-6-6-6']);
-  const BookOpen = makeIcon(['M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z', 'M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z']);
   const Check = makeIcon(['M20 6 9 17l-5-5']);
   const X = makeIcon(['M18 6 6 18', 'm6 6 12 12']);
   const ChevronDown = makeIcon(['m6 9 6 6 6-6']);
@@ -40,7 +39,6 @@
   const Home = makeIcon(['m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', 'M9 22V12h6v10']);
   const Shuffle = makeIcon(['M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22', 'm18 2 4 4-4 4', 'M2 6h1.9c1.5 0 2.9.9 3.6 2.2', 'M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8', 'm18 14 4 4-4 4']);
   const Eye = makeIcon(['M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z', 'M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z']);
-  const RotateCcw = makeIcon(['M3 12a9 9 0 1 0 3-6.7L3 8', 'M3 3v5h5']);
 
   /* ---- Spaced repetition (Leitner) ---- */
   const LEITNER_INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
@@ -110,6 +108,7 @@
       } catch (e) { return null; }
     }, []);
     const [view, setView] = useState(initialConcept ? 'item' : 'home');
+    const [keysOpen, setKeysOpen] = useState(false);
     const [currentId, setCurrentId] = useState(() => initialConcept
       ? (ITEMS.find((q) => q.concepts.includes(initialConcept)) || ITEMS[0])?.id
       : ITEMS[0]?.id);
@@ -300,13 +299,25 @@
         .map((x) => x.q);
     }, [currentItem, ITEMS]);
 
-    // Keyboard navigation (item view only). Ref keeps the latest logic.
+    const startModule = () => { setReviewMode(false); setConceptFilter(null); const first = ITEMS.find((q) => isOpen(q.id)) || ITEMS[0]; first && goToItem(first.id); };
+    const randomFromHome = () => { const r = ITEMS[Math.floor(Math.random() * ITEMS.length)]; if (r) goToItem(r.id); };
+
+    // Keyboard navigation (item view; space and r on the landing). Ref keeps the latest logic.
     const kbRef = useRef();
     kbRef.current = (e) => {
-      if (view !== 'item' || !currentItem) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const tgt = e.target;
       if (tgt && tgt.matches && tgt.matches('input, textarea, select, [contenteditable]')) return;
+      // Module landing: space/enter begins (or continues), r opens a random question.
+      if (view === 'home') {
+        if (tgt && tgt.closest && tgt.closest('button, a, summary')) return;
+        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); startModule(); return; }
+        if (e.key === 'r') { e.preventDefault(); randomFromHome(); return; }
+        return;
+      }
+      if (view !== 'item' || !currentItem) return;
+      if (e.key === '?') { e.preventDefault(); setKeysOpen((v) => !v); return; }
+      if (e.key === 'Escape' && keysOpen) { e.preventDefault(); setKeysOpen(false); return; }
       const answered = !!shownAttempt(currentId);
       const isRecall = currentItem.type === 'recall';
       const key = e.key;
@@ -369,10 +380,11 @@
                 hasTaxonomy=${hasTaxonomy}
                 domainFilter=${domainFilter} setDomainFilter=${setDomainFilter}
                 totalAnswered=${totalAnswered} totalCorrect=${totalCorrect}
+                resumeIdx=${ITEMS.findIndex((q) => isOpen(q.id))}
                 firstCorrect=${firstCorrect} answers=${answers}
                 dueCount=${dueIds.length} onReview=${startReview}
-                onStart=${() => { setReviewMode(false); setConceptFilter(null); const first = ITEMS.find((q) => isOpen(q.id)) || ITEMS[0]; first && goToItem(first.id); }}
-                onJump=${goToItem}
+                onStart=${startModule}
+                onRandom=${randomFromHome}
                 onConceptClick=${handleConceptClick} />`
             : html`<${ItemView}
                 DOMAINS=${DOMAINS} CONCEPTS=${CONCEPTS} ITEMS=${ITEMS}
@@ -382,6 +394,7 @@
                 choicesShown=${choicesShown} onShowChoices=${showChoices}
                 showDetailed=${showDetailed} setShowDetailed=${setShowDetailed}
                 onNext=${handleNext} onPrev=${handlePrev} onRandom=${handleRandom} onHome=${() => { commitPending(); setView('home'); }}
+                keysOpen=${keysOpen} onKeys=${() => setKeysOpen((v) => !v)}
                 pendingValue=${pending && pending.qId === currentId ? pending.value : null} onUndo=${undoPending}
                 openCount=${openCount} onNextOpen=${handleNextOpen} onJumpIdx=${jumpToIdx} statusOf=${statusOf}
                 currentIdx=${currentIdx} total=${filteredItems.length} globalTotal=${ITEMS.length}
@@ -397,7 +410,7 @@
   /* =========================================================
      HOME VIEW
      ========================================================= */
-  function HomeView({ meta, DOMAINS, CONCEPTS, ITEMS, hasTaxonomy, totalAnswered, totalCorrect, onStart, onJump, onConceptClick, answers, firstCorrect, domainFilter, setDomainFilter, dueCount, onReview }) {
+  function HomeView({ meta, DOMAINS, CONCEPTS, ITEMS, hasTaxonomy, totalAnswered, totalCorrect, resumeIdx, onStart, onRandom, onConceptClick, answers, firstCorrect, domainFilter, setDomainFilter, dueCount, onReview }) {
     const conceptsByDomain = useMemo(() => {
       const groups = {};
       Object.entries(CONCEPTS).forEach(([id, c]) => { (groups[c.domain] = groups[c.domain] || []).push({ id, ...c }); });
@@ -410,76 +423,53 @@
         counts[cId] = {
           total: ITEMS.filter((q) => q.concepts.includes(cId)).length,
           answered: ITEMS.filter((q) => q.concepts.includes(cId) && answers[q.id]).length,
-          correct: ITEMS.filter((q) => q.concepts.includes(cId) && firstCorrect[q.id]).length,
         };
       });
       return counts;
-    }, [answers, firstCorrect, CONCEPTS, ITEMS]);
+    }, [answers, CONCEPTS, ITEMS]);
 
+    const started = totalAnswered > 0;
     const progressPct = ITEMS.length ? (totalAnswered / ITEMS.length) * 100 : 0;
-    const titleLines = (meta.title || 'Study').split('\n');
+    const title = String(meta.title || 'Study').replace(/\s*\n\s*/g, ' ');
+    const nDomains = hasTaxonomy ? Object.keys(DOMAINS).length : 0;
+    const nConcepts = hasTaxonomy ? Object.keys(CONCEPTS).length : 0;
+    /* one facts line, mono: what the module holds, then where you are in it */
+    const facts = [ITEMS.length + ' questions'];
+    if (nDomains) facts.push(nDomains + ' domains');
+    if (nConcepts) facts.push(nConcepts + ' concepts');
+    facts.push(started ? totalAnswered + ' / ' + ITEMS.length + ' answered · ' + totalCorrect + ' right first time' : 'not started');
+    const startLabel = started ? (resumeIdx >= 0 ? 'Continue at Q' + (resumeIdx + 1) : 'Continue') : 'Begin';
 
     return html`
-      <div className="fade-up">
-        <div style=${{ marginBottom: '2rem' }}>
-          <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', color: C.ochre }}>
-            <div style=${{ height: '1px', flex: 1, backgroundColor: C.border }}></div>
-            <span className="ui-font" style=${{ fontSize: '10px', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 500 }}>${meta.kicker || 'Self-Assessment'}</span>
-            <div style=${{ height: '1px', flex: 1, backgroundColor: C.border }}></div>
-          </div>
-          <h1 className="display-font" style=${{ fontSize: 'clamp(2.2rem,7vw,3rem)', fontWeight: 300, lineHeight: 1.12, color: C.text, fontVariationSettings: "'opsz' 144, 'wght' 400, 'SOFT' 50" }}>
-            ${titleLines.map((line, i) => html`<${React.Fragment} key=${i}>${i > 0 ? html`<br/>` : null}${i === 0 ? line : html`<em style=${{ fontVariationSettings: "'opsz' 144, 'wght' 350, 'SOFT' 100" }}>${line}</em>`}</${React.Fragment}>`)}
-          </h1>
-          ${meta.subtitle ? html`<p style=${{ marginTop: '0.75rem', fontSize: '1rem', lineHeight: 1.6, color: C.textMuted }}>${meta.subtitle}</p>` : null}
-        </div>
-
-        <div className="ok-card" style=${{ marginBottom: '2rem', padding: '1.25rem' }}>
-          <div style=${{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-            <div className="display-font" style=${{ fontSize: '0.78rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: C.textMuted }}>Progress</div>
-            <div className="display-font" style=${{ fontSize: '1.5rem' }}>
-              <span style=${{ color: C.accent }}>${totalAnswered}</span><span style=${{ color: C.textFaint }}> / ${ITEMS.length}</span>
-            </div>
-          </div>
-          <div role="progressbar" aria-valuenow=${totalAnswered} aria-valuemin=${0} aria-valuemax=${ITEMS.length} aria-label="Questions answered"
-               style=${{ height: '6px', width: '100%', borderRadius: '999px', overflow: 'hidden', backgroundColor: C.borderSoft }}>
-            <div style=${{ height: '100%', width: progressPct + '%', backgroundColor: C.accent, transition: 'width 0.5s' }}></div>
-          </div>
-          ${totalAnswered > 0 ? html`
-            <div style=${{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: C.textMuted }}>
-              <${Check} size=${14} style=${{ color: C.correct }} />
-              <span><span className="display-font" style=${{ color: C.correct, fontWeight: 500 }}>${totalCorrect}</span> correct on first attempt</span>
-              <span style=${{ marginLeft: 'auto', fontSize: '0.78rem', color: C.textFaint }}>${Math.round((totalCorrect / Math.max(totalAnswered, 1)) * 100)}%</span>
+      <div className="fade-up ok-home">
+        <header className="ok-home-head">
+          <p className="ok-home-kicker">${meta.kicker || 'Self-Assessment'}</p>
+          <h1 className="ok-home-title">${title}</h1>
+          ${meta.subtitle ? html`<p className="ok-home-sub">${meta.subtitle}</p>` : null}
+          <p className="ok-home-facts">${facts.map((f, i) => html`<span key=${i}>${f}</span>`)}</p>
+          ${started ? html`
+            <div className="ok-home-meter" role="progressbar" aria-valuenow=${totalAnswered} aria-valuemin=${0} aria-valuemax=${ITEMS.length} aria-label="Questions answered">
+              <span style=${{ width: progressPct + '%' }}></span>
             </div>` : null}
-        </div>
+        </header>
 
-        <div style=${{ marginBottom: dueCount > 0 ? '1rem' : '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <div style=${{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }} className="ok-actions">
-            <div style=${{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <button className="ok-btn ok-btn--primary ok-btn--flex" onClick=${onStart}>
-                <${BookOpen} size=${16} />
-                <span className="display-font" style=${{ letterSpacing: '0.02em', fontWeight: 500 }}>${totalAnswered > 0 ? 'Continue' : 'Begin'}</span>
-              </button>
-              <button className="ok-btn" onClick=${() => { const r = ITEMS[Math.floor(Math.random() * ITEMS.length)]; if (r) onJump(r.id); }}>
-                <${Shuffle} size=${16} />
-                <span className="display-font" style=${{ letterSpacing: '0.02em', fontWeight: 500 }}>Random</span>
-              </button>
-            </div>
-          </div>
+        <div className="ok-home-actions">
+          <button className="ok-btn ok-btn--primary" onClick=${onStart}>
+            <span>${startLabel}</span><kbd className="ok-kbd ok-kbd--inv">space</kbd>
+          </button>
+          <button className="ok-btn" onClick=${onRandom}>
+            <span>Random</span><kbd className="ok-kbd">r</kbd>
+          </button>
           ${dueCount > 0 ? html`
-            <button className="ok-btn ok-btn--block" onClick=${onReview} style=${{ borderColor: C.ochre, color: C.ochre }}>
-              <${RotateCcw} size=${15} />
-              <span className="display-font" style=${{ letterSpacing: '0.02em', fontWeight: 500 }}>Review due · ${dueCount}</span>
+            <button className="ok-btn ok-home-due" onClick=${onReview}>
+              <span>Review due · ${dueCount}</span>
             </button>` : null}
         </div>
-        ${dueCount > 0 ? html`<div style=${{ marginBottom: '2.5rem' }}></div>` : null}
 
         ${hasTaxonomy ? html`
-          <div style=${{ marginBottom: '1.5rem' }}>
-            <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <${Layers} size=${14} style=${{ color: C.ochre }} />
-              <span className="display-font" style=${{ fontSize: '0.72rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: C.textMuted, fontWeight: 500 }}>Explore by Domain</span>
-            </div>
-            <div style=${{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <section className="ok-home-domains" aria-labelledby="ok-domains-h">
+            <h2 className="ok-home-label" id="ok-domains-h">Domains</h2>
+            <ul className="ok-domains">
               ${Object.entries(DOMAINS).map(([dId, d]) => {
                 const domainConcepts = conceptsByDomain[dId] || [];
                 const expanded = domainFilter === dId;
@@ -487,50 +477,60 @@
                 domainConcepts.forEach((c) => ITEMS.forEach((q) => { if (q.concepts.includes(c.id)) ids.add(q.id); }));
                 const domainAnswered = [...ids].filter((id) => answers[id]).length;
                 return html`
-                  <div key=${dId} className="ok-card" style=${{ overflow: 'hidden' }}>
-                    <button onClick=${() => setDomainFilter(expanded ? null : dId)} aria-expanded=${expanded}
-                            style=${{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textAlign: 'left', background: 'none', border: 'none', color: C.text }}>
-                      <div style=${{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <div style=${{ width: '4px', height: '2.25rem', borderRadius: '999px', backgroundColor: d.color }}></div>
-                        <div>
-                          <div className="display-font" style=${{ fontSize: '1rem', letterSpacing: '0.01em', fontWeight: 500 }}>${d.label}</div>
-                          <div style=${{ fontSize: '0.75rem', marginTop: '0.1rem', color: C.textFaint }}>
-                            ${domainConcepts.length} concepts · ${ids.size} questions${domainAnswered > 0 ? ' · ' + domainAnswered + ' answered' : ''}
-                          </div>
-                        </div>
-                      </div>
-                      <${ChevronDown} size=${18} style=${{ color: C.textFaint, transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                  <li key=${dId} className="ok-domain">
+                    <button className="ok-domain-row" onClick=${() => setDomainFilter(expanded ? null : dId)} aria-expanded=${expanded}>
+                      <span className="ok-domain-tick" style=${{ backgroundColor: d.color }}></span>
+                      <span className="ok-domain-name">${d.label}</span>
+                      <span className="ok-domain-meta">${domainConcepts.length} concept${domainConcepts.length === 1 ? '' : 's'} · ${ids.size} q${domainAnswered > 0 ? ' · ' + domainAnswered + ' done' : ''}</span>
+                      <${ChevronDown} size=${16} className="ok-domain-chev" style=${{ transform: expanded ? 'rotate(180deg)' : 'none' }} />
                     </button>
                     ${expanded ? html`
-                      <div className="fade-up" style=${{ padding: '0.25rem 1rem 1rem' }}>
-                        <div style=${{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                          ${domainConcepts.map((c) => {
-                            const ct = conceptCounts[c.id] || { total: 0, answered: 0 };
-                            const complete = ct.total > 0 && ct.answered === ct.total;
-                            return html`
-                              <button key=${c.id} className="ok-chip" onClick=${() => onConceptClick(c.id)} style=${{ backgroundColor: d.hex, color: d.color }}>
-                                ${c.label}
-                                <span style=${{ color: C.textFaint, fontWeight: 400 }}>${ct.answered}/${ct.total}</span>
-                                ${complete ? html`<${Check} size=${10} style=${{ color: C.correct }} />` : null}
-                              </button>`;
-                          })}
-                        </div>
+                      <div className="fade-up ok-domain-body">
+                        ${domainConcepts.map((c) => {
+                          const ct = conceptCounts[c.id] || { total: 0, answered: 0 };
+                          const complete = ct.total > 0 && ct.answered === ct.total;
+                          return html`
+                            <button key=${c.id} className="ok-chip" onClick=${() => onConceptClick(c.id)} style=${{ backgroundColor: d.hex, color: d.color }}>
+                              ${c.label}
+                              <span style=${{ color: C.textFaint, fontWeight: 400 }}>${ct.answered}/${ct.total}</span>
+                              ${complete ? html`<${Check} size=${10} style=${{ color: C.correct }} />` : null}
+                            </button>`;
+                        })}
                       </div>` : null}
-                  </div>`;
+                  </li>`;
               })}
-            </div>
-          </div>` : null}
-
-        <div style=${{ marginTop: '3rem', textAlign: 'center' }}>
-          <div className="display-font" style=${{ fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: C.textFaint }}>·  ·  ·</div>
-        </div>
+            </ul>
+          </section>` : null}
       </div>`;
   }
 
   /* =========================================================
      ITEM VIEW
      ========================================================= */
-  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, pendingValue, onUndo, openCount, onNextOpen, onJumpIdx, statusOf, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect }) {
+  /* The keyboard sheet: every key the item view answers to (principle 6), opened by "?" */
+  const KEYS = [
+    ['Space · Enter', 'reveal the answer; once answered, next'],
+    ['c', 'show the choices'],
+    ['1–9 · a–d', 'pick a choice (once the choices are open)'],
+    ['1–4', 'grade a revealed answer, Didn\u2019t know → Knew it cold'],
+    ['Esc · Backspace', 'undo a pick before it locks'],
+    ['← →', 'previous · next'],
+    ['u', 'next unanswered or due'],
+    ['r', 'random question'],
+    ['d', 'detailed explanation'],
+    ['h · Esc', 'back to the module menu'],
+    ['?', 'show or hide this list'],
+  ];
+  function KeySheet() {
+    return html`
+      <div className="ok-keys fade-up" id="ok-keys">
+        <dl>
+          ${KEYS.map(([k, v]) => html`<${React.Fragment} key=${k}><dt><kbd className="ok-kbd">${k}</kbd></dt><dd>${v}</dd></${React.Fragment}>`)}
+        </dl>
+      </div>`;
+  }
+
+  function ItemView({ keysOpen, onKeys, DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, pendingValue, onUndo, openCount, onNextOpen, onJumpIdx, statusOf, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect }) {
     // Jump slider: the index being previewed while dragging (null = idle).
     // The jump commits on release so the page does not scroll mid-drag.
     const [scrub, setScrub] = useState(null);
@@ -588,8 +588,10 @@
             ${reviewMode || retake ? html`<span style=${{ color: C.ochre }}>Review</span>` : null}
             ${item.difficulty ? html`<span style=${{ color: C.ochre }}>${item.difficulty}</span>` : null}
             ${conceptFilter ? html`<span>Filter · ${filterConcept ? filterConcept.label : conceptFilter}</span>` : html`<span>Question ${currentIdx + 1} of ${total}</span>`}
+            <button className="ok-keys-btn" onClick=${onKeys} aria-expanded=${!!keysOpen} aria-controls="ok-keys" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
           </div>
         </div>
+        ${keysOpen ? html`<${KeySheet} />` : null}
 
         ${conceptFilter ? html`
           <div className="fade-up" style=${{ marginBottom: '1rem', padding: '0.5rem 0.75rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.85rem', ...bannerStyle }}>
@@ -640,11 +642,11 @@
               ${!answered ? html`
                 <div style=${{ marginTop: '0.85rem' }}>
                   <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.textFaint, marginBottom: '0.45rem' }}>Did you know it?</div>
-                  <div style=${{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div className="ok-grades">
                     ${RECALL_GRADES.map((g, i) => {
                       const picked = pendingValue === g.id;
                       return html`
-                      <button key=${g.id} className="ok-btn" aria-pressed=${picked} onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: picked ? C.surface : C[g.color], backgroundColor: picked ? C[g.color] : undefined, opacity: pendingValue != null && !picked ? 0.55 : 1 }}>
+                      <button key=${g.id} className="ok-btn ok-grade" aria-pressed=${picked} onClick=${() => onGrade(g)} style=${{ borderColor: C[g.color], color: picked ? C.surface : C[g.color], backgroundColor: picked ? C[g.color] : undefined, opacity: pendingValue != null && !picked ? 0.55 : 1 }}>
                         <span className="display-font" style=${{ fontSize: '0.7rem', opacity: 0.6 }}>${i + 1}</span>
                         <span className="display-font" style=${{ fontWeight: 600, fontSize: '0.85rem' }}>${g.label}</span>
                       </button>`;

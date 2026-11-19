@@ -110,7 +110,28 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
   .hero-lede { grid-area: lede; }
   .hero-links { grid-area: link; align-self: start; }
   .hero-figure { grid-area: fig; margin: 0; max-width: none; align-self: start; }
+  .hero .hero-index { display: block; grid-area: fig; align-self: end; }
+  /* the portrait egg on "MD" takes the column back while it is open */
+  .hero:has(.hero-figure.is-open) .hero-index { display: none; }
 }
+
+/* ----- Section index: the folded-sections list, lifted into the empty
+   right column of the desktop hero. Phones already see it under the hero. */
+.hero-index { display: none; }
+.hero-index ol { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.hero-index li { border-top: 1px solid var(--rule); }
+.hero-index li > a {
+  display: grid; grid-template-columns: 2.25rem 1fr; column-gap: 0.25rem; align-items: baseline;
+  padding: 0.7rem 0; color: var(--ink); text-decoration: none;
+}
+.hi-no { grid-row: span 2; font: 500 0.8rem/1 var(--font-mono); color: var(--signal); }
+.hi-title { font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; font-size: var(--step-1); line-height: 1.2; }
+.hi-note { font: 400 0.75rem/1.4 var(--font-mono); color: var(--ink-faint); }
+.hero-index li > a:hover .hi-title, .hero-index li > a:focus-visible .hi-title { color: var(--signal); }
+.hi-tools { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; margin: -0.25rem 0 0.7rem 2.5rem; font: 500 0.75rem/1.4 var(--font-mono); letter-spacing: 0.02em; }
+.hi-tools a { color: var(--ink-muted); text-decoration-color: var(--rule-strong); }
+.hi-tools a::after { content: ' \2192'; color: var(--ink-faint); }
+.hi-tools a:hover { color: var(--ink); }
 
 /* ----- Fig. 1: the cochlea ----- */
 .cochlea { display: block; width: 100%; height: auto; overflow: visible; }
@@ -141,8 +162,11 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
    SECTION BLOCKS
    ============================================================= */
 .block {
+  --block-pad: clamp(3.5rem, 9vw, 7.5rem);
   max-width: var(--maxw); margin: 0 auto;
-  padding: clamp(3.5rem, 9vw, 7.5rem) var(--gutter) 0;
+  padding: var(--block-pad) var(--gutter) 0;
+  /* a #hash lands on the section's rule, not on its top padding */
+  scroll-margin-top: calc(0.75rem - var(--block-pad));
 }
 .block-head {
   position: relative;
@@ -207,8 +231,8 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
   .block-fold { display: block; }
   .block[data-fold]:not(.is-open) > .block-body { display: none; }
   /* closed sections stack as a compact index under the hero */
-  .block[data-fold]:not(.is-open) { padding-top: clamp(1.25rem, 3.5vw, 2rem); }
-  :not([data-fold]) + .block[data-fold]:not(.is-open) { padding-top: clamp(3.5rem, 9vw, 7.5rem); }
+  .block[data-fold]:not(.is-open) { --block-pad: clamp(1.25rem, 3.5vw, 2rem); }
+  :not([data-fold]) + .block[data-fold]:not(.is-open) { --block-pad: clamp(3.5rem, 9vw, 7.5rem); }
   .block[data-fold]:not(.is-open) .block-head { margin-bottom: 0; }
 }
 

@@ -57,7 +57,14 @@ window.__OKSAT_CHAPTER = {
 ```
 
 `k`, `short`, `min` and `sections` live in the manifest so the hub can total
-without loading a chapter. A start chapter has no `sections`.
+without loading a chapter. A start chapter has no `sections`. On the start page
+the viewer puts a Start action and the how-to list first; a leading `cards`
+block in its `intro` is the source list, shown at the foot behind a Sources
+disclosure. A `h` block in an `intro` renders as an `h2`.
+
+A lexicon term is underlined at its first use in each section (and once across
+the chapter head and intro); later uses keep the popover on hover but drop the
+underline.
 
 Section ids are kebab-case, **unique across the whole guide**, and permanent:
 progress is stored as `<chapter>/<section>`. Retrieval-prompt ids (`c1`, `c2`…)

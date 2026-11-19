@@ -7,7 +7,10 @@
    ============================================================= */
 (function () {
   OKSATPrefs.mountThemeToggle(document.getElementById('theme-toggle'));
-  OKSATPrefs.mountFontPicker(document.getElementById('font-picker'));
+  /* The Aa menu also opens the progress dialog: display and data settings in one control. */
+  OKSATPrefs.mountFontPicker(document.getElementById('font-picker'), [
+    { id: 'settings-btn', label: 'Progress and backup…', hint: 'reset · export', onClick: function () { openSettings(); } },
+  ]);
 
   /* `draft: true` lists the entry with a visible Draft badge (docs/decisions.md section 9). */
   function draftTag(x) { return x.draft === true ? ' <span class="module-draft">Draft: in progress</span>' : ''; }
@@ -35,7 +38,7 @@
       var nr = items[id] && items[id].nextReview;
       return nr && nr <= today;
     }).length;
-    return { answered: Object.keys(progress.answers || {}).length, due: due };
+    return { answered: Object.keys(progress.answers || {}).length, due: due, updated: String(progress.updated || '') };
   }
 
   /* Manifest strings are committed data, but escape anyway: innerHTML
@@ -138,6 +141,37 @@
       wrap.appendChild(moduleCard(m, st));
     });
 
+  /* ---- resume: the module or guide touched last, while it is unfinished ---- */
+  var last = null;
+  function consider(c) { if (c.updated && (!last || c.updated > last.updated)) last = c; }
+  manifest.forEach(function (m) {
+    var st = stateFor(m.slug);
+    if (st.answered > 0 && st.answered < m.count) {
+      consider({ updated: st.updated, title: m.title, href: 'oksat-study.html?m=' + encodeURIComponent(m.slug), meta: st.answered + ' / ' + m.count + ' answered' });
+    }
+  });
+  guides.forEach(function (g) {
+    var rec = OKSATStore.getLearn(g.slug, reviewer) || {};
+    var total = 0;
+    g.chapters.forEach(function (c) { total += c.sections || 0; });
+    var done = Object.keys(rec.done || {}).length;
+    var at = rec.ui && rec.ui.last ? g.chapters.filter(function (c) { return c.id === rec.ui.last; })[0] : null;
+    if (done > 0 && done < total) {
+      consider({
+        updated: String(rec.updated || ''), title: g.title,
+        href: 'oksat-learn.html?g=' + encodeURIComponent(g.slug) + (at ? '&c=' + encodeURIComponent(at.id) : ''),
+        meta: (at && at.short ? at.short + ' · ' : '') + done + ' / ' + total + ' sections',
+      });
+    }
+  });
+  var resumeEl = document.getElementById('resume');
+  if (last && resumeEl) {
+    resumeEl.href = last.href;
+    resumeEl.querySelector('.hub-resume-title').textContent = last.title;
+    resumeEl.querySelector('.hub-resume-meta').textContent = last.meta;
+    resumeEl.hidden = false;
+  }
+
   /* ---- review banner: every module with due items, most due first ---- */
   if (totalDue > 0) {
     dueModules.sort(function (a, b) { return b.due - a.due; });
@@ -187,7 +221,6 @@
   var overlay = document.getElementById('settings-overlay');
   function openSettings() { overlay.hidden = false; }
   function closeSettings() { overlay.hidden = true; }
-  document.getElementById('settings-btn').addEventListener('click', openSettings);
   document.getElementById('settings-close').addEventListener('click', closeSettings);
   overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSettings(); });
   document.addEventListener('keydown', function (e) {
