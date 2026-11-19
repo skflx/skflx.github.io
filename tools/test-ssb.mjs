@@ -2662,6 +2662,23 @@ async function vesselTests(browser, base) {
     const picked = await page.evaluate(() => window.__ssb.selection);
     check('vessels: a click on a tube selects its structure', picked === 's.internal-carotid-artery', String(picked));
   } else check('vessels: the ICA tube has a clickable point on screen', false);
+
+  /* with the bone solid, a tube inside it is hidden: the bone in front of it is picked, never the tube behind */
+  await page.click('#ssb-spec button[data-bone="solid"]');
+  await nextFrames(page, 2);
+  const grid = await page.evaluate(() => {
+    const r = document.getElementById('ssb-canvas').getBoundingClientRect();
+    const out = { behind: 0, wrong: 0, front: 0 };
+    for (let i = 1; i < 24; i++) for (let j = 1; j < 18; j++) {
+      const hits = window.__ssb.specimen.hits(r.left + (r.width * i) / 24, r.top + (r.height * j) / 18);
+      const t = hits.find((h) => h.tube);
+      if (!t) continue;
+      const nearer = hits.some((h) => !h.tube && !h.marker && !h.clear && !h.yields && h.distance < t.distance);
+      if (nearer) { out.behind += 1; if (hits[0].tube) out.wrong += 1; } else out.front += 1;
+    }
+    return out;
+  });
+  check('vessels: with the bone solid, a click over a tube hidden in the bone picks the bone, not the tube', grid.behind > 0 && grid.wrong === 0, JSON.stringify(grid));
   await context.close();
 }
 
