@@ -7,18 +7,21 @@
    of taking the page down. The Specimen stage (mode-specimen.js,
    ui-specimen.js) mounts with it, also by dynamic import, and the Scope
    (mode-endoscope.js, ui-endoscope.js: a pose over the specimen, scope.js
-   its math) mounts right after it. Nothing here throws to a blank page: a
+   its math) mounts right after it. The CT stage (mode-ct.js, ui-ct.js) is
+   CPU-drawn and needs only the graph, so it also works without WebGL. Nothing here throws to a blank page: a
    problem becomes a message in the place the missing piece would have been.
 
    window.__ssb is a read-only window for tests:
-   { frames, selection, caps, hash, specimen, scope, materials } (specimen, scope: the
+   { frames, selection, caps, hash, ct, specimen, scope, materials } (ct, specimen, scope: the
    stages' hooks; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=e6c379e9';
-import { createStore, parseHash } from './state.js?v=a8ca025a';
-import { mountTree } from './ui-tree.js?v=5718df3c';
-import { mountSearch } from './ui-search.js?v=908bdb22';
-import { mountPanel } from './ui-panel.js?v=1c277974';
+import { loadGraph } from './graph.js?v=4d2079d6';
+import { createStore, parseHash } from './state.js?v=126b3403';
+import { mountTree } from './ui-tree.js?v=fa27aa02';
+import { mountSearch } from './ui-search.js?v=63176609';
+import { mountPanel } from './ui-panel.js?v=b07aad21';
+import { mountCt } from './mode-ct.js?v=95603e9c';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=8e33ad21';
 
 const $ = (id) => document.getElementById(id);
 
@@ -48,6 +51,7 @@ let store = null;
 let stage = null;
 let specimen = null;
 let endo = null;
+let ct = null;
 let panelApi = null;
 Object.defineProperty(window, '__ssb', {
     value: Object.freeze({
@@ -57,6 +61,7 @@ Object.defineProperty(window, '__ssb', {
         get hash() { return store ? store.hash() : null; },
         get specimen() { return specimen ? specimen.hook : null; },
         get scope() { return endo ? endo.hook : null; },
+        get ct() { return ct ? ct.hook : null; },
         get materials() { return stage ? stage.materialsHook : null; },
     }),
 });
@@ -88,6 +93,7 @@ async function bootGraph() {
     wireUrl();
     wireQuality();
     wireStages();
+    bootCt(graph);
     return graph;
 }
 
@@ -162,14 +168,15 @@ function wireQuality() {
     });
 }
 
-/* The stage switch: the two stages are exclusive (specimen, scope). Which one is showing follows the store
+/* The stage switch: the three stages are exclusive (specimen, CT, scope). Which one is showing follows the store
    (`data-stage` on the app, the pressed pill). Leaving for the specimen works without a 3D view too,
    where it shows the "needs WebGL" message. */
 function wireStages() {
     const app = $('ssb-app');
     const stageSwitch = $('ssb-stage-mode');
     const mark = () => {
-        const stage = store.get().scope ? 'scope' : 'specimen';
+        const { ct: inCt, scope: inScope } = store.get();
+        const stage = inCt ? 'ct' : inScope ? 'scope' : 'specimen';
         app.dataset.stage = stage;
         for (const b of stageSwitch.querySelectorAll('button[data-stage]')) {
             const on = b.dataset.stage === stage;
@@ -182,6 +189,21 @@ function wireStages() {
     const specimen = stageSwitch.querySelector('button[data-stage="specimen"]');
     specimen.disabled = false;
     specimen.addEventListener('click', () => store.leaveStage());
+}
+
+/* ---------------- CT (needs only the graph) ---------------- */
+
+function bootCt(graph) {
+    try {
+        const dom = buildCtDom($('ssb-ct'));
+        ct = mountCt({ store, graph, dom });
+        mountCtControls({ dom, ct, store, graph, stageSwitch: $('ssb-stage-mode') });
+    } catch (e) {
+        console.error(e);
+        ct = null;
+        const button = $('ssb-stage-mode').querySelector('button[data-stage="ct"]');
+        if (button) button.title = 'The CT stage could not start.';
+    }
 }
 
 /* ---------------- 3D stage ---------------- */
@@ -222,7 +244,7 @@ async function bootStage() {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=23119ade'), import('./ui-specimen.js?v=97ab00c8')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=1671a0a1'), import('./ui-specimen.js?v=7316e0c7')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -245,7 +267,7 @@ async function bootSpecimen(graph, stageHandle) {
    here leaves the specimen working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=8c00b2f5'), import('./ui-endoscope.js?v=3b9b4734')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=265281bb'), import('./ui-endoscope.js?v=3b9b4734')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
     } catch (e) {

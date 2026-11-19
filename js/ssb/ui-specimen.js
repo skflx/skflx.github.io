@@ -16,8 +16,8 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES, stamped } from './volume.js?v=4837556e';
-import { CT_PLANES } from './state.js?v=a8ca025a';
+import { PLANES, stamped } from './volume.js?v=5cc64ceb';
+import { CT_PLANES } from './state.js?v=126b3403';
 
 /* The standardized-specimen note (docs/ssb.md 5.1, O6): shown wherever the volume is shown, when ct.json has
    a `standard` block. Resolves false when the header is absent or unreadable. */

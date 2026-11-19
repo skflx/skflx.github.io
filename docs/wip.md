@@ -141,7 +141,9 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
-**State:** unlisted (only `atlas.html` links to it). Two stages: the Specimen (pick, tree and search identify structures) and the Scope (the endoscope, traversal). The page loads only what the two stages draw (`docs/ssb.md` §5, §6.1).
+**State:** unlisted (only `atlas.html` links to it). Three stages: the Specimen (pick, tree and search identify structures), CT (labelled slices with UW's arrow tips as the reference) and the Scope (the endoscope, traversal). The page loads only what the stages draw (`docs/ssb.md` §5, §6.1).
+
+**CT baseline:** `tools/ssb-pipeline/uw/frames-baseline.json` is the per-frame UW tip agreement of today's labels (`tools/ssb-frames.mjs`). Rerun after any relabel; rewrite it with `--baseline` only when the new labels are accepted.
 
 **Gaps, owner decisions needed:**
 - `ssb/geometry/sweeps.json` is not fetched by the page: the sweep loader and layer are gone. It stays as the input of `tools/ssb-pipeline/uw/sdf.py` (the Scope HUD's ICA, optic nerve and AEA fields) and of `normalize.py`. Deleting it is an owner call; it also needs the `sdf.py` input changed.
