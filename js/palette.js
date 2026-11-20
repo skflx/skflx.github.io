@@ -73,6 +73,9 @@
     });
 
     /* ---------- lazy corpora ---------- */
+    /* manifest.js and cpt-data.js are fetched here, not in HTML: their ?v= stamps are rewritten by tools/stamp-assets.mjs */
+    var MANIFEST_V = 'e914fc26'; /* stamp:js/oksat/manifest.js */
+    var CPT_V = '8d7eaff2'; /* stamp:js/cpt-data.js */
     var loadStarted = false;
     var wikiState = 'idle';   /* idle | loading | ready | failed */
 
@@ -106,7 +109,7 @@
     }
 
     function loadOksat() {
-        var ready = Array.isArray(window.OKSAT_MANIFEST) ? Promise.resolve() : loadScript('js/oksat/manifest.js');
+        var ready = Array.isArray(window.OKSAT_MANIFEST) ? Promise.resolve() : loadScript('js/oksat/manifest.js?v=' + MANIFEST_V);
         return ready.then(buildOksat).catch(function () { data.oksat = []; });
     }
 
@@ -124,7 +127,7 @@
     }
 
     function loadCpt() {
-        var ready = Array.isArray(window.CPT_DB) ? Promise.resolve() : loadScript('js/cpt-data.js');
+        var ready = Array.isArray(window.CPT_DB) ? Promise.resolve() : loadScript('js/cpt-data.js?v=' + CPT_V);
         return ready.then(buildCpt).catch(function () { data.cpt = []; });
     }
 

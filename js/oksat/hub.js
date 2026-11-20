@@ -21,7 +21,7 @@
     if (lab && k.toLowerCase().indexOf(lab.toLowerCase()) === 0) k = k.slice(lab.length).replace(/^\s*·\s*/, '');
     return (k ? [k] : []).concat(facts).map(function (f) { return '<span>' + esc(f) + '</span>'; }).join(' · ');
   }
-  var today = new Date().toISOString().split('T')[0];
+  var today = OKSATStore.today();
   var reviewer = OKSATStore.reviewer();
   /* `unlisted: true` keeps a module or guide reachable by its own URL but out of
      the hub: no card, and nothing it holds reaches the hub's counts or banner. */

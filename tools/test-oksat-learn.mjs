@@ -189,6 +189,10 @@ async function main() {
     check('1k: progress survives a reload', await page.evaluate(() => document.querySelector('#sci-1 .lr-mark').getAttribute('aria-pressed') === 'true' && document.querySelector('#sci-1 .lr-q').classList.contains('is-graded')));
     await page.waitForFunction(() => [...document.querySelectorAll('#sci-1 .lr-drill-link')].every((l) => /\(\d+\)$/.test(l.textContent)), null, { timeout: 12000 });
     check('1l: drill links from two different modules both load (each module in its own frame)', (await page.$$eval('#sci-1 .lr-drill-link', (e) => e.length)) === 2);
+    await page.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#guides .module-card', { timeout: 8000 });
+    const resume = await page.$eval('#resume', (e) => ({ hidden: e.hidden, href: e.getAttribute('href') }));
+    check('1n: hub Resume banner shows the guide after marking a section done', !resume.hidden && resume.href && resume.href.startsWith(`oksat-learn.html?g=${SLUG}`), JSON.stringify(resume));
     check('1m: no console errors', errors.length === 0, JSON.stringify(errors.slice(0, 2)));
     await context.close();
   }

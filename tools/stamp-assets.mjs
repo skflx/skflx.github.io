@@ -17,8 +17,9 @@
    Covers <link href> and <script src> pointing into css/ or js/ in
    every root *.html. Fonts, images and the module files that
    js/oksat/viewer.js injects at runtime are not stamped. js/palette.js,
-   which js/site.js fetches at runtime, is stamped through the marked
-   `const PALETTE_V` line in js/site.js (stampPalette, run before the HTML pass).
+   which js/site.js fetches at runtime, and the manifest.js / cpt-data.js
+   scripts that js/palette.js fetches at runtime, are stamped through marked
+   constants in js/palette.js and js/site.js (stampPalette, run before the HTML pass).
 
    SSB's ES-module graph (js/ssb, docs/ssb.md section 6.2) needs more
    than the HTML pass: main.js?v=... imports ./scene.js, which the CDN
@@ -196,29 +197,55 @@ export function stampSsb({ write = false } = {}) {
 
 /* ---------------- palette.js (loaded by site.js, not by HTML) ---------------- */
 
-/* js/site.js fetches js/palette.js at runtime, so the HTML pass cannot stamp it.
-   The URL lives in one marked constant instead, which this tool rewrites to the
-   file's hash. site.js's own hash then changes too, so this runs BEFORE the HTML pass. */
+/* js/site.js fetches js/palette.js at runtime, and js/palette.js fetches
+   js/oksat/manifest.js and js/cpt-data.js at runtime, so the HTML pass cannot
+   stamp any of them. Each URL lives in a marked constant instead, rewritten
+   leaves-first: MANIFEST_V and CPT_V in js/palette.js first (which changes
+   palette.js's hash), then PALETTE_V in js/site.js (which changes site.js's
+   hash), BEFORE the HTML pass. */
 const PALETTE_FILE = 'js/palette.js';
 const PALETTE_HOST = 'js/site.js';
-const PALETTE_CONST = /(\b(?:const|var) PALETTE_V = ')[^']*(';\s*\/\* stamp:js\/palette\.js \*\/)/;
+const PALETTE_DEPS = [
+  { name: 'MANIFEST_V', file: 'js/oksat/manifest.js' },
+  { name: 'CPT_V', file: 'js/cpt-data.js' },
+];
+
+function stampConstRe(name, file) {
+  const esc = file.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(\\b(?:const|var) ${name} = ')[^']*(';\\s*\\/\\* stamp:${esc} \\*\\/)`);
+}
+
+function applyConstStamp(src, host, name, file, hash, { stale, errors }) {
+  const re = stampConstRe(name, file);
+  const hits = src.match(new RegExp(re.source, 'g')) || [];
+  if (hits.length !== 1) {
+    errors.push(`${host}: expected exactly one \`var ${name} = '…'; /* stamp:${file} */\` line, found ${hits.length}`);
+    return src;
+  }
+  const next = src.replace(re, '$1' + hash + '$2');
+  if (next !== src) stale.push(`${host}: ${name} -> ${hash} (${file})`);
+  return next;
+}
 
 export function stampPalette({ write = false } = {}) {
   const stale = [];
   const errors = [];
-  const abs = path.join(ROOT, PALETTE_HOST);
-  const src = fs.readFileSync(abs, 'utf8');
-  const hits = src.match(new RegExp(PALETTE_CONST.source, 'g')) || [];
-  if (hits.length !== 1) {
-    errors.push(`${PALETTE_HOST}: expected exactly one \`const PALETTE_V = '…'; /* stamp:js/palette.js */\` line, found ${hits.length}`);
-    return { stale, errors };
+
+  const palAbs = path.join(ROOT, PALETTE_FILE);
+  const palSrc = fs.readFileSync(palAbs, 'utf8');
+  let palNext = palSrc;
+  for (const dep of PALETTE_DEPS) {
+    palNext = applyConstStamp(palNext, PALETTE_FILE, dep.name, dep.file, hashOf(dep.file), { stale, errors });
   }
-  const want = '$1' + hashOf(PALETTE_FILE) + '$2';
-  const next = src.replace(PALETTE_CONST, want);
-  if (next !== src) {
-    stale.push(`${PALETTE_HOST}: PALETTE_V -> ${hashOf(PALETTE_FILE)} (${PALETTE_FILE})`);
-    if (write) fs.writeFileSync(abs, next);
-  }
+  if (errors.length) return { stale, errors };
+  if (write && palNext !== palSrc) fs.writeFileSync(palAbs, palNext);
+
+  const siteAbs = path.join(ROOT, PALETTE_HOST);
+  const siteSrc = fs.readFileSync(siteAbs, 'utf8');
+  const siteNext = applyConstStamp(siteSrc, PALETTE_HOST, 'PALETTE_V', PALETTE_FILE, sha8(palNext), { stale, errors });
+  if (errors.length) return { stale, errors };
+  if (write && siteNext !== siteSrc) fs.writeFileSync(siteAbs, siteNext);
+
   return { stale, errors };
 }
 

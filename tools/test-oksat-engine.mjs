@@ -121,9 +121,18 @@ async function main() {
     await context.close();
   }
 
-  /* ---- Case 2: SRS write ---- */
+  /* ---- Case 2: SRS write, local-date timezone safety, and mount-write guard ---- */
   {
     const { context, page } = await openStudy(browser, base);
+    const untouchedProg = await ls(page, PROGRESS);
+    const untouchedSrs = await ls(page, SRS);
+    check('2-mount: opening an untouched module writes neither progress nor SRS', untouchedProg === null && untouchedSrs === null, `prog=${JSON.stringify(untouchedProg)} srs=${JSON.stringify(untouchedSrs)}`);
+    const dateCheck = await page.evaluate(() => {
+      const t = OKSATStore.today();
+      const next = OKSATStore.addDays(t, 1);
+      return { t, next, ok: next > t };
+    });
+    check('2-tz: OKSATStore.addDays(today, 1) > today in local timezone', dateCheck.ok, JSON.stringify(dateCheck));
     await begin(page);
     await openChoices(page);
     await (await page.$$(optionButtons))[0].click();
@@ -134,6 +143,11 @@ async function main() {
     check('2a: SRS entry written', !!one, `srs=${JSON.stringify(srs)}`);
     check('2b: Leitner box in 1..5', one && one.box >= 1 && one.box <= 5, `box=${one && one.box}`);
     check('2c: nextReview is a date', one && /^\d{4}-\d{2}-\d{2}$/.test(one.nextReview), `nextReview=${one && one.nextReview}`);
+    const wrongLocked = await page.evaluate(() => {
+      const btns = [...document.querySelectorAll('button[role="radio"]')];
+      return btns.length > 0 && btns.every((b) => b.disabled) && /Not Quite/i.test(document.body.innerText);
+    });
+    check('2d: wrong answer (box 1) stays locked with feedback (not immediately due)', wrongLocked && one && one.box === 1 && one.nextReview > dateCheck.t, `locked=${wrongLocked} one=${JSON.stringify(one)} today=${dateCheck.t}`);
     await context.close();
   }
 
