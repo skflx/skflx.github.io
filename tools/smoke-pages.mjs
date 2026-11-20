@@ -133,8 +133,28 @@ export const PAGES = [
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
   /* Search: the index is built (OKSAT modules loaded in frames, CPT table present); a query yields hits from both. */
   { path: 'search.html', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-search') === 'ready') },
-  /* PDF chapter splitter: both vendored libraries loaded and the page logic ran (it wires the theme toggle). */
-  { path: 'pdf-chapter-splitter.html', ready: (p) => wait(p, () => !!window.PDFLib && !!window.JSZip && !!document.querySelector('.tool-title')) },
+  /* PDF chapter splitter: vendored libs loaded, negative interval guard terminates with 1-page parts,
+     and a synthetic 3-page PDF loads via handleUploadedFile and renders in the chapter table. */
+  { path: 'pdf-chapter-splitter.html', ready: async (p) => {
+    await wait(p, () => !!window.PDFLib && !!window.JSZip && !!document.querySelector('.tool-title'));
+    const ok = await p.evaluate(async () => {
+      const parts = generateFixedIntervals(10, -5);
+      if (!Array.isArray(parts) || parts.length !== 10 || !parts.every((it, i) => it.start === i + 1 && it.end === i + 1)) {
+        return false;
+      }
+      const doc = await PDFLib.PDFDocument.create();
+      doc.addPage();
+      doc.addPage();
+      doc.addPage();
+      const bytes = await doc.save();
+      const file = new File([bytes], 'synthetic.pdf', { type: 'application/pdf' });
+      await handleUploadedFile(file);
+      return document.getElementById('filePagesCountLabel').textContent === '3 pgs'
+        && document.querySelectorAll('#chapterTableBody tr .row-title-input').length > 0;
+    });
+    if (!ok) throw new Error('pdf-chapter-splitter negative-interval guard or synthetic PDF load failed');
+    return true;
+  } },
   /* Owner review (unlisted): the item list rendered from js/review-items.js. */
   { path: 'review.html', ready: (p) => wait(p, () => document.querySelectorAll('.rv-item').length > 0) },
   /* Atlas (unlisted): the head map drew; focusing a group lights it. */

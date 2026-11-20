@@ -137,6 +137,27 @@ try {
         check(errs.length === 0, 'phone: no console or page errors', errs.map((e) => e.text).join(' | '));
         await ctx.close();
     }
+
+    /* ---------- cpt-search clipboard fallback ---------- */
+    console.log('cpt-search clipboard fallback');
+    {
+        const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+        await ctx.addInitScript(() => {
+            Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true });
+        });
+        const p = await ctx.newPage();
+        const errs = collectErrors(p);
+        await p.goto(base + '/cpt-search.html');
+        await p.fill('#cpt-input', '31540');
+        await p.waitForSelector('.result-card', { timeout: 8000 });
+        const noClipboard = await p.evaluate(() => navigator.clipboard === undefined);
+        check(noClipboard, 'navigator.clipboard is undefined before click');
+        await p.click('.result-card');
+        const btnText = await p.textContent('.result-card .copy-btn');
+        check(btnText && btnText.trim() === 'Copied', 'clicking result card transitions button to Copied without navigator.clipboard', `text=${JSON.stringify(btnText)}`);
+        check(errs.length === 0, 'cpt-search fallback: no console or page errors', errs.map((e) => e.text).join(' | '));
+        await ctx.close();
+    }
 } finally {
     await browser.close();
     if (server) await server.close();

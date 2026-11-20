@@ -104,7 +104,7 @@
         histTop.innerHTML = top.map(function(t) {
             return '<button class="history-item" data-term="'+esc(t.term)+'">'
                  + '<span>'+esc(t.term)+'</span>'
-                 + '<span class="badge-count">'+t.count+'×</span>'
+                 + '<span class="badge-count">'+esc(t.count)+'×</span>'
                  + '</button>';
         }).join('');
 
@@ -163,18 +163,24 @@
     }
 
     /* ── Copy to clipboard ────────────────────────── */
+    function fallbackCopy(code) {
+        // fallback for older browsers or non-secure contexts
+        var ta = document.createElement('textarea');
+        ta.value = code;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+
     function copyCode(code, desc) {
-        navigator.clipboard.writeText(code).catch(function() {
-            // fallback for older browsers
-            var ta = document.createElement('textarea');
-            ta.value = code;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-        });
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).catch(function () { fallbackCopy(code); });
+        } else {
+            fallbackCopy(code);
+        }
 
         copied = code;
         saveSearch(input.value.trim(), code);
@@ -193,6 +199,12 @@
         if (!term) return;
         history = [{ term: term, code: code || null }].concat(history.slice(0, 19));
         analytics[term] = (analytics[term] || 0) + 1;
+        var entries = Object.entries(analytics);
+        if (entries.length > 100) {
+            entries.sort(function (a, b) { return b[1] - a[1]; });
+            analytics = {};
+            entries.slice(0, 100).forEach(function (e) { analytics[e[0]] = e[1]; });
+        }
         lsSet('cpt-history',   history);
         lsSet('cpt-analytics', analytics);
     }

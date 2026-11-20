@@ -864,9 +864,9 @@ function checkStamps() {
   ok(ssb.errors.length === 0, 'js/ssb: imports resolve, no cycle', `js/ssb: ${ssb.errors.join(' ; ')}`);
   ok(ssb.stale.length === 0, 'js/ssb: module specifiers and stamps.js current',
     `js/ssb: stale (run node tools/stamp-assets.mjs):\n        ` + ssb.stale.join('\n        '));
-  /* js/palette.js is fetched by js/site.js; its URL stamp is the PALETTE_V constant there. */
+  /* js/palette.js stamps manifest.js and cpt-data.js; js/site.js stamps js/palette.js via PALETTE_V. */
   const pal = stampPalette();
-  ok(pal.errors.length === 0 && pal.stale.length === 0, 'js/site.js: PALETTE_V stamps js/palette.js',
+  ok(pal.errors.length === 0 && pal.stale.length === 0, 'js/palette.js and js/site.js: dynamic script stamps current',
     `${[...pal.errors, ...pal.stale].join(' ; ')} (run node tools/stamp-assets.mjs)`);
 }
 

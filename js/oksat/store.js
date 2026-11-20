@@ -78,7 +78,15 @@
     catch (e) { return 'guest'; }
   }
 
-  var today = function () { return new Date().toISOString().split('T')[0]; };
+  function localDate(d) {
+    var dt = d || new Date();
+    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+  }
+  function today() { return localDate(); }
+  function addDays(iso, n) {
+    var parts = String(iso).split('-').map(Number);
+    return localDate(new Date(parts[0], parts[1] - 1, parts[2] + n));
+  }
   var nowISO = function () { return new Date().toISOString(); };
   var clampBox = function (b) { return Math.max(1, Math.min(5, b | 0 || 1)); };
 
@@ -122,6 +130,7 @@
     return {
       v: 1,
       done: rec.done || {}, checks: rec.checks || {}, practice: rec.practice || {}, ui: rec.ui || {},
+      updated: rec.updated || '',
     };
   }
   function saveLearn(slug, who, rec) {
@@ -147,7 +156,7 @@
 
   window.OKSATStore = {
     load: load, save: save, setRaw: setRaw, remove: remove, keysWithPrefix: keysWithPrefix, norm: norm,
-    reviewer: reviewer, resetLocal: resetLocal,
+    reviewer: reviewer, resetLocal: resetLocal, today: today, addDays: addDays,
     recordConceptResult: recordConceptResult, getConceptMastery: getConceptMastery,
     getLearn: getLearn, saveLearn: saveLearn,
   };

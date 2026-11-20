@@ -44,12 +44,8 @@
   const LEITNER_INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
   // How long a pick waits, undoable, before it locks as the first attempt.
   const LOCK_MS = 1500;
-  const today = () => new Date().toISOString().split('T')[0];
-  const addDays = (iso, n) => {
-    const d = new Date(iso + 'T00:00:00');
-    d.setDate(d.getDate() + n);
-    return d.toISOString().split('T')[0];
-  };
+  const today = OKSATStore.today;
+  const addDays = OKSATStore.addDays;
 
   /* Recall (free-response) self-grade tiers → Leitner movement.
      `box` is a number (absolute) or fn(currentBox)→box; `correct`
@@ -149,8 +145,16 @@
     // 'recall' (answered from memory, choices never shown) or 'mcq' (picked
     // from the options) — so "knew it cold" and "got it with the choices"
     // stay distinguishable. Absent on progress written before this existed.
-    useEffect(() => { save(PROGRESS_KEY, { v: 1, answers, firstCorrect, modes, updated: new Date().toISOString() }); }, [answers, firstCorrect, modes]);
-    useEffect(() => { save(SRS_KEY, { ...srs, updated: new Date().toISOString() }); }, [srs]);
+    const progMountedRef = useRef(false);
+    const srsMountedRef = useRef(false);
+    useEffect(() => {
+      if (!progMountedRef.current) { progMountedRef.current = true; return; }
+      save(PROGRESS_KEY, { v: 1, answers, firstCorrect, modes, updated: new Date().toISOString() });
+    }, [answers, firstCorrect, modes]);
+    useEffect(() => {
+      if (!srsMountedRef.current) { srsMountedRef.current = true; return; }
+      save(SRS_KEY, { ...srs, updated: new Date().toISOString() });
+    }, [srs]);
 
     const dueIds = useMemo(() => {
       const t = today();

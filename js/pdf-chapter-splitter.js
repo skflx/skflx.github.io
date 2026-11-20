@@ -1,5 +1,4 @@
 // State
-let rawPdfBytes = null;
 let loadedPdfDoc = null;
 let sourceFileName = "Document.pdf";
 let totalPdfPages = 0;
@@ -304,6 +303,7 @@ function generateFromBookmarks(bookmarks, total, depthMode = 'all') {
 }
 
 function generateFixedIntervals(total, interval) {
+  if (!(interval >= 1)) interval = 1;
   const items = [];
   let current = 1;
   let count = 1;
@@ -358,7 +358,7 @@ function renderTable() {
       <td style="text-align: center;">
         <input type="checkbox" class="row-checkbox" data-index="${idx}" ${item.selected ? 'checked' : ''}>
       </td>
-      <td style="text-align: center;" class="mono" style="color: var(--ink-muted);">
+      <td class="mono" style="text-align: center; color: var(--ink-muted);">
         ${String(idx + 1).padStart(2, '0')}
       </td>
       <td>
@@ -482,7 +482,7 @@ function applyStrategy() {
   } else if (mode === 'fixed') {
     bookmarkDepthControls.style.display = 'none';
     intervalControls.style.display = 'flex';
-    const interval = parseInt(intervalInput.value, 10) || 10;
+    const interval = Math.max(1, parseInt(intervalInput.value, 10) || 10);
     activeItems = generateFixedIntervals(totalPdfPages, interval);
     queueBadge.textContent = `${activeItems.length} Parts (${interval} pgs/each)`;
   } else if (mode === 'custom') {
@@ -557,7 +557,6 @@ async function handleUploadedFile(file) {
 
   try {
     const buffer = await file.arrayBuffer();
-    rawPdfBytes = buffer;
 
     // Load PDF with ignoreEncryption to handle protected PDFs
     loadedPdfDoc = await PDFLib.PDFDocument.load(buffer, { ignoreEncryption: true });
@@ -596,7 +595,6 @@ async function handleUploadedFile(file) {
 
 // Reset All
 resetAppBtn.addEventListener('click', () => {
-  rawPdfBytes = null;
   loadedPdfDoc = null;
   sourceFileName = "Document.pdf";
   totalPdfPages = 0;
@@ -650,6 +648,17 @@ selectAllCheckbox.addEventListener('change', (e) => {
 });
 
 // --- Lossless Splitting Engine ---
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 async function exportSingleChapter(index) {
   if (!loadedPdfDoc) return;
   const item = activeItems[index];
@@ -676,11 +685,7 @@ async function exportSingleChapter(index) {
     let cleanName = item.title.replace(/[/\\?%*:|"<>]/g, '-').trim();
     if (!cleanName) cleanName = `Chapter_${index + 1}`;
 
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${cleanName}.pdf`;
-    link.click();
-    URL.revokeObjectURL(link.href);
+    downloadBlob(blob, `${cleanName}.pdf`);
 
     showToast(`Downloaded: ${cleanName}.pdf`, 'success');
   } catch (err) {
@@ -747,11 +752,7 @@ extractZipBtn.addEventListener('click', async () => {
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       const zipName = sourceFileName.replace(/\.pdf$/i, '') + '_Chapters.zip';
 
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(zipBlob);
-      link.download = zipName;
-      link.click();
-      URL.revokeObjectURL(link.href);
+      downloadBlob(zipBlob, zipName);
 
       showToast(`Success! Archived ${totalCount} files in ${zipName}`, 'success');
     }
