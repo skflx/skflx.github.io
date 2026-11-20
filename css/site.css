@@ -1,8 +1,7 @@
 /* =============================================================
    site.css — the skflx.MD design system (tokens + shared chrome)
-   Loaded by index.html, cpt-search.html and airway-jeopardy.html.
-   OKSAT keeps its own sheet (css/oksat.css) with the same palette
-   expressed as --ok-* tokens.
+   Loaded by every page. OKSAT loads css/oksat.css after it, whose
+   --ok-* tokens are aliases of these.
 
    Idea: an instrument, not a brochure. Paper and ink, hairline
    rules, a monospace for anything that is data, and exactly two

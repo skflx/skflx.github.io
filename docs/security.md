@@ -34,7 +34,6 @@ to protect: visitors (script injection on this origin), the owner's reputation
    - `OLSB.html`'s Real CT mode fetches `tbone/` only once the mode is entered; its CSP is unchanged. Its Web Worker is a stamped same-origin file, allowed by `script-src 'self'`.
    - `ssb.html` reads its content with same-origin `fetch`, covered by `default-src 'self'`. Its citation links to DOI and PubMed are plain navigations built in `js/ssb/ui-panel.js` from validated ids, with `rel="noopener"`, and request nothing until clicked.
    - The URL hash is untrusted. `js/ssb/state.js` matches it against the graph index; it never reaches markup.
-   - OKSAT pages may fetch optional Google Fonts, only when a non-default typeface is picked.
 
 Changing any of these (a new CDN, loosening a CSP) is an owner decision (`docs/decisions.md` §7).
 
@@ -50,7 +49,6 @@ Everything committed is public: the whole repository is served, including `docs/
 
 ## Residual risk
 
-- Optional Google Fonts on OKSAT pages (the one remote request an OKSAT page can make).
 - Header-only protections above (`frame-ancestors`, HSTS, `Permissions-Policy`).
 
 Checked clean: no API keys or private keys in git history; image EXIF and XMP carry no

@@ -31,9 +31,8 @@ workflow or the shared harness, runs everything. Changes under
 The axe scan (`test-a11y.mjs`) is report-only in CI (`continue-on-error`). Its `--check` mode fails on any violation not in `tools/a11y-baseline.json` (rule, page, theme, node count); regenerate that file with `--write-baseline` only when a fix or an accepted exception changes it. It inspects the top document only.
 
 The browser suites need only a real Chromium: every page script is
-same-origin (React/htm are vendored), so they run without network. The only
-remote requests left are optional Google Fonts on OKSAT pages, which the
-console allowlist tolerates. Wall-clock checks (a flight sampled mid-way,
+same-origin (React/htm are vendored, fonts self-hosted), so they run without
+network. Wall-clock checks (a flight sampled mid-way,
 frames counted over a second) can fail on a loaded machine; do not run shards
 side by side on one box.
 
