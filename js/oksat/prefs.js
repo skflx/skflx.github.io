@@ -13,8 +13,6 @@
   var DEFAULT = 'instrument';
   var THEMES = [
     { id: 'instrument',  name: 'Instrument',  hint: 'Archivo · Plex Mono' },
-    { id: 'clinical',    name: 'Clinical',    hint: 'Inter' },
-    { id: 'atlas',       name: 'Atlas',       hint: 'IBM Plex · JetBrains' },
     { id: 'hyperlegible', name: 'Hyperlegible', hint: 'Atkinson' },
   ];
 

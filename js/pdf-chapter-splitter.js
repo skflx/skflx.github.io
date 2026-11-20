@@ -375,8 +375,8 @@ function renderTable() {
       </td>
       <td style="text-align: center;">
         <div style="display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-          <button class="btn btn-secondary btn-sm row-single-btn" data-index="${idx}" title="Download this chapter immediately">PDF</button>
-          <button class="btn btn-icon btn-sm row-del-btn" data-index="${idx}" title="Remove row">&times;</button>
+          <button class="site-btn site-btn-sm row-single-btn" data-index="${idx}" title="Download this chapter immediately">PDF</button>
+          <button class="site-btn site-btn-sm row-del-btn" data-index="${idx}" title="Remove row">&times;</button>
         </div>
       </td>
     `;

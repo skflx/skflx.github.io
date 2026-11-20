@@ -69,18 +69,16 @@ Text on a signal fill is `--on-signal` (`css/site.css`).
 ## 3. Typography: font themes
 
 Three roles: `--ok-font-display` (titles, stems, numbers), `--ok-font-body`
-(prose, explanations), `--ok-font-ui` (chips, kickers, controls). Four themes,
+(prose, explanations), `--ok-font-ui` (chips, kickers, controls). Two themes,
 switched by `data-font` from the "Aa" topbar button; persisted only on an
 explicit pick (`oksat:typeface`).
 
 | `data-font` | Display | Body | UI | When |
 |---|---|---|---|---|
 | `instrument` (default) | Archivo | Archivo | IBM Plex Mono | the site's own faces; self-hosted |
-| `clinical` | Inter | Inter | Inter | dense, neutral, screen-first |
-| `atlas` | IBM Plex Sans | IBM Plex Sans | JetBrains Mono | technical, high x-height |
-| `hyperlegible` | Atkinson Hyperlegible | Atkinson Hyperlegible | Atkinson Hyperlegible | maximum legibility |
+| `hyperlegible` | Atkinson Hyperlegible | Atkinson Hyperlegible | Atkinson Hyperlegible | maximum legibility; self-hosted |
 
-The three alternates load from Google Fonts only when chosen. Body text is at
+Both are self-hosted in `fonts/`, so OKSAT makes no third-party request. Body text is at
 least 15px; stems use the display face at about 1.15–1.4rem; UI and meta text is
 10–12px in the UI face, so it reads as chrome, not content. Archivo has no italic
 here, so `em` in titles is set upright (no faux italic).

@@ -623,7 +623,7 @@
           </div>` : null}
 
         <div className="ok-card" style=${{ padding: '1.5rem', marginBottom: '1.25rem' }}>
-          <p className="display-font" style=${{ fontSize: 'clamp(1.15rem,3.2vw,1.4rem)', lineHeight: 1.35, color: C.text, fontVariationSettings: "'opsz' 100, 'wght' 400" }}>${renderText(item.stem)}</p>
+          <p className="display-font" style=${{ fontSize: 'clamp(1.15rem,3.2vw,1.4rem)', lineHeight: 1.35, color: C.text }}>${renderText(item.stem)}</p>
           ${item.image ? html`<div style=${{ marginTop: '1rem' }}><img src=${item.image} alt=${item.imageAlt || ''} style=${{ maxWidth: '100%', borderRadius: '10px', border: '1px solid ' + C.borderSoft }} /></div>` : null}
 
           ${atGate ? html`
