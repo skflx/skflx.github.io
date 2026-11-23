@@ -84,8 +84,8 @@ const SEQ_ITEMS = ['CN VIII', 'Ventral cochlear nucleus', 'Superior olivary comp
 const LAYERS = [{ id: 'l0', label: 'Layer zero', src: 'images/oksat/fx-anat/l0.svg' }, { id: 'l1', label: 'Layer one', src: 'images/oksat/fx-anat/l1.svg' }];
 const hs = (id, frames, extra) => ({ t: 'hotspot', id, alt: 'Fixture ear figure', label: 'Fixture hotspot', modes: ['explore', 'find'], frames, ...extra });
 const FX_SECTIONS = [
-  { id: 'hs-s1', n: '1', title: 'Hotspot: explore and find', blocks: [hs('hs1', [{ src: 'images/oksat/fx-anat/hs1.svg', cap: 'Frame one', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] }])] },
-  { id: 'hs-s2', n: '2', title: 'Hotspot: two frames', blocks: [hs('hs2', [
+  { id: 'hs-s1', n: '1', title: 'Hotspot: explore and find', ref: ['Otology/Note Alpha & Beta', 'Otology/Second Note'], blocks: [hs('hs1', [{ src: 'images/oksat/fx-anat/hs1.svg', cap: 'Frame one', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] }])] },
+  { id: 'hs-s2', n: '2', title: 'Hotspot: two frames', ref: ['Otology/Note Alpha & Beta'], blocks: [hs('hs2', [
     { src: 'images/oksat/fx-anat/hs1.svg', cap: 'Frame one cap', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] },
     { src: 'images/oksat/fx-anat/hs2.svg', cap: 'Frame two cap', regions: [{ g: 'lscc' }, { g: 'mcfdura' }, { g: 'tegment' }] },
   ])] },
@@ -693,6 +693,47 @@ async function main() {
     await page.waitForSelector('#hs-s4 .lr-figure img', { state: 'attached', timeout: 12000 });
     check('10-T5a: a missing SVG renders as a plain figure with the block alt', (await page.$eval('#hs-s4 .lr-figure img', (e) => e.alt)) === 'Degrade fallback alt');
     check('10-T5b: the degraded block has no interactive stage', (await page.$$eval('#hs-s4 .lr-hs-stage', (e) => e.length)) === 0);
+    await context.close();
+  }
+
+  /* 11: Related in sk.oto (section ref renderer) */
+  {
+    const { context, page } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`);
+    await chapterReady(page);
+    const items = await page.$$eval('.lr-related-item', (els) => els.map((el) => ({
+      text: el.querySelector('.lr-related-link')?.textContent,
+      href: el.querySelector('.lr-related-link')?.getAttribute('href'),
+      rel: el.querySelector('.lr-related-link')?.getAttribute('rel'),
+      secs: el.querySelector('.lr-related-secs')?.textContent,
+    })));
+    check('11a: Related in sk.oto lists distinct notes in first-cited order with Quartz slugs',
+      items.length === 2
+      && items[0].text === 'Note Alpha & Beta'
+      && items[0].href === 'https://skflx.github.io/ohns-wiki-skflx/otology/note-alpha--and--beta'
+      && items[0].rel === 'noopener'
+      && items[0].secs === ' (§1, 2)'
+      && items[1].text === 'Second Note'
+      && items[1].href === 'https://skflx.github.io/ohns-wiki-skflx/otology/second-note'
+      && items[1].secs === ' (§1)',
+      JSON.stringify(items));
+    await context.close();
+  }
+  {
+    const { context, page } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`);
+    await page.route('**/js/oksat/manifest.js*', async (route) => {
+      const res = await route.fetch();
+      const body = (await res.text()).replace('live: true', 'live: false');
+      await route.fulfill({ response: res, body });
+    });
+    await page.goto(`${base}/oksat-learn.html?g=${FX_SLUG}&c=anat`, { waitUntil: 'domcontentloaded' });
+    await chapterReady(page);
+    check('11b: Related in sk.oto is hidden when OKSAT_SKOTO.live is false', (await page.$$eval('.lr-related', (e) => e.length)) === 0);
+    await context.close();
+  }
+  {
+    const { context, page } = await open(browser, base, `oksat-learn.html?g=${SLUG}&c=science`);
+    await chapterReady(page);
+    check('11c: Related in sk.oto is omitted when no section has ref', (await page.$$eval('.lr-related', (e) => e.length)) === 0);
     await context.close();
   }
 

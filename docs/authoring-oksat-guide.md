@@ -52,7 +52,7 @@ window.__OKSAT_CHAPTER = {
     src: 'ICAR §VI · EPOS §5.2',     // shown under the lede
     tldr: ['…', '…'],                // the 30-second version, 3–6 bullets
     intro: [ /* start chapter only: sources and any currency warning */ ],
-    sections: [{ id: 'sci-1', n: '1.1', title: '…', blocks: [ … ], drill: [ … ] }],
+    sections: [{ id: 'sci-1', n: '1.1', title: '…', blocks: [ … ], drill: [ … ], ref: [ … ] }],
 };
 ```
 
@@ -204,6 +204,14 @@ resolve.
 `drill: [{ m: '<module slug>', c: ['<concept key>'…] }]` ends a section with links
 to `oksat-study.html?m=<slug>&c=<concept>` and a live count. Every concept must
 exist in that module and have items. A section with no module questions has no `drill`.
+
+### Wiki references (`ref`)
+
+`ref: ['<Folder>/<Note title>', …]` on a section (never on a chapter, no duplicates
+within a section) names notes in `skflx/ohns-wiki-skflx` (`content/` prefix and `.md`
+omitted). When `OKSAT_SKOTO.live` is true, the chapter foot renders a **Related in sk.oto**
+list of distinct cited notes in first-cited order with their citing section numbers.
+`tools/check-data.mjs` validates every `ref` against `tools/skoto-notes.json`.
 
 ## Teaching conventions
 

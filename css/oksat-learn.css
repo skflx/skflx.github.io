@@ -373,5 +373,13 @@
 .lr-sources > summary::before { content: '+ '; color: var(--ok-accent); }
 .lr-sources[open] > summary::before { content: '\2212 '; }
 
+.lr-related { margin-top: 2.25rem; padding-top: 1.15rem; border-top: 1px solid var(--ok-border); max-width: 62ch; }
+.lr-related-list { list-style: none; padding: 0; margin: 0.55rem 0 0; display: grid; gap: 0.4rem; }
+.lr-related-item { font-size: 0.94rem; line-height: 1.5; }
+.lr-related-link { color: var(--ok-accent); text-decoration: underline; text-underline-offset: 0.2em; }
+.lr-related-link:hover { color: var(--ok-text); }
+.lr-related-link:focus-visible { outline: 2px solid var(--ok-accent); outline-offset: 2px; }
+.lr-related-secs { font-family: var(--ok-font-ui); font-size: 11.5px; color: var(--ok-text-muted); font-variant-numeric: tabular-nums; }
+
 /* ===== Measure: prose holds about 70 characters a line at any width ===== */
 .lr-p, .lr-why, .lr-list, .lr-cap, .lr-pl, .lr-lede { max-width: 62ch; }
