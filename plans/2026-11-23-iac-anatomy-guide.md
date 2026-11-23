@@ -338,14 +338,104 @@ marked so in the guide.
 
 ## 8. Wiki ref map (I0.5)
 
-Candidate notes for this guide (wiki `content/Otology/`, titles as filed): translabyrinthine
-approach; middle cranial fossa approach; retrosigmoid suboccipital approach; Koos grading; VS arise
-from the Schwann cell sheath of the inferior or superior vestibular nerve; labyrinthine segment is the
-narrowest portion of the fallopian canal; ENoG > 90% degeneration within 14 days; transmastoid and MCF
-facial nerve decompression; acute Bell's palsy; Ramsay Hunt syndrome; facial nerve schwannomas; facial
-nerve six segments; transcochlear approach; intraoperative facial and cochlear nerve monitoring;
-acoustic reflex thresholds and decay; `Trauma/` otic-capsule-violating fractures. I0.5 fixes exact
-paths per section, plus the backfill rows for `ear-anatomy` and `ar-crs-aerd`.
+Each row is a section's `ref` list, in order: the note's path under the wiki's `content/` without `.md`,
+exactly as filed. Every path was checked against `skflx/ohns-wiki-skflx` on 2026-11-23. I1.4 applies the
+`ear-anatomy` and `ar-crs-aerd` rows verbatim; the content waves apply the `iac-anatomy` rows when they
+write each section (a section renamed in the outline keeps its row). A section with no row gets no `ref`.
+
+### 8.1 `iac-anatomy` (applied by the content waves)
+
+| Section | `ref` |
+|---|---|
+| `os-dev` | `Otology/Inner ear malformations are classified by Jackler and Sennaroglu based on embryonic arrest timing and cochleovestibular architecture` |
+| `os-walls` | `Otology/The otic capsule is an immutable endochondral bone that provides fixed surgical reference landmarks` |
+| `os-cells` | `Otology/Cerebrospinal fluid CSF leak and pseudomeningocele require lumbar drainage, fat obliteration, and re-exploration` |
+| `fu-quadrants` | `Otology/cVEMP evaluates the saccule and inferior vestibular nerve via uncrossed sternocleidomastoid inhibition`<br>`Otology/oVEMP evaluates the utricle and superior vestibular nerve via crossed inferior oblique excitation`<br>`Otology/Vestibular neuritis causes acute spontaneous prolonged vertigo without auditory symptoms` |
+| `fu-meatal` | `Otology/The labyrinthine segment is the narrowest portion of the Fallopian canal and most vulnerable to edema` |
+| `nv-cpa` | `Otology/The facial nerve traverses six distinct anatomical segments from the pons to the parotid gland` |
+| `nv-intermedius` | `Sinus/Gustatory sensation is transmitted via the chorda tympani, greater superficial petrosal, glossopharyngeal, and superior laryngeal nerves`<br>`Otology/The first genu marks the location of the geniculate ganglion and origin of the greater superficial petrosal nerve` |
+| `nv-orz` | `Otology/Vestibular schwannomas arise from the Schwann cell sheath of the inferior or superior vestibular nerve` |
+| `im-mri` | `Otology/Internal auditory canal lipomas demonstrate T1 hyperintensity with fat saturation signal loss and mandate conservative observation` |
+| `im-cnd` | `Otology/Cochlear implant candidacy criteria include severe to profound bilateral sensorineural hearing loss`<br>`Otology/Auditory Brainstem Implantation ABI bypasses the cochlea and cochlear nerve to stimulate the cochlear nucleus in NF2`<br>`Otology/Otoacoustic emissions evaluate outer hair cell integrity and differentiate cochlear from auditory neuropathy spectrum disorder` |
+| `im-ip3` | `Otology/Gushing footplate indicates a congenital perilymph fistula from an abnormally patent cochlear aqueduct`<br>`Otology/Inner ear malformations are classified by Jackler and Sennaroglu based on embryonic arrest timing and cochleovestibular architecture` |
+| `im-lesions` | `Otology/Facial nerve schwannomas present with slow progressive paralysis or facial twitching along the Fallopian canal`<br>`Otology/Internal auditory canal lipomas demonstrate T1 hyperintensity with fat saturation signal loss and mandate conservative observation` |
+| `ap-translab` | `Otology/The translabyrinthine approach provides direct exposure of the internal auditory canal with complete hearing sacrifice` |
+| `ap-mcf` | `Otology/The middle cranial fossa approach provides hearing preservation for intracanalicular schwannomas with lateral fundus extension` |
+| `ap-retrosig` | `Otology/The retrosigmoid suboccipital approach allows hearing preservation for small to medium vestibular schwannomas` |
+| `ap-extend` | `Otology/The transcochlear approach expands the translabyrinthine corridor through posterior facial nerve rerouting and cochlear drill-out to access the prepontine space and ventral clivus`<br>`Otology/Auditory Brainstem Implantation ABI bypasses the cochlea and cochlear nerve to stimulate the cochlear nucleus in NF2` |
+| `ap-choose` | `Otology/The translabyrinthine approach provides direct exposure of the internal auditory canal with complete hearing sacrifice`<br>`Otology/The middle cranial fossa approach provides hearing preservation for intracanalicular schwannomas with lateral fundus extension`<br>`Otology/The retrosigmoid suboccipital approach allows hearing preservation for small to medium vestibular schwannomas` |
+| `cc-vs-origin` | `Otology/Vestibular schwannomas arise from the Schwann cell sheath of the inferior or superior vestibular nerve` |
+| `cc-fn-displacement` | `Otology/Intraoperative facial nerve and cochlear nerve monitoring minimize cranial nerve morbidity in skull base surgery` |
+| `cc-hearing-mech` | `Otology/Intraoperative facial nerve and cochlear nerve monitoring minimize cranial nerve morbidity in skull base surgery` |
+| `cc-audiometry` | `Otology/Acoustic reflex thresholds and reflex decay testing identify retrocochlear lesions and facial nerve pathology`<br>`Otology/Auditory brainstem response waves I through V identify retrocochlear and brainstem pathology` |
+| `cc-grades` | `Otology/Koos grading system classifies vestibular schwannomas from Stage I intracanalicular to Stage IV brainstem compression`<br>`Otology/House-Brackmann grading system stratifies facial nerve function from Grade I normal to Grade VI total paralysis` |
+| `cc-bell` | `Otology/Acute Bell's palsy presents with unilateral lower motor neuron facial paralysis treated with early oral steroids`<br>`Otology/Electroneuronography showing greater than ninety percent degeneration within fourteen days indicates severe facial nerve axonal injury`<br>`Otology/Transmastoid and middle cranial fossa facial nerve decompression relieves canalicular compression` |
+| `cc-trauma` | `Trauma/Temporal bone fractures classified as otic capsule violating carry high risks of sensorineural hearing loss and facial nerve transection`<br>`Otology/Temporal bone longitudinal and transverse fractures cause delayed or immediate facial paralysis` |
+| `cc-csf` | `Otology/Cerebrospinal fluid CSF leak and pseudomeningocele require lumbar drainage, fat obliteration, and re-exploration`<br>`Trauma/Traumatic cerebrospinal fluid otorrhea and rhinorrhea are managed conservatively before considering surgical skull base repair` |
+
+### 8.2 `ear-anatomy` backfill (I1.4)
+
+| Section | `ref` |
+|---|---|
+| `or-parts` | `Otology/The otic capsule is an immutable endochondral bone that provides fixed surgical reference landmarks` |
+| `au-cart` | `Otology/Auricular hematoma evacuation and bolster compression prevents permanent cauliflower ear deformity` |
+| `au-dev` | `Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna` |
+| `eac-gaps` | `Otology/The external auditory canal cartilaginous third harbors Fissures of Santorini and Foramen of Huschke as routes of disease spread` |
+| `tm-geo` | `Otology/The tympanic membrane areal ratio of seventeen to one provides the primary impedance gain`<br>`Otology/The middle ear transformer ratio provides twenty-seven decibels of acoustic impedance matching` |
+| `tm-layers` | `Otology/Primary acquired cholesteatoma arises from retraction pocket invagination of the pars flaccida into Prussak space` |
+| `tm-quad` | `Otology/Congenital cholesteatoma presents as an anterosuperior white mass behind an intact tympanic membrane` |
+| `cav-medial` | `Otology/The cochleariform process serves as the constant middle ear landmark triangulating the geniculate ganglion, tympanic CN VII, and tensor tympani tendon` |
+| `cav-roof-floor` | `Otology/Tegmen erosion with dural exposure increases the risk of meningoencephalocele and CSF leak` |
+| `os-joints` | `Otology/The lever ratio of the malleus to incus provides a one point three to one mechanical advantage`<br>`Otology/The distance from the incus long process to the stapes footplate averages four to four point five millimeters` |
+| `os-stapedius` | `Otology/Acoustic reflex thresholds and reflex decay testing identify retrocochlear lesions and facial nerve pathology` |
+| `sp-prussak` | `Otology/Primary acquired cholesteatoma arises from retraction pocket invagination of the pars flaccida into Prussak space` |
+| `sp-folds` | `Otology/The epitympanic diaphragm and tympanic isthmus govern attic ventilation and selective epitympanic dysventilation` |
+| `sp-isthmus` | `Otology/The epitympanic diaphragm and tympanic isthmus govern attic ventilation and selective epitympanic dysventilation` |
+| `sp-retro` | `Otology/The retrotympanum is partitioned into sinus tympani, facial sinus, and subtympanic sinus by the ponticulus and subiculum` |
+| `sp-sight` | `Otology/Transcanal endoscopic ear surgery TEES provides line-of-sight visualization into the sinus tympani and epitympanum` |
+| `et-seg` | `Otology/Eustachian tube dysfunction divides into dilatory and patulous forms with opposite treatment goals` |
+| `et-cart` | `Otology/Patulous Eustachian tube manifests with autophony, respiratory-synchronous tinnitus, and tympanic membrane excursions on nasal breathing` |
+| `ma-surface` | `Otology/The Macewen triangle and Henle spine indicate the surface projection of the mastoid antrum` |
+| `ma-antrum` | `Otology/Complete cortical mastoidectomy unroofs the mastoid antrum and establishes dependent middle ear drainage` |
+| `ma-fn` | `Otology/The facial nerve traverses six distinct anatomical segments from the pons to the parotid gland` |
+| `ma-recess` | `Otology/The facial recess is bounded by the facial nerve, chorda tympani, and fossa incudis`<br>`Otology/Posterior tympanotomy facial recess approach opens the corridor between CN VII and chorda tympani` |
+| `ma-peds` | `Otology/The infant mastoid lacks a developed tip placing the facial nerve in a subcutaneous vulnerable position at the stylomastoid foramen` |
+| `pa-tracts` | `Otology/Infracochlear and infralabyrinthine approaches establish hearing-preserving drainage pathways for petrous apex cholesterol granulomas inferior to the otic capsule` |
+| `pa-corridors` | `Otology/Infracochlear and infralabyrinthine approaches establish hearing-preserving drainage pathways for petrous apex cholesterol granulomas inferior to the otic capsule`<br>`Otology/Petrous apex cholesteatoma requires infracochlear, translabyrinthine, or middle cranial fossa exteriorization` |
+| `pa-clinical` | `Otology/Gradenigo triad of otorrhea, retroorbital pain, and abducens nerve palsy indicates suppurative petrous apicitis`<br>`Otology/Petrous apex lesions are differentiated into cholesterol granuloma, cholesteatoma, and mucocele by T1, T2, and non-EPI diffusion-weighted MRI` |
+| `sy-fn` | `Otology/The facial nerve traverses six distinct anatomical segments from the pons to the parotid gland`<br>`Otology/The first genu marks the location of the geniculate ganglion and origin of the greater superficial petrosal nerve` |
+| `sy-para` | `Otology/The greater and lesser petrosal nerves function as parasympathetic couriers connecting middle ear nerves to the lacrimal and parotid glands`<br>`Sinus/Gustatory sensation is transmitted via the chorda tympani, greater superficial petrosal, glossopharyngeal, and superior laryngeal nerves` |
+| `sy-dev` | `Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna` |
+| `ap-arches` | `Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna` |
+| `ap-numbers` | `Otology/The middle ear transformer ratio provides twenty-seven decibels of acoustic impedance matching`<br>`Otology/The tympanic membrane areal ratio of seventeen to one provides the primary impedance gain`<br>`Otology/The lever ratio of the malleus to incus provides a one point three to one mechanical advantage` |
+
+### 8.3 `ar-crs-aerd` backfill (I1.4)
+
+| Section | `ref` |
+|---|---|
+| `sci-1` | `Sinus/Type 2 CRS exhibits eosinophilic inflammation responsive to targeted biologics` |
+| `sci-2` | `Sinus/Epithelial tight junctions and antimicrobial peptides form the primary sinonasal mucosal barrier` |
+| `sci-3` | `Sinus/The Gell and Coombs classification delineates four distinct immunologic hypersensitivity mechanisms underlying otolaryngic disease` |
+| `sci-6` | `Sinus/The Vidian nerve carries parasympathetic secretomotor and sympathetic vasomotor fibers`<br>`Sinus/The nasal cycle provides alternating autonomic mucosal congestion and decongestion` |
+| `sci-10` | `Sinus/Nitric oxide produced in the paranasal sinuses provides host defense and ciliary stimulation` |
+| `ar-3` | `Sinus/Rhinitis subtypes are differentiated into allergic, vasomotor, gustatory, and rhinitis medicamentosa`<br>`Sinus/Nonallergic rhinitis with eosinophilia syndrome NARES features nasal eosinophilia without IgE sensitization and represents a precursor to Samter triad` |
+| `dx-1` | `Sinus/Diagnostic rigid nasal endoscopy utilizes a standardized three-pass examination sequence`<br>`Sinus/The Lund-Kennedy endoscopic staging system tracks mucosal edema, polyps, and discharge` |
+| `dx-2` | `Sinus/Intradermal dilutional testing IDT and modified quantitative testing MQT quantify allergic sensitization to guide safe immunotherapy escalation` |
+| `dx-4` | `Sinus/Acoustic rhinometry and rhinomanometry evaluate internal nasal valve geometry and dynamic airflow resistance through cross-sectional area and transnasal pressure measurements` |
+| `dx-5` | `Sinus/The Lund-Mackay CT scoring system quantifies sinonasal opacification and ostiomeatal occlusion` |
+| `mg-4` | `Sinus/Allergen immunotherapy induces regulatory T cells and IgG4 blocking antibodies to modulate allergic rhinitis and prevent asthma progression` |
+| `mg-5` | `Sinus/Allergen immunotherapy via subcutaneous injections or sublingual dosing induces regulatory T cells and allergen-specific IgG4 blocking antibodies to restore immune tolerance` |
+| `mg-6` | `Sinus/Inferior turbinate submucosal resection with outfracture provides durable volume reduction while preserving ciliated mucosal function`<br>`Sinus/Transnasal endoscopic vidian neurectomy treats refractory non-allergic cholinergic rhinitis` |
+| `rs-4` | `Sinus/Orbital complications of acute sinusitis staged by the Chandler classification dictate medical versus surgical drainage`<br>`Sinus/Pott's puffy tumor represents subperiosteal abscess and frontal bone osteomyelitis from sinusitis`<br>`Sinus/Cavernous sinus thrombosis presents with chemosis, proptosis, and progressive ophthalmoplegia from CN III, IV, V1, V2, and VI involvement` |
+| `crs-2` | `Sinus/Type 2 CRS exhibits eosinophilic inflammation responsive to targeted biologics`<br>`Sinus/Non-Type 2 CRS features neutrophilic inflammation associated with cystic fibrosis and ciliopathies` |
+| `crs-5` | `Sinus/The Lund-Mackay CT scoring system quantifies sinonasal opacification and ostiomeatal occlusion`<br>`Sinus/Steroid-eluting sinus implants deliver localized anti-inflammatory therapy to prevent restenosis` |
+| `crs-6` | `Sinus/Allergic fungal rhinosinusitis presents with eosinophilic mucin and Charcot-Leyden crystals`<br>`Sinus/Chronic non-invasive fungal ball presents with dense maxillary mycetoma without tissue invasion`<br>`Sinus/Acute invasive fungal rhinosinusitis requires emergent surgical debridement and systemic amphotericin B` |
+| `crs-7` | `Sinus/Granulomatosis with polyangiitis presents with necrotizing sinonasal granulomas and saddle nose`<br>`Sinus/Eosinophilic granulomatosis with polyangiitis causes asthma, peripheral eosinophilia, and necrotizing vasculitis`<br>`Sinus/Odontogenic sinusitis arises from periapical maxillary dental pathology and oroantral fistulas` |
+| `crs-8` | `Sinus/Pediatric endoscopic sinus surgery employs a stepwise escalation algorithm following adenoidectomy and preserves midfacial growth centers through conservative mucosal sparing dissection` |
+| `ae-1` | `Sinus/AERD manifests with asthma, nasal polyps, and severe aspirin-induced respiratory reactions` |
+| `ae-4` | `Sinus/Draf III modified Lothrop unites both frontal sinuses into a common cavity` |
+| `bi-1` | `Sinus/Biologic therapeutics in chronic rhinosinusitis target IgE, IL-4, IL-5, and IL-13 inflammatory pathways` |
+| `as-2` | `Otology/Eustachian tube dysfunction divides into dilatory and patulous forms with opposite treatment goals` |
 
 ## 9. Verification (every content and machinery WP)
 
