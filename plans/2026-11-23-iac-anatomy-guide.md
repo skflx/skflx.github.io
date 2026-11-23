@@ -109,12 +109,16 @@ free-response and MCQ; synthesis cases last. `node tools/lint-oksat.mjs iac-anat
 
 ### 4.3 Glossary ids (I0.3)
 
-Existing ids are reused (`iac`, `fn-meatal`, `fn-labyrinthine`, labyrinthine artery, AICA, cell
-tracts, posterior fossa dura). New ids, named in I0.3, cover at least: porus acusticus, fundus,
-transverse (falciform) crest, vertical crest (Bill's bar), superior / inferior vestibular nerves,
-cochlear nerve, nervus intermedius, singular canal and posterior ampullary nerve, meatal foramen,
-bony cochlear nerve canal, cochlear aqueduct, vestibular aqueduct / operculum, subarcuate fossa and
-artery, arcuate eminence, GSPN, vestibular (Scarpa) ganglion. Ids are never renamed afterwards.
+Reused: `iac`, `cn8`, `fn-meatal`, `fn-lab`, `fcanal`, `geniculate`, `gspn`, `labyr-a`, `aica`,
+`subarcuate` (cell tract), `supralab`, `infralab`, `retrofacial`, `ssc`, `pscc`, `lscc`, `vestibule`,
+`cochlea`, `oticcap`, `petapex`, `ica`, `jb`, `sps`, `sigmoid`, `els`, `mcfdura`, `pfdura`, `cerebellum`,
+`temporallobe`, `meckel`.
+
+Added in I0.3: `porus`, `iac-fundus`, `falciform`, `bills-bar`, `svn`, `ivn`, `cochn`, `nint`,
+`singular`, `pan`, `meatal-for`, `bcnc`, `modiolus`, `utricle`, `saccule`, `scarpa`, `coch-aq`,
+`vest-aq`, `arcuate`, `subarc-fossa`, `subarc-a`, `comcoch-a`, `antvest-a`, `cpa`. Their notes carry no
+`[GROUND]` number; `rel` is given only where the direction is unambiguous at the fundus. Ids are never
+renamed afterwards; further ids are added by the content WP that first needs them.
 
 ### 4.4 Section `ref` (I1.1, I1.2)
 
