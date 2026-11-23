@@ -87,6 +87,11 @@ Interactive learning guides (`docs/authoring-oksat-guide.md`):
   open-access paper figure by figure, with cropped paper figures under CC BY 4.0
   (`images/oksat/jc-whisking-auditory-cortex/ATTRIBUTION.md`). No question module, so
   no drill rows.
+- **IAC anatomy** (`iac-anatomy`, plan `plans/2026-11-23-iac-anatomy-guide.md`, issue #326):
+  planned, not built. Wave 0 (Opus: `[GROUND]` ledger, glossary ids, figure geometry specs, wiki
+  ref map) and wave 1 (Gemini: section `ref` renderer, sk.oto note snapshot check, rasters,
+  backfill of `ref` rows into `ear-anatomy` and `ar-crs-aerd`) come first; content then ships in
+  three draft waves, each reviewed by Sonnet.
 
 None of the newer modules is clinically verified except where its explanations say so.
 Otoplasty's explanations flag vault-versus-StatPearls discrepancies for owner review.
