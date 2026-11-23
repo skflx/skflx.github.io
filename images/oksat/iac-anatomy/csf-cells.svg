@@ -6,6 +6,6 @@
   <circle cx="520" cy="300" r="7" fill="#c97b6b" fill-opacity="0.55" stroke="#8c4b3e" stroke-width="1.4"/>
   <circle cx="500" cy="286" r="7" fill="#c97b6b" fill-opacity="0.55" stroke="#8c4b3e" stroke-width="1.4"/>
   <circle cx="535" cy="282" r="7" fill="#c97b6b" fill-opacity="0.55" stroke="#8c4b3e" stroke-width="1.4"/>
-  <text x="380" y="256" text-anchor="end" font-size="12" font-weight="bold" fill="#8c4b3e">Opened cells: posterior lip</text>
-  <text x="380" y="272" text-anchor="end" font-size="12" font-weight="bold" fill="#8c4b3e">and petrous apex</text>
+  <text x="484" y="256" text-anchor="end" font-size="12" font-weight="bold" fill="#8c4b3e">Opened cells: posterior lip</text>
+  <text x="484" y="272" text-anchor="end" font-size="12" font-weight="bold" fill="#8c4b3e">and petrous apex</text>
 </svg>

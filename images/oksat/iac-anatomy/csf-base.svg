@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
   <title>CSF leak tracts from IAC cells to the Eustachian tube (base, schematic)</title>
   <rect width="100%" height="100%" fill="#ffffff"/>
-  <g data-g="cerebellum"><path d="M 380 540 L 520 330 L 620 470 L 640 540 Z" fill="#f4f1ea" stroke="#555049" stroke-width="1.2"/></g>
+  <g data-g="cerebellum"><path d="M 380 560 L 520 330 L 620 470 L 640 560 Z" fill="#f4f1ea" stroke="#555049" stroke-width="1.2"/></g>
   <text x="515" y="485" text-anchor="middle" font-size="12" fill="#555049">Posterior fossa</text>
   <polygon points="440,170 740,350 620,470" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
   <path d="M 702 290 L 560 120 L 520 60" fill="none" stroke="#8c4b3e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
@@ -11,6 +11,8 @@
   <g data-g="iac"><rect x="545" y="318" width="115" height="24" fill="#555049" fill-opacity="0.25" stroke="#555049" stroke-width="1.2"/></g>
   <g data-g="porus"><rect x="539" y="314" width="12" height="32" fill="none" stroke="#8a7b5f" stroke-width="1.4"/></g>
   <g data-g="iac-fundus"><rect x="654" y="314" width="12" height="32" fill="none" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <line x1="622" y1="312" x2="622" y2="322" stroke="#555049" stroke-width="1.2"/>
+  <text x="622" y="308" text-anchor="middle" font-size="11" fill="#555049">⅔</text>
   <g data-g="cochlea"><circle cx="672" cy="292" r="20" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
   <g data-g="vestibule"><circle cx="690" cy="338" r="16" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
   <g data-g="pscc"><path d="M 655 372 A 26 26 0 1 0 705 380" fill="none" stroke="#8a7b5f" stroke-width="5" stroke-linecap="round"/></g>
@@ -18,7 +20,7 @@
   <g data-g="sigmoid"><circle cx="700" cy="470" r="20" fill="#2f5d8a" stroke="#2f5d8a" stroke-width="1"/></g>
   <g data-label="1" font-size="11.5">
     <text x="534" y="335" text-anchor="end" fill="#555049">Porus</text>
-    <text x="742" y="340" text-anchor="end" font-weight="bold">Middle ear</text>
+    <text x="756" y="272" text-anchor="end" font-weight="bold">Middle ear</text>
     <text x="742" y="426" text-anchor="end" font-weight="bold">Mastoid antrum</text>
     <text x="534" y="54" text-anchor="start" font-weight="bold">Eustachian tube → nasopharynx</text>
   </g>
