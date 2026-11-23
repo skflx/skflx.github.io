@@ -1345,6 +1345,8 @@
             d.appendChild(renderBlocks([split.sources], { ch: entry, sec: { id: 'intro', blocks: [] } }));
             art.appendChild(d);
         }
+        const rel = relatedSkoto(ch);
+        if (rel) art.appendChild(rel);
         art.appendChild(chapterFoot(entry));
         quietRepeats(art);
         return art;
@@ -1360,6 +1362,55 @@
             const keys = seen.get(scope);
             if (keys.has(t.dataset.term)) { t.classList.add('is-repeat'); t.tabIndex = -1; } else keys.add(t.dataset.term);
         });
+    }
+
+    function skotoSlug(notePath) {
+        const clean = String(notePath || '').replace(/^\/+|\/+$/g, '').replace(/\.md$/i, '');
+        if (!clean) return '';
+        const segs = clean.normalize('NFC').split('/').map((seg) =>
+            seg.replace(/\s/g, '-')
+                .replace(/&/g, '-and-')
+                .replace(/%/g, '-percent')
+                .replace(/\?/g, '')
+                .replace(/#/g, '')
+                .replace(/[<>:"|*]/g, '')
+                .toLowerCase()
+        );
+        if (segs[segs.length - 1] === '_index') segs[segs.length - 1] = 'index';
+        if (segs.length >= 2 && segs[segs.length - 1] === segs[segs.length - 2]) segs[segs.length - 1] = 'index';
+        let slug = segs.join('/').replace(/\/$/, '');
+        if (slug === 'index') return '';
+        if (slug.endsWith('/index')) slug = slug.slice(0, -'/index'.length);
+        return slug;
+    }
+
+    function relatedSkoto(ch) {
+        const sk = window.OKSAT_SKOTO;
+        if (!sk || !sk.live || !sk.base) return null;
+        const byPath = new Map();
+        (ch.sections || []).forEach((s) => {
+            (s.ref || []).forEach((p) => {
+                if (!byPath.has(p)) byPath.set(p, []);
+                const nums = byPath.get(p);
+                if (s.n && nums.indexOf(s.n) === -1) nums.push(s.n);
+            });
+        });
+        if (!byPath.size) return null;
+        const sec = h('section', 'lr-related', [txt('span', 'lr-label', 'Related in sk.oto')]);
+        const ul = h('ul', 'lr-related-list');
+        byPath.forEach((nums, p) => {
+            const li = h('li', 'lr-related-item');
+            const a = h('a', 'lr-related-link');
+            a.href = sk.base + skotoSlug(p);
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.textContent = p.indexOf('/') !== -1 ? p.slice(p.lastIndexOf('/') + 1) : p;
+            li.appendChild(a);
+            if (nums.length) li.appendChild(txt('span', 'lr-related-secs', ' (§' + nums.join(', ') + ')'));
+            ul.appendChild(li);
+        });
+        sec.appendChild(ul);
+        return sec;
     }
 
     function navList() { return guide.chapters.map((c) => c.id).concat(['deck', 'pearls']); }
