@@ -21,6 +21,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'dx-1',
+            ref: ['Sinus/Diagnostic rigid nasal endoscopy utilizes a standardized three-pass examination sequence', 'Sinus/The Lund-Kennedy endoscopic staging system tracks mucosal edema, polyps, and discharge'],
             n: '3.1',
             title: 'History, exam, endoscopy, imaging',
             blocks: [
@@ -67,6 +68,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'dx-2',
+            ref: ['Sinus/Intradermal dilutional testing IDT and modified quantitative testing MQT quantify allergic sensitization to guide safe immunotherapy escalation'],
             n: '3.2',
             title: 'Skin testing',
             blocks: [
@@ -234,6 +236,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'dx-4',
+            ref: ['Sinus/Acoustic rhinometry and rhinomanometry evaluate internal nasal valve geometry and dynamic airflow resistance through cross-sectional area and transnasal pressure measurements'],
             n: '3.4',
             title: 'Challenge, cytology, airflow, nitric oxide',
             blocks: [
@@ -302,6 +305,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'dx-5',
+            ref: ['Sinus/The Lund-Mackay CT scoring system quantifies sinonasal opacification and ostiomeatal occlusion'],
             n: '3.5',
             title: 'Sinus disease workup',
             blocks: [

@@ -74,6 +74,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sp-prussak',
+            ref: ['Otology/Primary acquired cholesteatoma arises from retraction pocket invagination of the pars flaccida into Prussak space'],
             n: '7.2',
             title: 'Prussak space and the pouches',
             blocks: [
@@ -108,6 +109,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sp-folds',
+            ref: ['Otology/The epitympanic diaphragm and tympanic isthmus govern attic ventilation and selective epitympanic dysventilation'],
             n: '7.3',
             title: 'Folds and the diaphragm',
             blocks: [
@@ -165,6 +167,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sp-isthmus',
+            ref: ['Otology/The epitympanic diaphragm and tympanic isthmus govern attic ventilation and selective epitympanic dysventilation'],
             n: '7.4',
             title: 'Isthmus, ventilation route, mucosa',
             blocks: [
@@ -214,6 +217,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sp-retro',
+            ref: ['Otology/The retrotympanum is partitioned into sinus tympani, facial sinus, and subtympanic sinus by the ponticulus and subiculum'],
             n: '7.5',
             title: 'Retrotympanum partitions',
             blocks: [
@@ -267,6 +271,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sp-sight',
+            ref: ['Otology/Transcanal endoscopic ear surgery TEES provides line-of-sight visualization into the sinus tympani and epitympanum'],
             n: '7.6',
             title: 'What each approach sees',
             blocks: [

@@ -21,6 +21,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'bi-1',
+            ref: ['Sinus/Biologic therapeutics in chronic rhinosinusitis target IgE, IL-4, IL-5, and IL-13 inflammatory pathways'],
             n: '8.1',
             title: 'Drugs and targets',
             blocks: [

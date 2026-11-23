@@ -47,6 +47,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'os-joints',
+            ref: ['Otology/The lever ratio of the malleus to incus provides a one point three to one mechanical advantage', 'Otology/The distance from the incus long process to the stapes footplate averages four to four point five millimeters'],
             n: '6.2',
             title: 'Joints, ligaments and the axis',
             blocks: [
@@ -95,6 +96,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'os-stapedius',
+            ref: ['Otology/Acoustic reflex thresholds and reflex decay testing identify retrocochlear lesions and facial nerve pathology'],
             n: '6.4',
             title: 'Stapedius and the reflex arc',
             blocks: [

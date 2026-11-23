@@ -21,6 +21,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'et-seg',
+            ref: ['Otology/Eustachian tube dysfunction divides into dilatory and patulous forms with opposite treatment goals'],
             n: '8.1',
             title: 'Segments and dimensions',
             blocks: [
@@ -48,6 +49,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'et-cart',
+            ref: ['Otology/Patulous Eustachian tube manifests with autophony, respiratory-synchronous tinnitus, and tympanic membrane excursions on nasal breathing'],
             n: '8.2',
             title: 'Cartilage, fat pad, safety canal',
             blocks: [

@@ -52,6 +52,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'or-parts',
+            ref: ['Otology/The otic capsule is an immutable endochondral bone that provides fixed surgical reference landmarks'],
             n: '1.2',
             title: 'The parts of the temporal bone and their seams',
             blocks: [

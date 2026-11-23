@@ -21,6 +21,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'tm-geo',
+            ref: ['Otology/The tympanic membrane areal ratio of seventeen to one provides the primary impedance gain', 'Otology/The middle ear transformer ratio provides twenty-seven decibels of acoustic impedance matching'],
             n: '4.1',
             title: 'Geometry and mechanics',
             blocks: [
@@ -42,6 +43,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'tm-layers',
+            ref: ['Otology/Primary acquired cholesteatoma arises from retraction pocket invagination of the pars flaccida into Prussak space'],
             n: '4.2',
             title: 'Pars tensa and pars flaccida',
             blocks: [
@@ -91,6 +93,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'tm-quad',
+            ref: ['Otology/Congenital cholesteatoma presents as an anterosuperior white mass behind an intact tympanic membrane'],
             n: '4.4',
             title: 'What lies behind each quadrant',
             blocks: [

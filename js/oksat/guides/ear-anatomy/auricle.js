@@ -40,6 +40,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'au-cart',
+            ref: ['Otology/Auricular hematoma evacuation and bolster compression prevents permanent cauliflower ear deformity'],
             n: '2.2',
             title: 'Cartilage and skin',
             blocks: [
@@ -183,6 +184,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'au-dev',
+            ref: ['Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna'],
             n: '2.6',
             title: 'Development and proportions',
             blocks: [
