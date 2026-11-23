@@ -994,6 +994,235 @@
             "name": "Vestibulocochlear nerve",
             "note": "Fills most of the internal auditory canal: the cochlear nerve anteroinferior, the superior and inferior vestibular nerves posterior. Shown here as one bundle."
         },
+        "porus": {
+            "name": "Porus acusticus internus",
+            "syn": [
+                "Internal acoustic porus"
+            ],
+            "note": "The oval medial opening of the internal auditory canal on the posterior face of the petrous bone. Its posterior lip is sharp and is what the retrosigmoid surgeon drills; the anterior wall is bevelled. A vestibular schwannoma flares it.",
+            "rel": {
+                "lat": [
+                    "iac"
+                ],
+                "med": [
+                    "cpa"
+                ]
+            }
+        },
+        "iac-fundus": {
+            "name": "Fundus of the internal auditory canal",
+            "note": "The blind lateral end of the canal against the otic capsule, a thin perforated plate (lamina cribrosa) divided by the transverse crest and, above it, the vertical crest into the nerve quadrants.",
+            "rel": {
+                "med": [
+                    "iac"
+                ],
+                "lat": [
+                    "vestibule",
+                    "cochlea"
+                ]
+            }
+        },
+        "falciform": {
+            "name": "Transverse crest",
+            "syn": [
+                "Falciform crest",
+                "Crista transversa"
+            ],
+            "note": "Horizontal ridge across the fundus: the facial and superior vestibular nerves above it, the cochlear and inferior vestibular nerves below it.",
+            "rel": {
+                "sup": [
+                    "fn-meatal",
+                    "svn"
+                ],
+                "inf": [
+                    "cochn",
+                    "ivn"
+                ]
+            }
+        },
+        "bills-bar": {
+            "name": "Vertical crest",
+            "syn": [
+                "Bill's bar"
+            ],
+            "note": "Vertical ridge in the superior compartment of the fundus only, between the facial nerve in front and the superior vestibular nerve behind. Named for William House. It does not extend below the transverse crest.",
+            "rel": {
+                "ant": [
+                    "fn-meatal"
+                ],
+                "post": [
+                    "svn"
+                ],
+                "inf": [
+                    "falciform"
+                ]
+            }
+        },
+        "svn": {
+            "name": "Superior vestibular nerve",
+            "note": "Posterosuperior quadrant of the fundus, behind the vertical crest. Supplies the utricle and the ampullae of the superior and lateral canals.",
+            "rel": {
+                "ant": [
+                    "fn-meatal"
+                ],
+                "inf": [
+                    "ivn"
+                ]
+            }
+        },
+        "ivn": {
+            "name": "Inferior vestibular nerve",
+            "note": "Posteroinferior quadrant of the fundus, below the transverse crest. Supplies the saccule; the posterior ampullary nerve leaves separately through the singular canal.",
+            "rel": {
+                "ant": [
+                    "cochn"
+                ]
+            }
+        },
+        "cochn": {
+            "name": "Cochlear nerve",
+            "note": "Anteroinferior quadrant of the fundus, below the transverse crest; enters the modiolus through the cochlear aperture (the bony cochlear nerve canal) and its spiral tract of foramina.",
+            "rel": {
+                "sup": [
+                    "fn-meatal"
+                ]
+            }
+        },
+        "nint": {
+            "name": "Nervus intermedius",
+            "syn": [
+                "Nerve of Wrisberg"
+            ],
+            "note": "The sensory and parasympathetic root of the facial nerve: leaves the brainstem between the facial and vestibulocochlear nerves, often runs with the vestibulocochlear nerve in the angle, and joins the facial nerve in the canal. Taste, lacrimal and salivary secretomotor fibres, and sensation from part of the ear canal."
+        },
+        "singular": {
+            "name": "Singular canal",
+            "syn": [
+                "Foramen singulare"
+            ],
+            "note": "A separate small opening in the posteroinferior fundus for the posterior ampullary nerve, running to the ampulla of the posterior canal."
+        },
+        "pan": {
+            "name": "Posterior ampullary nerve",
+            "syn": [
+                "Singular nerve"
+            ],
+            "note": "Branch of the inferior vestibular nerve to the ampulla of the posterior semicircular canal, through the singular canal."
+        },
+        "meatal-for": {
+            "name": "Meatal foramen",
+            "note": "Where the facial nerve leaves the fundus for the labyrinthine segment: the narrowest point of the fallopian canal, where the arachnoid sleeve ends. Edema here is the presumed site of conduction block in Bell's palsy.",
+            "rel": {
+                "med": [
+                    "fn-meatal"
+                ],
+                "lat": [
+                    "fn-lab"
+                ]
+            }
+        },
+        "bcnc": {
+            "name": "Bony cochlear nerve canal",
+            "syn": [
+                "Cochlear aperture"
+            ],
+            "note": "The short bony channel from the anteroinferior fundus into the modiolus that carries the cochlear nerve. A narrow canal on CT suggests a deficient cochlear nerve even when the internal auditory canal is normal.",
+            "origin": [
+                "otic"
+            ],
+            "rel": {
+                "med": [
+                    "iac-fundus"
+                ],
+                "lat": [
+                    "modiolus"
+                ]
+            }
+        },
+        "modiolus": {
+            "name": "Modiolus",
+            "note": "The bony core of the cochlea that carries the spiral ganglion and the cochlear nerve fibres. Absent in incomplete partition type III, which leaves the fundus open to the cochlea.",
+            "origin": [
+                "otic"
+            ]
+        },
+        "utricle": {
+            "name": "Utricle",
+            "note": "Otolith organ in the vestibule, supplied by the superior vestibular nerve.",
+            "origin": [
+                "otic"
+            ]
+        },
+        "saccule": {
+            "name": "Saccule",
+            "note": "Otolith organ in the vestibule, supplied mainly by the inferior vestibular nerve.",
+            "origin": [
+                "otic"
+            ]
+        },
+        "scarpa": {
+            "name": "Vestibular ganglion",
+            "syn": [
+                "Scarpa's ganglion"
+            ],
+            "note": "The cell bodies of the vestibular nerve fibres, within the internal auditory canal."
+        },
+        "coch-aq": {
+            "name": "Cochlear aqueduct",
+            "syn": [
+                "Perilymphatic duct"
+            ],
+            "note": "Bony channel from the basal turn of the cochlea to the subarachnoid space, below the internal auditory canal. In translabyrinthine surgery it marks the inferior limit of drilling, above the lower cranial nerves at the jugular foramen.",
+            "rel": {
+                "sup": [
+                    "iac"
+                ]
+            }
+        },
+        "vest-aq": {
+            "name": "Vestibular aqueduct",
+            "syn": [
+                "Aqueduct of the vestibule"
+            ],
+            "note": "Bony channel for the endolymphatic duct from the vestibule to the endolymphatic sac on the posterior face of the petrous bone, behind the internal auditory canal; its outer opening is under a bony lip (the operculum).",
+            "rel": {
+                "ant": [
+                    "iac"
+                ]
+            }
+        },
+        "arcuate": {
+            "name": "Arcuate eminence",
+            "note": "Bulge on the floor of the middle fossa usually over the superior semicircular canal, though the two do not always coincide. A middle fossa landmark for finding the internal auditory canal.",
+            "rel": {
+                "inf": [
+                    "ssc"
+                ],
+                "sup": [
+                    "mcfdura"
+                ]
+            }
+        },
+        "subarc-fossa": {
+            "name": "Subarcuate fossa",
+            "note": "Depression on the posterior face of the petrous bone, above and lateral to the porus, under the arch of the superior canal; the subarcuate artery enters it."
+        },
+        "subarc-a": {
+            "name": "Subarcuate artery",
+            "note": "Usually from AICA or its meatal loop, into the subarcuate fossa under the arch of the superior canal. Coagulate and divide it before retracting: avulsion can tear AICA."
+        },
+        "comcoch-a": {
+            "name": "Common cochlear artery",
+            "note": "One of the two divisions of the labyrinthine artery: the cochlea and part of the vestibule."
+        },
+        "antvest-a": {
+            "name": "Anterior vestibular artery",
+            "note": "One of the two divisions of the labyrinthine artery: the utricle, the superior and lateral canal ampullae and part of the saccule."
+        },
+        "cpa": {
+            "name": "Cerebellopontine angle",
+            "note": "The subarachnoid cistern between the cerebellum, pons and posterior face of the petrous bone, medial to the porus; holds the facial, intermedius and vestibulocochlear nerves and AICA."
+        },
         "pfdura": {
             "name": "Posterior fossa dura",
             "note": "Over the posterior face of the petrous bone, medial to the sigmoid sinus. Trautmann's triangle (between the sigmoid, the superior petrosal sinus and the bony labyrinth) is the window onto it from the mastoid.",
