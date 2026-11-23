@@ -1,13 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
-  <title>Mid-canal</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" width="960" height="380" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Mid-canal: cochlear and inferior vestibular fused</title>
   <g data-g="cn8">
-    <ellipse cx="635.1" cy="206.7" rx="42" ry="34" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
-    <line x1="601.1" y1="206.7" x2="669.1" y2="206.7" stroke="#555049" stroke-width="1" stroke-dasharray="3 3"/>
+    <path d="M 337.5 167.5 A 46 46 0 0 0 402.5 232.5 Z" fill="#ddd0b4" stroke="none"/>
+    <path d="M 402.5 232.5 A 46 46 0 0 0 337.5 167.5 Z" fill="#f7f1e3" stroke="none"/>
+    <circle cx="370" cy="200" r="46" fill="none" stroke="#555049" stroke-width="1.4"/>
+    <line x1="337.5" y1="167.5" x2="402.5" y2="232.5" stroke="#555049" stroke-width="1.4" stroke-dasharray="4 3" stroke-opacity="0.35"/>
   </g>
-  <g data-g="fn-meatal"><circle cx="556.9" cy="185.8" r="22" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
-  <path d="M 530.8 221.2 A 82 82 0 0 1 530.8 178.8" fill="none" stroke="#9b7600" stroke-width="2"/>
-  <polygon points="530.8,178.8 537.8,182.8 531.8,186.8" fill="#9b7600"/>
-  <text x="556.9" y="189.8" text-anchor="middle" font-size="11.5" font-weight="bold">VII</text>
-  <text x="635.1" y="200.7" text-anchor="middle" font-size="11.5" font-weight="bold">VIII</text>
-  <text x="610" y="308" text-anchor="middle" font-size="11" fill="#555049">n. int. joined VII</text>
+  <g data-g="fn-meatal"><circle cx="319.4" cy="157.6" r="20" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-label="1" font-size="11.5">
+    <line x1="307.4" y1="141.6" x2="294" y2="106" stroke="#555049" stroke-width="1"/>
+    <text x="294" y="90" text-anchor="middle">VII</text>
+    <text x="294" y="103" text-anchor="middle" font-size="10.5" fill="#555049">(n. int. merged)</text>
+    <text x="353" y="221" text-anchor="middle" font-size="11">cochlear</text>
+    <text x="387" y="187" text-anchor="middle" font-size="11">vestibular</text>
+    <line x1="402.5" y1="232.5" x2="438" y2="284" stroke="#555049" stroke-width="1"/>
+    <text x="442" y="288" text-anchor="start" fill="#555049">poorly defined</text>
+  </g>
 </svg>
