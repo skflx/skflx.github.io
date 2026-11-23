@@ -36,7 +36,7 @@ semicircular canal planes.
 
 **State:** an index. Name beside a hero that opens its portrait from the "MD"
 word (`docs/decisions.md` §10) with an accessible toggle, guarded text selection,
-and an organic 0.5s decelerating glide curve. Five numbered sections, all folded
+and an organic 0.5s decelerating glide curve. Five sections marked O or X on a blank audiogram hero, all folded
 at load; each opens from its head or from a link into it; with no JavaScript all
 five are open. Sticky section heads on desktop. The residency year is computed
 in `js/onepager.js` and duplicated as a no-JS fallback in the HTML: change both or neither.

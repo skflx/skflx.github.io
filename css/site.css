@@ -122,6 +122,20 @@ a:hover { text-decoration-color: var(--signal); }
   clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
 }
 
+/* Audiogram marks: the two signals drawn as an audiogram draws them,
+   right ear O in --signal, left ear X in --signal-2. Across the site
+   O marks something to use (a tool, a question) and X something to
+   read (prose, a reference code). Always aria-hidden, always next to
+   words that say the same thing. */
+.ear { position: relative; display: inline-block; flex: none; width: 0.9em; height: 0.9em; vertical-align: -0.08em; }
+.ear-o { border: 0.13em solid var(--signal); border-radius: 50%; }
+.ear-x::before, .ear-x::after {
+  content: ''; position: absolute; left: 50%; top: -0.14em; bottom: -0.14em;
+  width: 0.13em; margin-left: -0.065em; border-radius: 1px;
+  background: var(--signal-2); transform: rotate(45deg);
+}
+.ear-x::after { transform: rotate(-45deg); }
+
 /* Mono label: anything that is metadata rather than prose. */
 .site-kicker {
   font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
@@ -253,7 +267,7 @@ dialog.cmdk::backdrop { background: var(--bg); opacity: 0.86; }
   display: grid; gap: 0.15rem; padding: 0.55rem 0.6rem; min-height: 44px; box-sizing: border-box;
   border-top: 1px solid var(--rule); cursor: pointer; min-width: 0;
 }
-.cmdk-opt[aria-selected="true"] { background: var(--wash); box-shadow: inset 3px 0 0 var(--signal); }
+.cmdk-opt[aria-selected="true"] { background: var(--wash); }
 .cmdk-title-text { color: var(--ink); line-height: 1.4; overflow-wrap: anywhere; }
 .cmdk-sub { font: 500 0.72rem/1.3 var(--font-mono); letter-spacing: 0.02em; color: var(--ink-faint); overflow-wrap: anywhere; }
 .cmdk-foot { margin: 0.5rem 0 0; padding-top: 0.5rem; border-top: 1px solid var(--rule); font: 500 0.7rem/1.3 var(--font-mono); letter-spacing: 0.02em; color: var(--ink-faint); }

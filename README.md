@@ -5,8 +5,8 @@ self-contained clinical study tools. Live at [skflx.github.io](https://skflx.git
 
 ## The site
 
-`index.html` is one scrollable page set like an index: a large name, five
-numbered sections (About, Tools, Clinical projects, Research, Off hours) that start
+`index.html` is one scrollable page set like an index: a large name on a blank audiogram, five
+sections (About, Tools, Clinical projects, Research, Off hours) that start
 folded and open on a tap of their heads, and a deep link such as `index.html#research`
 opens its section. The portrait opens from the "MD" in the name. On desktop an open
 section's head stays pinned in a left column; on phones it is one column. The
@@ -17,7 +17,8 @@ renderer (`js/ascii3d.js`). Each is an easter egg: select or tap its word in the
 and it unfolds in place. How to make one: `docs/diagrams.md`.
 
 Design is one system in `css/site.css`: paper and ink, hairline rules, and two
-audiogram signal colours (red for action, blue for science). Nothing is coloured for
+audiogram signal colours (red for action, blue for science), also drawn as the
+audiogram's symbols: a red O for things to use, a blue X for things to read. Nothing is coloured for
 decoration. A day/night toggle flips `html[data-theme]`, persisted as `sk_theme`.
 
 ## The tools

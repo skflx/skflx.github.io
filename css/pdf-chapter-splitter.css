@@ -105,9 +105,9 @@
 .toast-container { position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
 .toast-item {
   display: flex; align-items: center; gap: 0.6rem; max-width: 26rem; padding: 0.75rem 1rem; pointer-events: auto;
-  background: var(--surface); border: 1px solid var(--rule-strong); border-left: 4px solid var(--signal); border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--signal); border-radius: var(--radius);
   font-size: var(--step--1); animation: toastIn 0.2s var(--ease);
 }
-.toast-item.success { border-left-color: var(--ok); }
-.toast-item.error { border-left-color: var(--bad); }
+.toast-item.success { border-color: var(--ok); }
+.toast-item.error { border-color: var(--bad); }
 @keyframes toastIn { from { transform: translateY(12px); opacity: 0; } }

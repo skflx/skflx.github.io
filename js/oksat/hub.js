@@ -38,7 +38,9 @@
       var nr = items[id] && items[id].nextReview;
       return nr && nr <= today;
     }).length;
-    return { answered: Object.keys(progress.answers || {}).length, due: due, updated: String(progress.updated || '') };
+    var fc = progress.firstCorrect || {}, right = 0, scored = 0;
+    Object.keys(fc).forEach(function (q) { if (fc[q] === true || fc[q] === false) { scored++; if (fc[q]) right++; } });
+    return { answered: Object.keys(progress.answers || {}).length, due: due, right: right, scored: scored, updated: String(progress.updated || '') };
   }
 
   /* Manifest strings are committed data, but escape anyway: innerHTML
@@ -53,20 +55,21 @@
   /* ---- module card ---- */
   function moduleCard(m, st) {
     var subInfo = subs[m.subspecialty];
-    var pct = m.count ? Math.round((st.answered / m.count) * 100) : 0;
+    var acc = st.scored ? Math.round((st.right / st.scored) * 100) : 0;
     var a = document.createElement('a');
     a.className = 'module-card';
     a.href = 'oksat-study.html?m=' + encodeURIComponent(m.slug);
     a.innerHTML =
-      '<div class="module-accent" style="background:' + hue(subInfo ? subInfo.hue : m.accent) + '"></div>' +
       '<div class="module-body">' +
         '<div class="module-label">' + metaLine(m, subInfo, [m.count + ' questions']) + '</div>' +
         '<div class="module-title">' + esc(m.title) + draftTag(m) + '</div>' +
         '<p class="module-desc">' + esc(m.desc) + '</p>' +
         (st.due > 0 ? '<div class="module-due">' + st.due + ' due for review</div>' : '') +
         (st.answered > 0
-          ? '<div class="module-meter"><span class="bar"><span class="fill" style="width:' + pct + '%"></span></span>' +
-            '<span>' + st.answered + ' / ' + m.count + '</span></div>'
+          ? '<div class="module-track">' +
+              (st.scored ? '<span class="trk" aria-hidden="true"><span class="ear ear-o" style="left:' + acc + '%"></span></span>' +
+                '<span>' + acc + '% first try</span><span>' : '<span>') +
+              st.answered + ' / ' + m.count + ' answered</span></div>'
           : '') +
       '</div>' +
       '<div class="module-arrow">' + (st.answered > 0 && st.answered < m.count ? 'Resume' : 'Launch') + ' &rarr;</div>';
@@ -86,7 +89,6 @@
     a.className = 'module-card';
     a.href = 'oksat-learn.html?g=' + encodeURIComponent(g.slug);
     a.innerHTML =
-      '<div class="module-accent" style="background:' + hue(subInfo ? subInfo.hue : g.accent) + '"></div>' +
       '<div class="module-body">' +
         '<div class="module-label">' + metaLine(g, subInfo, [chapters + ' chapters', '~' + Math.round(mins / 60 * 10) / 10 + ' h']) + '</div>' +
         '<div class="module-title">' + esc(g.title) + draftTag(g) + '</div>' +

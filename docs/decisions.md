@@ -112,6 +112,13 @@ must never read as a wrong answer; red stays for review-due and kickers (act). T
 ink, red only for hover, the current item and Active Recall, blue for science. Categorical colours that encode game state (Airway teams, topics,
 difficulty) are allowed; decorative colour is not.
 
+The two signals are also drawn as the audiogram draws them: `.ear-o` (red O, right ear) marks something
+to use (a tool, a question) and `.ear-x` (blue X, left ear) something to read (prose, a CPT code). They
+mark the home sections, search results and scope buttons; on the OKSAT hub a module's O sits on a 0-100%
+track at its first-attempt accuracy. A mark is always `aria-hidden` and beside words that say the same.
+The home hero stands on a blank audiogram (octaves by dB HL, >=960px), with a key saying so; nothing is
+ever plotted on it as a threshold. No eyebrow kicker above a page title and no 01-05 section numbers.
+
 Cmd/Ctrl-K means "search where you are": on the site it opens the palette (`js/palette.js`, which also
 indexes the wiki's notes); inside the wiki it opens the wiki's own search. Neither surface rebinds it.
 

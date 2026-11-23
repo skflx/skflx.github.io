@@ -356,19 +356,19 @@ function renderTable() {
 
     tr.innerHTML = `
       <td style="text-align: center;">
-        <input type="checkbox" class="row-checkbox" data-index="${idx}" ${item.selected ? 'checked' : ''}>
+        <input type="checkbox" class="row-checkbox" data-index="${idx}" aria-label="Include chapter ${idx + 1}" ${item.selected ? 'checked' : ''}>
       </td>
       <td class="mono" style="text-align: center; color: var(--ink-muted);">
         ${String(idx + 1).padStart(2, '0')}
       </td>
       <td>
-        <input type="text" class="row-title-input" data-index="${idx}" value="${escapeHtml(item.title)}">
+        <input type="text" class="row-title-input" data-index="${idx}" aria-label="Chapter ${idx + 1} title" value="${escapeHtml(item.title)}">
       </td>
       <td style="text-align: center;">
-        <input type="number" class="row-num-input row-start-input" data-index="${idx}" min="1" max="${totalPdfPages}" value="${item.start}">
+        <input type="number" class="row-num-input row-start-input" data-index="${idx}" aria-label="Chapter ${idx + 1} first page" min="1" max="${totalPdfPages}" value="${item.start}">
       </td>
       <td style="text-align: center;">
-        <input type="number" class="row-num-input row-end-input" data-index="${idx}" min="1" max="${totalPdfPages}" value="${item.end}">
+        <input type="number" class="row-num-input row-end-input" data-index="${idx}" aria-label="Chapter ${idx + 1} last page" min="1" max="${totalPdfPages}" value="${item.end}">
       </td>
       <td style="text-align: center;">
         <span class="tag-pill mono">${span} pg${span === 1 ? '' : 's'}</span>

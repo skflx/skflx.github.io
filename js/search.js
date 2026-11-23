@@ -159,16 +159,20 @@
         var a = document.createElement('a');
         a.className = 'srch-hit';
         a.href = h.entry.href;
+        var mark = document.createElement('span');
+        mark.className = 'ear ' + (h.entry.group === 'cpt' ? 'ear-x' : 'ear-o');
+        mark.setAttribute('aria-hidden', 'true');
         var label = document.createElement('span');
         label.className = 'srch-label';
         label.textContent = h.entry.label;
         var field = document.createElement('span');
         field.className = 'srch-field';
         field.textContent = h.field.name;
+        label.append(' · ', field);
         var text = document.createElement('span');
         text.className = 'srch-text';
         text.textContent = h.field.text;
-        a.append(label, field, text);
+        a.append(mark, label, text);
         li.appendChild(a);
         return li;
     }
@@ -292,7 +296,10 @@
             sec.className = 'srch-group';
             var h2 = document.createElement('h2');
             h2.className = 'site-kicker';
-            h2.textContent = g.title + ' · ' + mine.length;
+            var gm = document.createElement('span');
+            gm.className = 'ear ' + (g.id === 'cpt' ? 'ear-x' : 'ear-o');
+            gm.setAttribute('aria-hidden', 'true');
+            h2.append(gm, document.createTextNode(g.title + ' · ' + mine.length));
             var ol = document.createElement('ol');
             mine.slice(0, CAP).forEach(function (h) { ol.appendChild(hitRow(h)); });
             sec.append(h2, ol);

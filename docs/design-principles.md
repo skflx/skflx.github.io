@@ -60,7 +60,7 @@ Values live in `css/oksat.css` (light and dark blocks). Subspecialty hues live i
 | `--ok-surface` | cards, modal |
 | `--ok-text` | primary text; primary buttons |
 | `--ok-accent` | actions, focus, progress (audiogram blue; not red, because red is a miss: `docs/decisions.md` §5) |
-| `--ok-ochre` | kickers, review-due (audiogram red) |
+| `--ok-ochre` | review-due, guide chapter labels (audiogram red) |
 | `--ok-correct` | pass |
 | `--ok-incorrect` | miss |
 
@@ -87,7 +87,9 @@ here, so `em` in titles is set upright (no faux italic).
 
 - Radii 4px, except pills (999px). Square is the house style.
 - One content column, `--ok-maxw`, with generous bottom padding.
-- Hub modules are ruled rows under a subspecialty rule, not floating cards.
+- Hub modules are ruled rows under a subspecialty rule, not floating cards, with no
+  side stripe. A started module shows the audiogram O on a 0-100% track at its
+  first-attempt accuracy (partials excluded); guides keep a 2px completion rule.
 - The module landing follows the hub: a left mono kicker, the wide title, one
   mono facts line, then actions and the domains as ruled rows with the hue tick.
   No meter until the first answer, and then a 2px rule, not a card.
