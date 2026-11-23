@@ -21,7 +21,7 @@ The owner decides the roster for each wave. Protocol: `docs/delegation.md`.
 
 ## Skills
 
-`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`). Claude invokes them as skills; any other agent reads the file and follows it as written.
+`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `gemini-delegate`, `oksat-guide`, `oksat-module`). Claude invokes them as skills; any other agent reads the file and follows it as written.
 
 ## What this is
 
@@ -51,6 +51,9 @@ node tools/test-ssb.mjs          # SSB: every section; --only a,b for some; CI r
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 node tools/ssb-content.mjs --queue # SSB owner review queue: draft nodes whose cited sources are all verified
 node tools/ssb-frames.mjs        # SSB: every CT slice as a labelled PNG + per-frame UW tip agreement vs the baseline
+
+# Delegate a WP brief (or a read-only review) to Gemini CLI, headless: docs/delegation.md §9
+node tools/gemini-run.mjs <brief.md> [--mode work|read]
 
 # ASCII 3D figures: preview as text, then refresh the baked no-JS frames
 node tools/ascii3d.mjs render <id> --inks   # the exact frame + its ink map
