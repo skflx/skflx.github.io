@@ -14,6 +14,7 @@ lives here: each spec has a parent GitHub issue, with one sub-issue per work pac
 | [2026-11-10-ssb-nasal-framework](2026-11-10-ssb-nasal-framework.md) | SSB `nasal-framework` diorama spec | #267 |
 | [2026-11-10-jc-whisking-auditory-cortex](2026-11-10-jc-whisking-auditory-cortex.md) | journal-club OKSAT guide on auditory cortex and whisking movements | none |
 | [2026-11-23-iac-anatomy-guide](2026-11-23-iac-anatomy-guide.md) | internal auditory canal: ground-up OKSAT guide, question module, sk.oto `ref` renderer | #326 |
+| [2026-11-23-iac-anatomy-handoff](2026-11-23-iac-anatomy-handoff.md) | IAC serial queue and Gemini handoff (one prompt, one step, one PR) | #326 |
 | [2026-11-23-iac-anatomy-ledger](2026-11-23-iac-anatomy-ledger.md) | `[GROUND]` truth-concordance ledger for the IAC guide | #326 |
 | [2026-10-07-ssb-roadmap](2026-10-07-ssb-roadmap.md) | SSB decisions, work package specs, content backlog | #266 |
 | [2026-11-20-ponytail-audit-fixes](2026-11-20-ponytail-audit-fixes.md) | ponytail-audit fixes: OKSAT timezone SRS & hub Resume, PDF splitter, CPT fallback, palette stamps | pending (`gh` CLI unavailable) |
