@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Three surgical corridors to the right IAC (base, schematic)</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <g data-g="cerebellum"><path d="M 380 540 L 520 330 L 620 470 L 640 540 Z" fill="#f4f1ea" stroke="#555049" stroke-width="1.2"/></g>
+  <text x="515" y="485" text-anchor="middle" font-size="12" fill="#555049">Posterior fossa</text>
+  <polygon points="440,170 740,350 620,470" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <g data-g="iac"><rect x="545" y="318" width="115" height="24" fill="#555049" fill-opacity="0.25" stroke="#555049" stroke-width="1.2"/></g>
+  <g data-g="porus"><rect x="539" y="314" width="12" height="32" fill="none" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="iac-fundus"><rect x="654" y="314" width="12" height="32" fill="none" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <line x1="622" y1="312" x2="622" y2="322" stroke="#555049" stroke-width="1.2"/>
+  <text x="622" y="308" text-anchor="middle" font-size="11" fill="#555049">⅔</text>
+  <g data-g="cochlea"><circle cx="672" cy="292" r="20" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="vestibule"><circle cx="690" cy="338" r="16" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="pscc"><path d="M 655 372 A 26 26 0 1 0 705 380" fill="none" stroke="#8a7b5f" stroke-width="5" stroke-linecap="round"/></g>
+  <g data-g="vest-aq"><line x1="640" y1="372" x2="610" y2="420" stroke="#8a7b5f" stroke-width="3" stroke-linecap="round"/></g>
+  <g data-g="sigmoid"><circle cx="700" cy="470" r="20" fill="#2f5d8a" stroke="#2f5d8a" stroke-width="1"/></g>
+  <g data-label="1" font-size="11.5">
+    <text x="536" y="310" text-anchor="end" fill="#555049">Porus</text>
+    <text x="672" y="266" text-anchor="middle">Cochlea</text>
+    <text x="712" y="342" text-anchor="start">Vestibule</text>
+    <text x="646" y="392" text-anchor="end" font-size="11">Common crus / PSCC</text>
+    <text x="605" y="430" text-anchor="end" font-size="11" fill="#555049">Vest. aq.</text>
+    <text x="674" y="474" text-anchor="end" fill="#2f5d8a" font-weight="bold">Sigmoid</text>
+  </g>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="50" y1="472" x2="86" y2="472" stroke="#555049" stroke-width="1.2"/>
+    <line x1="68" y1="454" x2="68" y2="490" stroke="#555049" stroke-width="1.2"/>
+    <text x="68" y="450" text-anchor="middle" font-weight="bold">A</text>
+    <text x="68" y="502" text-anchor="middle" font-weight="bold">P</text>
+    <text x="45" y="476" text-anchor="end" font-weight="bold">M</text>
+    <text x="91" y="476" text-anchor="start" font-weight="bold">L</text>
+    <text x="68" y="514" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Right ear</text>
+  </g>
+</svg>

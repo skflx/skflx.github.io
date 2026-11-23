@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Fisch: the canal's angle from the arcuate eminence</title>
+  <line x1="520" y1="300" x2="340" y2="300" stroke="#2F6E6A" stroke-width="2" stroke-dasharray="6 4"/>
+  <line x1="520" y1="300" x2="430" y2="455.9" stroke="#2F6E6A" stroke-width="2" stroke-dasharray="6 4"/>
+  <path d="M 460 300 A 60 60 0 0 0 490 352" fill="none" stroke="#2F6E6A" stroke-width="2"/>
+  <text x="458" y="338" text-anchor="end" font-size="12.5" font-weight="bold" fill="#2F6E6A">≈ 60°</text>
+  <text x="220" y="456" font-size="11.5" fill="#555049">45–60° (House Clinic Atlas); 73.5 ± 11.7° on CT (Sahana 2023)</text>
+</svg>
