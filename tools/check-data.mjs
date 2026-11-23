@@ -618,7 +618,7 @@ function checkGuides() {
     if (Array.isArray(snap.notes)) noteSet = new Set(snap.notes);
   } catch (e) { fail('tools/skoto-notes.json load: ' + e.message); }
   ok(noteSet.size > 0, `tools/skoto-notes.json: ${noteSet.size} sk.oto note paths`, 'tools/skoto-notes.json missing or empty');
-  const SKIP = new Set(['t', 'id', 'src', 'k', 'alt', 'm', 'c', 'refs', 'tone', 'data', 'g', 'base', 'dirs', 'poly', 'modes', 'mode', 'on']);
+  const SKIP = new Set(['t', 'id', 'src', 'k', 'alt', 'm', 'c', 'ref', 'refs', 'tone', 'data', 'g', 'base', 'dirs', 'poly', 'modes', 'mode', 'on']);
   const used = new Set();
   const termScan = (v, key, where, out) => {
     if (typeof v === 'string') {
