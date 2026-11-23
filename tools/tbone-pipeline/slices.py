@@ -32,6 +32,14 @@ CROP = {'axial': (70, 60, 360, 400), 'coronal': (20, 120, 380, 316)}   # x0, y0,
 SLICES = [('axial', 'ax', n) for n in (18, 30, 41, 47, 56)] + [('coronal', 'co', n) for n in (21, 18, 17, 15, 10)]
 CT_DIR = os.path.join(REPO, 'images', 'oksat', 'ear-anatomy', 'ct')
 GUIDE = os.path.join(REPO, 'js', 'oksat', 'guides', 'ear-anatomy', 'imaging.js')
+GUIDES = {
+    'ear-anatomy': (SLICES, CT_DIR, GUIDE),
+    'iac-anatomy': (
+        [('axial', 'ax', n) for n in (29, 32, 36)] + [('coronal', 'co', n) for n in (14, 16)],
+        os.path.join(REPO, 'images', 'oksat', 'iac-anatomy', 'ct'),
+        os.path.join(REPO, 'js', 'oksat', 'guides', 'iac-anatomy', 'imaging.js'),
+    ),
+}
 GLOSSARY = os.path.join(REPO, 'js', 'olsb', 'glossary.js')
 
 
@@ -102,14 +110,19 @@ def rewrite(js, name, kept):
 
 def main():
     check = '--check' in sys.argv
+    guide_key = 'ear-anatomy'
+    if '--guide' in sys.argv:
+        guide_key = sys.argv[sys.argv.index('--guide') + 1]
+    slices_cfg, ct_dir, guide_path = GUIDES[guide_key]
     lm = json.load(open(os.path.join(OUT, 'geometry', 'landmarks.json')))
     gl = glossary_ids()
-    js = open(GUIDE).read()
+    has_guide = os.path.exists(guide_path)
+    js = open(guide_path).read() if has_guide else ''
     bad = False
-    for plane, ab, n in SLICES:
+    for plane, ab, n in slices_cfg:
         name = f'{ab}-{n}'
         data = crop_bytes(plane, n)
-        path = os.path.join(CT_DIR, name + '.jpg')
+        path = os.path.join(ct_dir, name + '.jpg')
         same = os.path.exists(path) and open(path, 'rb').read() == data
         kept, dropped = regions(lm, gl, plane, n)
         print(f'{name}: {len(kept)} regions, {len(dropped)} dropped, crop {"unchanged" if same else "NEW"}')
@@ -119,16 +132,17 @@ def main():
             print(f'    WARNING: {name} has {len(kept)} regions; a find-mode hotspot needs 3 (check-data)')
         for nm, why in dropped:
             print(f'    dropped {nm}: {why}')
-        js = rewrite(js, name, kept)
+        if has_guide and f"ct/{name}.jpg'" in js:
+            js = rewrite(js, name, kept)
         if not same:
             bad = True
             if not check:
-                os.makedirs(CT_DIR, exist_ok=True)
+                os.makedirs(ct_dir, exist_ok=True)
                 open(path, 'wb').write(data)
-    if js != open(GUIDE).read():
+    if has_guide and js != open(guide_path).read():
         bad = True
         if not check:
-            open(GUIDE, 'w').write(js)
+            open(guide_path, 'w').write(js)
     if check and bad:
         print('STALE: rerun slices.py without --check')
         sys.exit(1)
