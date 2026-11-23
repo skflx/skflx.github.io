@@ -150,6 +150,9 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - **Untrusted input**: `?g=`, `?c=` and the hash match only known ids; a payload renders as text.
 - **sk.oto link**: one "sk.oto map ↗" link (labelled "Read the map in sk.oto") with the exact `OKSAT_SKOTO`
   URL where the subspecialty has a map; none where it has none, or when `live` is false.
+- **sk.oto note snapshot**: `tools/skoto-notes.json` holds the wiki's `content/**/*.md`
+  paths; `check-data` fails any unknown, chapter-level, or duplicate section `ref`. Refresh
+  with `node tools/skoto-notes.mjs [path/to/ohns-wiki-skflx]`.
 - Manual: read each new chapter in both themes and at phone width. A green run
   proves structure, not that the page teaches.
 

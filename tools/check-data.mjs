@@ -470,6 +470,26 @@ function liveGuideEnv(G) {
   };
 }
 
+/* Rule 11: section `ref` rows cite real sk.oto notes and never appear on a chapter or duplicate within a section. */
+function guideRefProblems(ch, chId, noteSet) {
+  const out = [];
+  if (ch.ref !== undefined) out.push(`${chId}: ref belongs on a section, not a chapter`);
+  for (const s of ch.sections || []) {
+    if (s.ref === undefined) continue;
+    if (!Array.isArray(s.ref) || s.ref.some((r) => typeof r !== 'string' || !r)) {
+      out.push(`${chId}/${s.id}: ref must be an array of non-empty strings`);
+      continue;
+    }
+    const seen = new Set();
+    for (const r of s.ref) {
+      if (seen.has(r)) out.push(`${chId}/${s.id}: duplicate ref '${r}'`);
+      seen.add(r);
+      if (!noteSet.has(r)) out.push(`${chId}/${s.id}: unknown sk.oto ref '${r}'`);
+    }
+  }
+  return out;
+}
+
 /* Rule 10: in-memory good and bad fixtures; nothing is written to the repo. */
 function checkBlockValidators() {
   console.log('\nguide block validators: in-memory self-test (no fixture files written)');
@@ -548,6 +568,11 @@ function checkBlockValidators() {
   if (!draftProblem({ draft: 'yes' })) selfFail.push("bad 'draft: yes' accepted");
   if (attributionProblems('ear-anatomy', ['ct/ax-3.png', 'tm-right.svg', 'ATTRIBUTION.md'], files[ATTR]).length) selfFail.push('good attribution rejected');
   if (!attributionProblems('ear-anatomy', [RASTER_NOT_LISTED.slice(DIR.length)], files[ATTR]).length) selfFail.push("bad 'raster absent from ATTRIBUTION.md' accepted");
+  const refSet = new Set(['Otology/Note A', 'Otology/Note B']);
+  if (guideRefProblems({ sections: [{ id: 's1', ref: ['Otology/Note A'] }] }, 'ch1', refSet).length) selfFail.push('good section ref rejected');
+  if (!guideRefProblems({ ref: ['Otology/Note A'], sections: [] }, 'ch1', refSet).some((m) => m.includes('ch1: ref belongs on a section'))) selfFail.push('bad chapter ref accepted');
+  if (!guideRefProblems({ sections: [{ id: 's1', ref: ['Otology/Missing'] }] }, 'ch1', refSet).some((m) => m.includes("ch1/s1: unknown sk.oto ref 'Otology/Missing'"))) selfFail.push('bad unknown ref accepted');
+  if (!guideRefProblems({ sections: [{ id: 's1', ref: ['Otology/Note A', 'Otology/Note A'] }] }, 'ch1', refSet).some((m) => m.includes("ch1/s1: duplicate ref 'Otology/Note A'"))) selfFail.push('bad duplicate ref accepted');
   ok(selfFail.length === 0, 'guide block validators reject the W0.3 bad fixtures',
     'guide block validator self-test: ' + selfFail.join(' | '));
 }
@@ -587,6 +612,12 @@ function checkGuides() {
      an acronym-shaped token the lexicon does not know, and on a lexicon entry no guide uses. */
   let T = null;
   try { T = loadWindow(rel('js/oksat/terms.js')).OKSATTerms; } catch (e) { fail('js/oksat/terms.js load: ' + e.message); }
+  let noteSet = new Set();
+  try {
+    const snap = JSON.parse(fs.readFileSync(rel('tools/skoto-notes.json'), 'utf8'));
+    if (Array.isArray(snap.notes)) noteSet = new Set(snap.notes);
+  } catch (e) { fail('tools/skoto-notes.json load: ' + e.message); }
+  ok(noteSet.size > 0, `tools/skoto-notes.json: ${noteSet.size} sk.oto note paths`, 'tools/skoto-notes.json missing or empty');
   const SKIP = new Set(['t', 'id', 'src', 'k', 'alt', 'm', 'c', 'refs', 'tone', 'data', 'g', 'base', 'dirs', 'poly', 'modes', 'mode', 'on']);
   const used = new Set();
   const termScan = (v, key, where, out) => {
@@ -669,6 +700,7 @@ function checkGuides() {
       (ch.tldr || []).forEach((t) => strings.push([c.id + '.tldr', t]));
       for (const [at, t] of strings) { const m = markup(t); if (m) problems.push(`${at}: ${m}: ${t.slice(0, 50)}`); }
       if (T) termScan(ch, '', c.id, problems);
+      if (noteSet.size) guideRefProblems(ch, c.id, noteSet).forEach((m) => problems.push(m));
     }
     ok(problems.length === 0, `${tag}: ${g.chapters.length} chapters, blocks, markup, figures and module references resolve`,
       `${tag}: ${problems.length} problem(s):\n        ` + problems.slice(0, 12).join('\n        '));
