@@ -18,7 +18,7 @@
     <text x="112" y="164" text-anchor="middle">Dural tail (non-specific)</text>
     <line x1="286" y1="152" x2="318" y2="94" stroke="#555049" stroke-width="1"/>
     <text x="324" y="92" text-anchor="start" font-weight="bold">Hyperostosis (strong sign)</text>
-    <text x="412" y="256" text-anchor="start" fill="#555049">Porus not flared</text>
+    <text x="402" y="296" text-anchor="start" fill="#555049">Porus not flared</text>
   </g>
   <g data-label="1" font-size="11" fill="#555049">
     <line x1="46" y1="376" x2="82" y2="376" stroke="#555049" stroke-width="1.2"/>
