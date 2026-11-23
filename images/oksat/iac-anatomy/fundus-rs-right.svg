@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Right fundus from medial (retrosigmoid view)</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="15" font-weight="bold">Right fundus from medial (retrosigmoid view)</text>
+  <circle cx="380" cy="280" r="190" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/>
+  <circle cx="380" cy="280" r="176" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.2"/>
+  <g data-g="falciform"><rect x="200" y="244" width="360" height="14" rx="7" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="bills-bar"><rect x="373" y="112" width="14" height="132" rx="7" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="fn-meatal"><ellipse cx="300" cy="180" rx="52" ry="46" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-g="svn">
+    <rect x="420" y="140" width="100" height="80" rx="12" fill="#f7f1e3" fill-opacity="0.35" stroke="#555049" stroke-width="1" stroke-dasharray="3 3"/>
+    <circle cx="437" cy="157" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="437" cy="180" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="437" cy="203" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="470" cy="157" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="470" cy="180" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="470" cy="203" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="503" cy="157" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="503" cy="180" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="503" cy="203" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+  </g>
+  <g data-g="cochn">
+    <circle cx="290" cy="360" r="68" fill="#f7f1e3" fill-opacity="0.2" stroke="none"/>
+    <circle cx="290" cy="360" r="14" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="312.0" cy="360.0" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="309.3" cy="376.2" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="294.9" cy="388.0" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="274.2" cy="387.4" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="257.3" cy="371.9" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="254.3" cy="347.0" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="269.4" cy="324.3" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="297.7" cy="316.3" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="326.5" cy="329.4" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="340.8" cy="360.0" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="331.4" cy="394.7" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="299.9" cy="416.3" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="259.8" cy="412.3" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <circle cx="230.2" cy="381.8" r="5" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+  </g>
+  <g data-g="ivn">
+    <rect x="430" y="300" width="80" height="70" rx="12" fill="#f7f1e3" fill-opacity="0.35" stroke="#555049" stroke-width="1" stroke-dasharray="3 3"/>
+    <circle cx="445" cy="318" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="470" cy="318" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="495" cy="318" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="440" cy="350" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="462" cy="350" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="484" cy="350" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <circle cx="506" cy="350" r="7" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+  </g>
+  <g data-g="singular"><circle cx="520" cy="420" r="9" fill="#ddd0b4" stroke="#555049" stroke-width="1.4"/></g>
+  <g data-label="1" font-size="13">
+    <line x1="255" y1="165" x2="170" y2="145" stroke="#555049" stroke-width="1"/>
+    <text x="164" y="149" text-anchor="end">Facial nerve</text>
+    <line x1="230" y1="360" x2="170" y2="365" stroke="#555049" stroke-width="1"/>
+    <text x="164" y="369" text-anchor="end">Cochlear</text>
+    <line x1="508" y1="175" x2="590" y2="145" stroke="#555049" stroke-width="1"/>
+    <text x="596" y="149" text-anchor="start">Superior vestibular</text>
+    <line x1="510" y1="330" x2="590" y2="330" stroke="#555049" stroke-width="1"/>
+    <text x="596" y="334" text-anchor="start">Inferior vestibular</text>
+    <line x1="380" y1="112" x2="380" y2="72" stroke="#555049" stroke-width="1"/>
+    <text x="380" y="64" text-anchor="middle">Vertical crest (Bill's bar)</text>
+    <line x1="200" y1="251" x2="165" y2="251" stroke="#555049" stroke-width="1"/>
+    <text x="159" y="255" text-anchor="end">Transverse (falciform) crest</text>
+    <line x1="526" y1="425" x2="585" y2="445" stroke="#555049" stroke-width="1"/>
+    <text x="591" y="449" text-anchor="start">Singular canal (post. ampullary n.)</text>
+  </g>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="50" y1="485" x2="86" y2="485" stroke="#555049" stroke-width="1.2"/>
+    <line x1="68" y1="467" x2="68" y2="503" stroke="#555049" stroke-width="1.2"/>
+    <text x="68" y="463" text-anchor="middle" font-weight="bold">S</text>
+    <text x="68" y="515" text-anchor="middle" font-weight="bold">I</text>
+    <text x="45" y="489" text-anchor="end" font-weight="bold">A</text>
+    <text x="91" y="489" text-anchor="start" font-weight="bold">P</text>
+    <text x="68" y="530" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Right ear</text>
+  </g>
+</svg>

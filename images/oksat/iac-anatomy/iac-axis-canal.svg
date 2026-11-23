@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" width="760" height="520" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>IAC and EAC</title>
+  <g data-g="iac">
+    <rect x="550" y="318" width="110" height="24" fill="#f7f1e3" stroke="#555049" stroke-width="1.2"/>
+    <path d="M 550 318 A 6 12 0 0 0 550 342" fill="none" stroke="#555049" stroke-width="1.4"/>
+  </g>
+  <text x="590" y="312" font-size="13" font-weight="bold">IAC</text>
+  <rect x="705" y="320" width="40" height="20" fill="#ffffff" stroke="#8a7b5f" stroke-width="1.4"/>
+  <text x="712" y="312" font-size="13" font-weight="bold">EAC</text>
+  <line x1="520" y1="330" x2="750" y2="330" stroke="#2F6E6A" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="420" y="372" font-size="12" fill="#2F6E6A">Same line: the IAC runs mediolaterally, with the EAC</text>
+</svg>

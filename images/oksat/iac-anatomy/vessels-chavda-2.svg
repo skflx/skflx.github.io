@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" width="760" height="460" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Type II: enters the canal, up to half</title>
+  <path d="M 134 300 C 260 300 440 248 440 245 C 440 242 260 330 134 340" fill="none" stroke="#b8352a" stroke-width="7" stroke-linecap="round"/>
+  <text x="440" y="286" text-anchor="middle" font-size="12" font-weight="bold" fill="#8c4b3e">Type II (&lt; 50%)</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" width="760" height="460" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Right CPA and IAC vasculature (base, schematic)</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <path d="M 30 40 L 150 40 Q 175 230 150 420 L 30 420 Z" fill="#f4f1ea" stroke="#555049" stroke-width="1.2"/>
+  <text x="72" y="210" text-anchor="middle" font-size="13" font-weight="bold">Pons /</text>
+  <text x="72" y="226" text-anchor="middle" font-size="13" font-weight="bold">medulla</text>
+  <rect x="120" y="40" width="14" height="380" fill="#b8352a" stroke="#8c4b3e" stroke-width="1"/>
+  <text x="127" y="28" text-anchor="middle" font-size="12" fill="#8c4b3e">Basilar artery</text>
+  <path d="M 360 40 L 740 40 L 740 420 L 360 420 Z" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <line x1="360" y1="40" x2="360" y2="420" stroke="#8a7b5f" stroke-width="2"/>
+  <g data-g="iac"><rect x="360" y="205" width="280" height="60" fill="#f6e3d4" stroke="#8c4b3e" stroke-width="1.2"/></g>
+  <g data-g="porus"><rect x="352" y="200" width="16" height="70" fill="none" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <line x1="500" y1="197" x2="500" y2="210" stroke="#555049" stroke-width="1.2"/>
+  <text x="500" y="191" text-anchor="middle" font-size="11.5" fill="#555049">50%</text>
+  <text x="360" y="191" text-anchor="middle" font-size="12" fill="#555049">Porus</text>
+  <text x="640" y="191" text-anchor="middle" font-size="12" fill="#555049">Fundus</text>
+  <g data-g="fn-meatal"><rect x="362" y="212" width="276" height="18" rx="4" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-g="cn8"><rect x="362" y="236" width="276" height="24" rx="4" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/></g>
+  <g data-g="cochlea"><circle cx="685" cy="280" r="32" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="vestibule"><circle cx="690" cy="200" r="26" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="subarc-fossa"><ellipse cx="430" cy="120" rx="22" ry="14" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <text x="430" y="98" text-anchor="middle" font-size="12" fill="#555049">Subarcuate fossa</text>
+  <text x="685" y="328" text-anchor="middle" font-size="12">Cochlea</text>
+  <text x="690" y="168" text-anchor="middle" font-size="12">Vestibule</text>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="50" y1="392" x2="86" y2="392" stroke="#555049" stroke-width="1.2"/>
+    <line x1="68" y1="374" x2="68" y2="410" stroke="#555049" stroke-width="1.2"/>
+    <text x="68" y="370" text-anchor="middle" font-weight="bold">S</text>
+    <text x="68" y="422" text-anchor="middle" font-weight="bold">I</text>
+    <text x="45" y="396" text-anchor="end" font-weight="bold">M</text>
+    <text x="91" y="396" text-anchor="start" font-weight="bold">L</text>
+    <text x="68" y="437" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Right ear</text>
+  </g>
+</svg>

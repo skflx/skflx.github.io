@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" width="760" height="520" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Petrous pyramid vs IAC vs EAC axis (base, schematic)</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <line x1="380" y1="40" x2="380" y2="500" stroke="#555049" stroke-width="1" stroke-dasharray="2 4"/>
+  <text x="386" y="56" font-size="12" fill="#555049">Midline</text>
+  <polygon points="440,170 740,350 620,470" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <text x="600" y="455" font-size="13" font-weight="bold">Petrous pyramid</text>
+  <line x1="740" y1="120" x2="740" y2="500" stroke="#8a7b5f" stroke-width="1.4"/>
+  <rect x="700" y="312" width="30" height="36" fill="#f6e3d4" stroke="#8c4b3e" stroke-width="1.1"/>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="50" y1="446" x2="86" y2="446" stroke="#555049" stroke-width="1.2"/>
+    <line x1="68" y1="428" x2="68" y2="464" stroke="#555049" stroke-width="1.2"/>
+    <text x="68" y="424" text-anchor="middle" font-weight="bold">A</text>
+    <text x="68" y="476" text-anchor="middle" font-weight="bold">P</text>
+    <text x="45" y="450" text-anchor="end" font-weight="bold">M</text>
+    <text x="91" y="450" text-anchor="start" font-weight="bold">L</text>
+    <text x="68" y="491" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Right ear</text>
+  </g>
+</svg>
