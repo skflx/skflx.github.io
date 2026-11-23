@@ -105,6 +105,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q54', 'ear-anatomy:q55'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sp-prussak'] }],
+            ref: ['Otology/Primary acquired cholesteatoma arises from retraction pocket invagination of the pars flaccida into Prussak space'],
         },
         {
             id: 'sp-folds',
@@ -162,6 +163,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q56', 'ear-anatomy:q57', 'ear-anatomy:q58'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sp-folds'] }],
+            ref: ['Otology/The epitympanic diaphragm and tympanic isthmus govern attic ventilation and selective epitympanic dysventilation'],
         },
         {
             id: 'sp-isthmus',
@@ -211,6 +213,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q59', 'ear-anatomy:q60', 'ear-anatomy:q61'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sp-isthmus'] }],
+            ref: ['Otology/The epitympanic diaphragm and tympanic isthmus govern attic ventilation and selective epitympanic dysventilation'],
         },
         {
             id: 'sp-retro',
@@ -264,6 +267,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q62', 'ear-anatomy:q63', 'ear-anatomy:q64'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sp-retro'] }],
+            ref: ['Otology/The retrotympanum is partitioned into sinus tympani, facial sinus, and subtympanic sinus by the ponticulus and subiculum'],
         },
         {
             id: 'sp-sight',
@@ -310,6 +314,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q65', 'ear-anatomy:q66'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sp-sight'] }],
+            ref: ['Otology/Transcanal endoscopic ear surgery TEES provides line-of-sight visualization into the sinus tympani and epitympanum'],
         },
     ],
 };

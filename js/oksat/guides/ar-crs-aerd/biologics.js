@@ -116,6 +116,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['biologic-targets', 'dupilumab', 'anti-il5', 'tezepelumab'],
                 },
             ],
+            ref: ['Sinus/Biologic therapeutics in chronic rhinosinusitis target IgE, IL-4, IL-5, and IL-13 inflammatory pathways'],
         },
         {
             id: 'bi-2',

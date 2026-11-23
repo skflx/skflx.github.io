@@ -302,6 +302,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['immunotherapy-mechanism', 'immunotherapy-indications'],
                 },
             ],
+            ref: ['Sinus/Allergen immunotherapy induces regulatory T cells and IgG4 blocking antibodies to modulate allergic rhinitis and prevent asthma progression'],
         },
         {
             id: 'mg-5',
@@ -407,6 +408,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['scit-vs-slit', 'slit-tablets', 'systemic-reaction-grading'],
                 },
             ],
+            ref: ['Sinus/Allergen immunotherapy via subcutaneous injections or sublingual dosing induces regulatory T cells and allergen-specific IgG4 blocking antibodies to restore immune tolerance'],
         },
         {
             id: 'mg-6',
@@ -430,6 +432,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['nonallergic-rhinitis'],
                 },
             ],
+            ref: ['Sinus/Inferior turbinate submucosal resection with outfracture provides durable volume reduction while preserving ciliated mucosal function', 'Sinus/Transnasal endoscopic vidian neurectomy treats refractory non-allergic cholinergic rhinitis'],
         },
     ],
 };

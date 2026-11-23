@@ -45,6 +45,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q87'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['et-seg'] }],
+            ref: ['Otology/Eustachian tube dysfunction divides into dilatory and patulous forms with opposite treatment goals'],
         },
         {
             id: 'et-cart',
@@ -75,6 +76,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q89'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['et-cart'] }],
+            ref: ['Otology/Patulous Eustachian tube manifests with autophony, respiratory-synchronous tinnitus, and tympanic membrane excursions on nasal breathing'],
         },
         {
             id: 'et-muscle',

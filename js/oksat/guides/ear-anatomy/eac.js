@@ -120,6 +120,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q19'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['eac-gaps'] }],
+            ref: ['Otology/The external auditory canal cartilaginous third harbors Fissures of Santorini and Foramen of Huschke as routes of disease spread'],
         },
         {
             id: 'eac-rel',

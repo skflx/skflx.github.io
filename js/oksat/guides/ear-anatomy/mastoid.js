@@ -58,6 +58,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q67', 'ear-anatomy:q68'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-surface'] }],
+            ref: ['Otology/The Macewen triangle and Henle spine indicate the surface projection of the mastoid antrum'],
         },
         {
             id: 'ma-antrum',
@@ -85,6 +86,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q69', 'ear-anatomy:q70'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-antrum'] }],
+            ref: ['Otology/Complete cortical mastoidectomy unroofs the mastoid antrum and establishes dependent middle ear drainage'],
         },
         {
             id: 'ma-pneum',
@@ -219,6 +221,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q76', 'ear-anatomy:q77'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-fn'] }],
+            ref: ['Otology/The facial nerve traverses six distinct anatomical segments from the pons to the parotid gland'],
         },
         {
             id: 'ma-recess',
@@ -247,6 +250,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q79', 'ear-anatomy:q80'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-recess'] }],
+            ref: ['Otology/The facial recess is bounded by the facial nerve, chorda tympani, and fossa incudis', 'Otology/Posterior tympanotomy facial recess approach opens the corridor between CN VII and chorda tympani'],
         },
         {
             id: 'ma-lines',
@@ -304,6 +308,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q83', 'ear-anatomy:q84'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-peds'] }],
+            ref: ['Otology/The infant mastoid lacks a developed tip placing the facial nerve in a subcutaneous vulnerable position at the stylomastoid foramen'],
         },
     ],
 };

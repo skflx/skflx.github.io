@@ -65,6 +65,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['epidemiology', 'natural-history', 'history-taking'],
                 },
             ],
+            ref: ['Sinus/AERD manifests with asthma, nasal polyps, and severe aspirin-induced respiratory reactions'],
         },
         {
             id: 'ae-2',
@@ -239,6 +240,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['ess', 'draf-iii'],
                 },
             ],
+            ref: ['Sinus/Draf III modified Lothrop unites both frontal sinuses into a common cavity'],
         },
         {
             id: 'ae-5',

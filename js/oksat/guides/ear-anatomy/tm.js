@@ -39,6 +39,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q22', 'ear-anatomy:q23'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-geo'] }],
+            ref: ['Otology/The tympanic membrane areal ratio of seventeen to one provides the primary impedance gain', 'Otology/The middle ear transformer ratio provides twenty-seven decibels of acoustic impedance matching'],
         },
         {
             id: 'tm-layers',
@@ -69,6 +70,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q24', 'ear-anatomy:q25'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-layers'] }],
+            ref: ['Otology/Primary acquired cholesteatoma arises from retraction pocket invagination of the pars flaccida into Prussak space'],
         },
         {
             id: 'tm-marks',
@@ -126,6 +128,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q27'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-quad'] }],
+            ref: ['Otology/Congenital cholesteatoma presents as an anterosuperior white mass behind an intact tympanic membrane'],
         },
         {
             id: 'tm-supply',

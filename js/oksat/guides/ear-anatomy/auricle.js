@@ -74,6 +74,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q8'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-cart'] }],
+            ref: ['Otology/Auricular hematoma evacuation and bolster compression prevents permanent cauliflower ear deformity'],
         },
         {
             id: 'au-muscle',
@@ -219,6 +220,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q13', 'ear-anatomy:q14'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-dev'] }],
+            ref: ['Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna'],
         },
     ],
 };

@@ -75,6 +75,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q101'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['pa-tracts'] }],
+            ref: ['Otology/Infracochlear and infralabyrinthine approaches establish hearing-preserving drainage pathways for petrous apex cholesterol granulomas inferior to the otic capsule'],
         },
         {
             id: 'pa-corridors',
@@ -97,6 +98,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q103'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['pa-corridors'] }],
+            ref: ['Otology/Infracochlear and infralabyrinthine approaches establish hearing-preserving drainage pathways for petrous apex cholesterol granulomas inferior to the otic capsule', 'Otology/Petrous apex cholesteatoma requires infracochlear, translabyrinthine, or middle cranial fossa exteriorization'],
         },
         {
             id: 'pa-clinical',
@@ -125,6 +127,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q105'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['pa-clinical'] }],
+            ref: ['Otology/Gradenigo triad of otorrhea, retroorbital pain, and abducens nerve palsy indicates suppurative petrous apicitis', 'Otology/Petrous apex lesions are differentiated into cholesterol granuloma, cholesteatoma, and mucocele by T1, T2, and non-EPI diffusion-weighted MRI'],
         },
     ],
 };

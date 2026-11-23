@@ -82,6 +82,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['endotype'],
                 },
             ],
+            ref: ['Sinus/Type 2 CRS exhibits eosinophilic inflammation responsive to targeted biologics'],
         },
         {
             id: 'sci-2',
@@ -150,6 +151,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['epithelial-alarmins', 'allergen-biology'],
                 },
             ],
+            ref: ['Sinus/Epithelial tight junctions and antimicrobial peptides form the primary sinonasal mucosal barrier'],
         },
         {
             id: 'sci-3',
@@ -202,6 +204,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['ige-synthesis', 'ige-sensitization'],
                 },
             ],
+            ref: ['Sinus/The Gell and Coombs classification delineates four distinct immunologic hypersensitivity mechanisms underlying otolaryngic disease'],
         },
         {
             id: 'sci-4',
@@ -408,6 +411,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['nonallergic-rhinitis'],
                 },
             ],
+            ref: ['Sinus/The Vidian nerve carries parasympathetic secretomotor and sympathetic vasomotor fibers', 'Sinus/The nasal cycle provides alternating autonomic mucosal congestion and decongestion'],
         },
         {
             id: 'sci-7',
@@ -541,6 +545,7 @@ window.__OKSAT_CHAPTER = {
                 },
                 { t: 'check', id: 'c1', q: 'Which gut phylum, reduced in AR, produces butyrate that tightens epithelial junctions?', a: 'Firmicutes.' },
             ],
+            ref: ['Sinus/Nitric oxide produced in the paranasal sinuses provides host defense and ciliary stimulation'],
         },
     ],
 };

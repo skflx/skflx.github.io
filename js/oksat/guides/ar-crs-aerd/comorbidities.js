@@ -122,6 +122,7 @@ window.__OKSAT_CHAPTER = {
                 },
                 { t: 'check', id: 'c1', q: 'A grass-allergic patient with EoE asks about the grass SLIT tablet. Answer?', a: 'Contraindicated (EoE). Discuss SCIT instead if AIT is indicated.' },
             ],
+            ref: ['Otology/Eustachian tube dysfunction divides into dilatory and patulous forms with opposite treatment goals'],
         },
     ],
 };

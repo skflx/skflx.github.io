@@ -72,6 +72,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q43', 'ear-anatomy:q44'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-joints'] }],
+            ref: ['Otology/The lever ratio of the malleus to incus provides a one point three to one mechanical advantage', 'Otology/The distance from the incus long process to the stapes footplate averages four to four point five millimeters'],
         },
         {
             id: 'os-tensor',
@@ -126,6 +127,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q47'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-stapedius'] }],
+            ref: ['Otology/Acoustic reflex thresholds and reflex decay testing identify retrocochlear lesions and facial nerve pathology'],
         },
         {
             id: 'os-supply',

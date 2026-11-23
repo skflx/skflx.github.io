@@ -40,6 +40,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q146', 'ear-anatomy:q148'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ap-arches'] }],
+            ref: ['Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna'],
         },
         {
             id: 'ap-dehiscence',
@@ -117,6 +118,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q152', 'ear-anatomy:q154'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ap-numbers'] }],
+            ref: ['Otology/The middle ear transformer ratio provides twenty-seven decibels of acoustic impedance matching', 'Otology/The tympanic membrane areal ratio of seventeen to one provides the primary impedance gain', 'Otology/The lever ratio of the malleus to incus provides a one point three to one mechanical advantage'],
         },
     ],
 };

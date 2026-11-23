@@ -104,6 +104,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q33', 'ear-anatomy:q35'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-medial'] }],
+            ref: ['Otology/The cochleariform process serves as the constant middle ear landmark triangulating the geniculate ganglion, tympanic CN VII, and tensor tympani tendon'],
         },
         {
             id: 'cav-roof-floor',
@@ -132,6 +133,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q36', 'ear-anatomy:q37'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-roof-floor'] }],
+            ref: ['Otology/Tegmen erosion with dural exposure increases the risk of meningoencephalocele and CSF leak'],
         },
         {
             id: 'cav-anterior',

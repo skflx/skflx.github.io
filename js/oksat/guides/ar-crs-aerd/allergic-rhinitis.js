@@ -223,6 +223,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['nonallergic-rhinitis'],
                 },
             ],
+            ref: ['Sinus/Rhinitis subtypes are differentiated into allergic, vasomotor, gustatory, and rhinitis medicamentosa', 'Sinus/Nonallergic rhinitis with eosinophilia syndrome NARES features nasal eosinophilia without IgE sensitization and represents a precursor to Samter triad'],
         },
         {
             id: 'ar-4',

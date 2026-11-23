@@ -287,6 +287,7 @@ window.__OKSAT_CHAPTER = {
                     c: ['chandler', 'orbital-management', 'ars-complications'],
                 },
             ],
+            ref: ['Sinus/Orbital complications of acute sinusitis staged by the Chandler classification dictate medical versus surgical drainage', 'Sinus/Pott\'s puffy tumor represents subperiosteal abscess and frontal bone osteomyelitis from sinusitis', 'Sinus/Cavernous sinus thrombosis presents with chemosis, proptosis, and progressive ophthalmoplegia from CN III, IV, V1, V2, and VI involvement'],
         },
     ],
 };

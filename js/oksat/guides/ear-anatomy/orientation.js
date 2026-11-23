@@ -94,6 +94,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q3'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['or-parts'] }],
+            ref: ['Otology/The otic capsule is an immutable endochondral bone that provides fixed surgical reference landmarks'],
         },
         {
             id: 'or-map',
