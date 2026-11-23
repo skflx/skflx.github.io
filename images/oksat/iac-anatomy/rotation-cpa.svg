@@ -1,9 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" width="960" height="380" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
   <title>At the brainstem</title>
-  <g data-g="cn8"><ellipse cx="156.0" cy="185.0" rx="40" ry="30" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/></g>
-  <g data-g="fn-meatal"><circle cx="86.7" cy="225.0" r="22" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
-  <g data-g="nint"><circle cx="130.0" cy="240.0" r="7" fill="#d9a400" fill-opacity="0.7" stroke="#9b7600" stroke-width="1.2"/></g>
-  <text x="86.7" y="229.0" text-anchor="middle" font-size="11.5" font-weight="bold">VII</text>
-  <text x="156.0" y="189.0" text-anchor="middle" font-size="12" font-weight="bold">VIII</text>
-  <text x="130.0" y="258.0" text-anchor="middle" font-size="11" fill="#555049">n. int.</text>
+  <g data-g="cn8">
+    <path d="M 804 200 A 46 46 0 0 0 896 200 Z" fill="#ddd0b4" stroke="none"/>
+    <path d="M 896 200 A 46 46 0 0 0 804 200 Z" fill="#f7f1e3" stroke="none"/>
+    <circle cx="850" cy="200" r="46" fill="none" stroke="#555049" stroke-width="1.4"/>
+    <line x1="804" y1="200" x2="896" y2="200" stroke="#555049" stroke-width="1.4" stroke-dasharray="4 3"/>
+  </g>
+  <g data-g="fn-meatal"><circle cx="784.2" cy="176.1" r="20" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-g="nint"><circle cx="791.7" cy="221.2" r="7" fill="#d9a400" fill-opacity="0.7" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-label="1" font-size="11.5">
+    <line x1="769.2" y1="166.1" x2="754" y2="120" stroke="#555049" stroke-width="1"/>
+    <text x="750" y="120" text-anchor="end">VII</text>
+    <line x1="785.7" y1="225.2" x2="754" y2="270" stroke="#555049" stroke-width="1"/>
+    <text x="750" y="274" text-anchor="end" fill="#555049">n. int.</text>
+    <text x="850" y="228" text-anchor="middle" font-size="11">cochlear</text>
+    <text x="850" y="180" text-anchor="middle" font-size="11">vestibular</text>
+  </g>
 </svg>
