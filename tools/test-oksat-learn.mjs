@@ -121,12 +121,12 @@ const FX_GUIDE = {
   chapters: [{ id: 'anat', short: 'Fixture', min: 5, sections: FX_SECTIONS.length, data: 'js/oksat/guides/fx-anat/anat.js' }],
 };
 
-async function openFx(browser, base, url) {
+async function openFx(browser, base, url, live = true) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   await context.addInitScript(`try{localStorage.setItem('oksat:reviewer','${REVIEWER}');}catch(e){}`);
   await context.route(/\/js\/oksat\/manifest\.js(\?.*)?$/, async (route) => {
     const res = await route.fetch();
-    const body = (await res.text()) + `\nwindow.OKSAT_GUIDES.push(${JSON.stringify(FX_GUIDE)});`;
+    const body = (await res.text()) + `\nwindow.OKSAT_GUIDES.push(${JSON.stringify(FX_GUIDE)});window.OKSAT_SKOTO.live = ${live};`;
     await route.fulfill({ status: 200, contentType: 'application/javascript', body });
   });
   await context.route(/\/js\/oksat\/guides\/fx-anat\/anat\.js(\?.*)?$/, (route) => route.fulfill({
@@ -696,7 +696,7 @@ async function main() {
     await context.close();
   }
 
-  /* 11: Related in sk.oto (section ref renderer) */
+  /* 12: Related in sk.oto (section ref renderer) */
   {
     const { context, page } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`);
     await chapterReady(page);
@@ -706,7 +706,7 @@ async function main() {
       rel: el.querySelector('.lr-related-link')?.getAttribute('rel'),
       secs: el.querySelector('.lr-related-secs')?.textContent,
     })));
-    check('11a: Related in sk.oto lists distinct notes in first-cited order with Quartz slugs',
+    check('12a: Related in sk.oto lists distinct notes in first-cited order with Quartz slugs',
       items.length === 2
       && items[0].text === 'Note Alpha & Beta'
       && items[0].href === 'https://skflx.github.io/ohns-wiki-skflx/otology/note-alpha--and--beta'
@@ -719,21 +719,15 @@ async function main() {
     await context.close();
   }
   {
-    const { context, page } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`);
-    await page.route('**/js/oksat/manifest.js*', async (route) => {
-      const res = await route.fetch();
-      const body = (await res.text()).replace('live: true', 'live: false');
-      await route.fulfill({ response: res, body });
-    });
-    await page.goto(`${base}/oksat-learn.html?g=${FX_SLUG}&c=anat`, { waitUntil: 'domcontentloaded' });
+    const { context, page } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`, false);
     await chapterReady(page);
-    check('11b: Related in sk.oto is hidden when OKSAT_SKOTO.live is false', (await page.$$eval('.lr-related', (e) => e.length)) === 0);
+    check('12b: Related in sk.oto is hidden when OKSAT_SKOTO.live is false', (await page.$$eval('.lr-related', (e) => e.length)) === 0);
     await context.close();
   }
   {
     const { context, page } = await open(browser, base, `oksat-learn.html?g=${SLUG}&c=science`);
     await chapterReady(page);
-    check('11c: Related in sk.oto is omitted when no section has ref', (await page.$$eval('.lr-related', (e) => e.length)) === 0);
+    check('12c: Related in sk.oto is omitted when no section has ref', (await page.$$eval('.lr-related', (e) => e.length)) === 0);
     await context.close();
   }
 
