@@ -46,7 +46,6 @@
 - **Items:** (a) ~90°, in the canal. (b) cleavage plane vertical at fundus → horizontal at CPA. (c) cochlear
   inferior at the brainstem. (d) right CCW / left CW (state the viewpoint in the stem). (e) no plane in ~25%.
 
-- **Also:** `figure` `images/oksat/iac-anatomy/stanford-fig-6.jpg`. Credit line in the caption: "Stanford Skull Base Surgery Atlas, © RK Jackler; used with the atlas's educational permission." Caption must add: "The atlas describes a gradual 180° rotation; this guide teaches about 90° (see `appraisal`)."
 
 ## `nv-intermedius` · Nervus intermedius
 - **Teach:** carries the facial nerve's parasympathetic and sensory fibres; it exits the pons between the

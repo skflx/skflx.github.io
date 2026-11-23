@@ -27,6 +27,13 @@
 - **Ref:** `Otology/Intraoperative facial nerve and cochlear nerve monitoring minimize cranial nerve morbidity in skull base surgery`.
 - **Practice:** `vestibular-schwannoma:q7`. **Drill:** `cc-fn-displacement`.
 - **Items:** (a) anterior most common. (b) adherence at the porus.
+- **Figure:** `figure` `images/oksat/iac-anatomy/stanford-fig-6.jpg`. The drawing shows nerve positions around a
+  superior vs an inferior vestibular schwannoma, with the middle fossa, translabyrinthine and retrosigmoid
+  views marked (MF, TL, PF). Caption (from the atlas caption, ST6): "As a general rule the facial nerve is
+  displaced opposite to the vestibular nerve of origin. An inferior vestibular schwannoma puts the facial nerve
+  between the tumour and the surgeon in a middle fossa approach." Credit line: "Stanford Skull Base Surgery
+  Atlas, © RK Jackler; used with the atlas's educational permission." Do not quote the atlas's "180°" rotation
+  sentence (taught as ~90°, `nv-rotation`, `appraisal`).
 
 ## `cc-audiometry` · Why speech falls more than tones
 - **Teach:** progressive unilateral or asymmetric high-frequency SNHL is the presenting symptom in almost 90%;
