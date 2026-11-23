@@ -90,7 +90,7 @@
   aqueduct; IX, X, XI. (2) "What limits retrosigmoid drilling of the posterior lip?" → the posterior canal
   (and common crus laterally). (3) "What lies ≤ 1 mm in front of the labyrinthine segment?" → the cochlea.
 - **Ref:** `Otology/The otic capsule is an immutable endochondral bone that provides fixed surgical reference landmarks`.
-- **Practice:** `vestibular-schwannoma:q2`. **Drill:** `os-walls`.
+- **Practice:** none (`vestibular-schwannoma:q2` asks about the CPA, not the walls). **Drill:** `os-walls`.
 - **Items:** one per wall (6): superior → arcuate eminence/GSPN/SPS; inferior → bulb, cochlear aqueduct
   above IX–XI; anterior → cochlea ≤ 1 mm, carotid; posterior → vestibular aqueduct/sac, PSCC/common crus;
   lateral → vestibule/cochlea; medial → CPA.

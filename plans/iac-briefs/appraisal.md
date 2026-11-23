@@ -6,7 +6,7 @@ what this guide teaches. Then 1 `check` per section.
 ## `apr-cutoffs` · IAC size cutoffs
 - Card: normal 4–8 mm, stenosis < 2 / < 3 mm, flaring > 8 (> 9) mm, asymmetry > 2 mm [owner; El Sadik 2017;
   Ionescu 2023] vs measured means: adult vertical diameter 4.47 mm in 110 CTs [Marques 2012]; mid-diameter
-  4.2 mm in 162 CTs [Gözen 2026]. Design: CT series differ in plane and where they measure (mid-canal vs
+  4.2 mm in 162 CTs [Gözen 2026, PMID 41682992]. Design: CT series differ in plane and where they measure (mid-canal vs
   porus vs opening width). Taught: the owner's cutoffs, measured perpendicular to the long axis.
 - Card: BCNC < 1.4 mm [Stjernholm 2002, casts plus CT] vs other series (Fatterpekar 2000 found smaller canals
   in SNHL without a cutoff in its abstract). Taught: < 1.4 mm.

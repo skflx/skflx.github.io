@@ -46,10 +46,12 @@ for (const entry of manifest) {
   const guide = guides.find((g) => g.slug === entry.slug);
   const maxD = guide ? Math.max(8, guide.chapters.filter((c) => c.k).length) : 8;
   const maxC = guide ? Math.max(50, guide.chapters.reduce((n, c) => n + (c.sections || 0), 0)) : 50;
+  // A draft companion grows one chapter at a time, so its minimums wait until the owner drops `draft`.
+  const minD = guide && entry.draft ? 1 : 5, minC = guide && entry.draft ? 1 : 20;
   const nd = Object.keys(DOMAINS).length;
-  if (nd < 5 || nd > maxD) E(`${nd} domains (spec 5–${maxD})`);
+  if (nd < minD || nd > maxD) E(`${nd} domains (spec ${minD}–${maxD})`);
   const nc = Object.keys(CONCEPTS).length;
-  if (nc < 20 || nc > maxC) E(`${nc} concepts (spec 20–${maxC})`);
+  if (nc < minC || nc > maxC) E(`${nc} concepts (spec ${minC}–${maxC})`);
   for (const [k, c] of Object.entries(CONCEPTS)) if (!DOMAINS[c.domain]) E(`concept ${k}: unknown domain ${c.domain}`);
 
   const used = new Set(), ids = new Set();

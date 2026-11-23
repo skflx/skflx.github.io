@@ -110,6 +110,33 @@ One concept key per guide section that has items, keyed as the section id (§5),
 resolve one to one. Items are hand-authored by Opus per `.claude/skills/oksat-module/SKILL.md`; mix of
 free-response and MCQ; synthesis cases last. `node tools/lint-oksat.mjs iac-anatomy` clean.
 
+**Created by I2.2** (`osteology`, the first chapter with items), not by `start`. While the module is
+`draft: true`, `lint-oksat` lets it start under 5 domains and 20 concepts; the full minimums return when
+the owner drops `draft` (I5). One domain per content chapter, **each added by the step that writes that
+chapter** (never empty in advance):
+
+```js
+const DOMAINS = {
+    osteology:     { label: 'Osteology & Six Walls',    color: '#2F6E6A', hex: 'rgba(47,110,106,0.14)' },
+    fundus:        { label: 'Fundus & Crests',          color: '#4A5C6B', hex: 'rgba(74,92,107,0.14)' },
+    neurovascular: { label: 'Neurovascular Contents',   color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
+    imaging:       { label: 'Imaging',                  color: '#4F5B66', hex: 'rgba(79,91,102,0.14)' },
+    approaches:    { label: 'Surgical Corridors',       color: '#8A6A2F', hex: 'rgba(138,106,47,0.14)' },
+    clinical:      { label: 'Clinical Correlations',    color: '#6E4A6B', hex: 'rgba(110,74,107,0.14)' },
+    synthesis:     { label: 'Synthesis Cases',          color: '#7A3F4F', hex: 'rgba(122,63,79,0.14)' },
+    appraisal:     { label: 'The Evidence',             color: '#5B5F8A', hex: 'rgba(91,95,138,0.14)' },
+};
+const meta = {
+    title: 'IAC\nAnatomy',
+    subtitle: 'The internal auditory canal from the bone out: the six walls, the fundus and its crests, the nerves and vessels, imaging, the surgical corridors, clinical correlations, cases and the evidence. Each concept matches a section of the Interactive learning guide.',
+    kicker: 'Self-Assessment · Neurotology Module',
+    id: 'iac-anatomy',
+    sources: [ /* one line per ledger source the module's items cite (ledger "Sources read"), added with the chapter that first cites it */ ],
+};
+```
+
+Synthesis case concepts are keyed `case-*` (the module lint expects them).
+
 ### 4.3 Glossary ids (I0.3)
 
 Reused: `iac`, `cn8`, `fn-meatal`, `fn-lab`, `fcanal`, `geniculate`, `gspn`, `labyr-a`, `aica`,

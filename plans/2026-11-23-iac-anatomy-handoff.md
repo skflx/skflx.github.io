@@ -53,7 +53,7 @@ wave's merged PRs and Opus adjudicates (owner runs both); `owner` the owner deci
 | 1 | I1.4 Backfill `ref` rows into `ear-anatomy`, `ar-crs-aerd` | #334 | — | — |
 | 2 | I1.3 Vendor Stanford figures + UW IAC slices | #333 | — | 1 merged |
 | 3 | I2.S SVGs F1, F2, F3, F4, F8 | #344 | — | 2 merged |
-| 4 | I2.1 `start` + register guide and module | #335 | — | 3 merged |
+| 4 | I2.1 `start` + register guide | #335 | — | 3 merged |
 | 5 | I2.2 `osteology` | #336 | — | 4 merged |
 | 6 | I2.3 `fundus` | #337 | — | 5 merged |
 | 7 | I2.4 `neurovascular` | #338 | — | 6 merged |
@@ -81,8 +81,8 @@ inserts them here by PR, before the next wave starts).
   `ear-anatomy` chapter), sections exactly as the brief lists them (ids, order), `ref` rows as given.
 - The chapter's items appended to `js/oksat/modules/iac-anatomy.js` (`window.__MCQ_MODULE = { meta,
   DOMAINS, CONCEPTS, ITEMS }`); one concept per section that has items, key = section id.
-- Step 4 (`start`) also creates the module file, both registry entries (spec §4.1, `draft: true`), and
-  `js/oksat/guides/iac-anatomy/start.js`. Later steps append a chapter row to `OKSAT_GUIDES` and update
-  the module `count`.
-- New acronyms in `js/oksat/terms.js`; owner review entries in `js/review-items.js` (one per chapter and
+- Step 4 (`start`) writes `start.js` and adds only the `OKSAT_GUIDES` entry (spec §4.1, `draft: true`).
+  Step 5 (`osteology`) creates the module file (meta and DOMAINS as spec §4.2) and its `OKSAT_MANIFEST`
+  entry. Every later step appends a chapter row, its domain and concepts, and updates the module `count`.
+- New acronyms in `js/oksat/terms.js`, each added by the chapter that first uses it (check-data fails an unused one); owner review entries in `js/review-items.js` (one per chapter and
   per figure, with a deep link).

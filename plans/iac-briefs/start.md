@@ -18,7 +18,7 @@ surgical anatomy changes with the direction you enter it from. This guide builds
 (`neurovascular`) → 3 · Reading the tube (`imaging`) → 4 · Entering the tube (`approaches`), then
 mechanisms (`clinical-correlations`), cases (`synthesis`) and the evidence (`appraisal`).
 
-**Tier targets** (a `cards` block, three cards):
+**Tier targets** (a `table`, head `['Level', 'Aim to know']`, one row each; not `cards`: in `start`, `cards` are dated source cards):
 - *Junior (PGY-1/2):* fundal quadrants and crests; canal dimensions; the normal four-dot MRI; where a
   vestibular schwannoma sits.
 - *Senior (PGY-3/4):* the six walls; the 90° turn; middle fossa landmarks; which corridor for which
@@ -31,8 +31,19 @@ mechanisms (`clinical-correlations`), cases (`synthesis`) and the evidence (`app
 schwannoma management choices (see the `vestibular-schwannoma` module); trauma work-up (see
 `temporal-bone-trauma`).
 
-**Credits** (`call k:'pearl'`, label "Sources"): House Clinic Atlas (Thieme 2012); Kirtane, de Souza,
-Sanna *Otology and Neurotology* (Thieme 2013); Jackler *Ear Surgery Illustrated* (Thieme 2019); Stanford
-Skull Base Surgery Atlas figures (© RK Jackler, used with the page's educational permission); UW CT
-temporal bone module (University of Washington Department of Radiology); primary papers by PMID in each
-chapter. "Draft: medical content not yet verified by the owner."
+**Sources** (the first `intro` block: `cards`, `cols: 1`, one card each; every heading names a year, as
+`ear-anatomy/start.js`):
+- *House Clinic Atlas 2012*: Friedman, Slattery, Brackmann, *Lateral Skull Base Surgery: The House Clinic
+  Atlas*, Thieme 2012, ch. 3, 5, 6 (middle fossa, retrosigmoid, translabyrinthine).
+- *Otology and Neurotology 2013*: Kirtane, de Souza, Sanna, Thieme 2013, ch. 1, 2, 6, 9, 30, 31.
+- *Ear Surgery Illustrated 2019*: Jackler, Thieme 2019, ch. 9, 10.
+- *Stanford Skull Base Surgery Atlas 2009*: figures © RK Jackler (Thieme 2009), used with the atlas's
+  educational permission.
+- *UW CT temporal bone module, accessed 2026*: University of Washington Department of Radiology, used with
+  permission.
+Primary papers are cited by PMID in each chapter, not in a card.
+
+**Currency check** (`call k:'trap'`, label "Currency check", second `intro` block): "Checked 2026-11. The
+bony anatomy does not change; what moves is the degree of nerve rotation taught (this guide: about 90°),
+cutoffs for a narrow canal and a narrow cochlear nerve canal, and the share of schwannomas that start on
+each vestibular nerve. Draft: medical content not yet verified by the owner."
