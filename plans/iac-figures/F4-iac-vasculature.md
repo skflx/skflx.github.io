@@ -1,7 +1,7 @@
 # F4 · `iac-vasculature` — AICA loops and end arteries
 
 **Block:** `layers`, `mode: 'toggle'`. **Ledger:** G5 (Chavda I–III from McDermott et al. 2003;
-labyrinthine artery from AICA's meatal loop 90%, basilar 10%; single 60%, two 40%; subarcuate artery
+labyrinthine artery from AICA's meatal loop 90%, basilar 10% (also the superior cerebellar artery, K6); single 60%, two 40%; subarcuate artery
 from the depression superolateral to the porus, K2; internal auditory artery between VII and the
 cochlear nerve, HCA3 p45). Schematic: no loop shape is to scale.
 

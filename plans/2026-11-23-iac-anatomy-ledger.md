@@ -20,24 +20,34 @@ committed.
 | K30 | Ibid., ch. 30 Facial nerve disorders | anatomy, Bell's palsy, electrodiagnosis, imaging |
 | K31 | Ibid., ch. 31 Acoustic neuromas and NF2 (Sanna group) | origin, hearing classes, approach algorithm, IAC anatomy |
 | ST6 | Stanford Skull Base Surgery Atlas (Jackler RK, Gralapp C; Thieme 2009), "Surgical anatomy", figs. 5–6 captions | captions only |
+| K1, K6 | Kirtane ch. 1 Embryology; ch. 6 Anatomy of the vestibular system | whole chapters |
+| J9, J10 | Jackler, *Ear Surgery Illustrated*, Thieme 2019, ch. 9 Facial nerve; ch. 10 Vestibular surgery | whole chapters (figure captions) |
+| Owner | Owner answers on #355 (2026-11-23): Stanford figures, G1 cutoffs, G3 rotation, G4 transition zone | as written there |
 | PubMed | Primary papers below, by PMID | abstracts only (the Xenellis editorial: title only) |
 
 Read but not useful here: K12 (aural atresia only; nothing on the IAC, cochlear nerve deficiency or
-IP-III). **Not available:** Rhoton, Cummings, Radiopaedia (HTTP 402). **Not yet read:** Jackler *Ear
-Surgery Illustrated* ch. 1, 9, 10, 11; HCA ch. 14, 15, 17; K6 (vestibular anatomy). They are drawing
-references for I0.4 and can add columns later.
+IP-III). **Not available:** Rhoton, Cummings, Radiopaedia (HTTP 402). **Not read:** Jackler ch. 1 and 11; HCA ch. 14, 15, 17 (drawing references only).
 
 ## Rows
 
 ### G1 · IAC dimensions and cutoffs
 
-- **Adopted:** about 1 cm long (K2, K31); CT mean length 11.0–11.1 mm and mid-canal diameter 4.2 mm
-  in 162 patients, no sex or age difference (PMID 41682992). Long axis in line with the EAC (K2, K31,
-  HCA3 p42). Porus: posterior lip an acute angle, anterior wall flatter (K2, K31).
-- **Not adopted:** the blueprint's stenosis (< 2–3 mm), flaring (> 8 mm) and asymmetry (> 2 mm)
-  cutoffs. No source read states them. The guide teaches symmetry and calibre qualitatively and
-  names no cutoff until one is sourced.
-- **Owner:** add a source for the cutoffs, or accept the qualitative wording.
+- **Adopted (owner, #355):** normal diameter **4–8 mm**, measured perpendicular to the canal's long axis
+  at mid-canal or the porus; **stenosis < 2 mm** (classic, with VIII aplasia or severe hypoplasia),
+  **< 3 mm** in broader screening ("near-narrowed IAC"); **flaring > 8 mm** (some series give > 9 mm);
+  **side-to-side asymmetry > 2 mm** is abnormal and calls for contrast MRI. Symmetric smooth-walled
+  flaring with a sharp transverse crest favours a variant or dural ectasia; asymmetric widening with
+  erosion favours a mass. A normal bony IAC does not exclude a deficient nerve (about a third of
+  deficient nerves sit in a normal-calibre canal; McClay 2008).
+- **Sources (owner-supplied, existence checked on PubMed):** Marques 2012 (PMID 23329967), El Sadik
+  2017 (PMID 27665959), Ionescu 2023 (PMID 38137649), McClay 2008 (PMID 18794439). Normal values also:
+  about 1 cm long (K2, K31); CT length 11.0–11.1 mm, mid-diameter 4.2 mm (PMID 41682992); in line with
+  the EAC (K2, K31, HCA3 p42); porus posterior lip acute, anterior wall flatter (K2, K31).
+- **Note:** Marques 2012's abstract reports adult vertical diameter 4.47 mm and opening width 7.10 mm,
+  not a "4–8 mm" range; the range rests on the owner's note. The owner's reference "Jackler,
+  Brackmann, Schindler, Otol Neurotol 2011;32(5):e36" is miscited: its DOI is Korban & Bassim,
+  *Bilateral giant internal auditory canals*, Otol Neurotol 2011;32(8):e60 (PMID 21358559, case
+  report). Cite it as that, or drop it.
 
 ### G2 · Meatal foramen and labyrinthine segment
 
@@ -51,32 +61,38 @@ references for I0.4 and can add columns later.
 
 ### G3 · Rotation of the nerves
 
-- **Conflict.** Blueprint: about 90°. Stanford atlas (ST6, fig. 6): "gradual 180 degree rotation"
-  between fundus and brainstem, positions far more variable mid-canal than at the fundus. Cadaver
-  series, 30 bones (PMID 18253691): the facial nerve stays anterosuperior to VIII through the whole
-  canal in 37%; in 63% it rotates anteroinferiorly by **30–90°**, the same direction as the cochlear
-  nerve. VIII enters the porus as one trunk and divides into identifiable nerves only in the lateral
-  **3–4 mm** (K31).
-- **Adopted teaching:** the fundus is fixed (four quadrants, two crests); medially the bundle rotates
-  by a variable amount, so the clock face does not hold mid-canal. The guide gives the 30–90%
-  cadaver data and the atlas's 180° as a Source conflict. It states **no per-ear handedness**: none
-  of the sources read gives one.
-- **Owner:** confirm this stance (it replaces the blueprint's fixed 90°).
+- **Adopted (owner, #355):** the cochleovestibular bundle rotates about **90°** (not 180°), almost all
+  of it inside the canal. Fundus: cochlear nerve anterior to the inferior vestibular nerve; the
+  cochleovestibular cleavage plane runs superior–inferior. Mid-canal: the cochlear and inferior
+  vestibular nerves fuse tightly; the plane is poorly defined. Porus and CPA: the cochlear nerve lies
+  inferior (anteroinferior) to the vestibular bundle; the plane runs anterior–posterior. **Chirality**,
+  tracing fundus → brainstem: **right ear counterclockwise, left ear clockwise**. Variations: no
+  cleavage plane in ~25% (a fused trunk to the brainstem); in some, the last 15–30° occurs just medial
+  to the porus. "180°" is not normal anatomy. Sources (owner-supplied, existence checked): Silverstein
+  1986 (PMID 3108792), Schefter & Harner 1986 (PMID 3963686), Özdogmus 2004 (PMID 15255963).
+- **Orchestrator note on viewpoint:** the owner's text gives no viewpoint for "counterclockwise". The
+  figures draw each cut **viewed from medial** (anterior on the viewer's left for a right ear), and the
+  owner's positions (vestibular bundle posterior at the fundus, superior at the porus) then turn
+  counterclockwise on screen for a right ear. The guide states the viewpoint whenever it states the
+  chirality. Owner to confirm on the R1 read.
+- **Kept as context, not a conflict:** the Stanford/Jackler "180°" caption (ST6) and Tian 2008 (the
+  facial nerve's own position varies, 0° in 37%, 30–90° in 63%) are cited in `appraisal`. Owner's
+  surgical pearls (adopted): selective vestibular neurectomy is most reliable laterally, before
+  fusion; separating the cochlear and inferior vestibular nerves mid-canal risks the cochlear nerve.
 
 ### G4 · Obersteiner-Redlich zone
 
-- **Conflict.** Blueprint: VIII has the longest central myelin segment (~8–11 mm, into the canal) vs
-  VII ~1–2 mm. K31: VIII's transition is "near the porus acousticus". Histomorphometry of cisternal
-  nerves (PMID 37399929): central segment **3.6 ± 1.4 mm** for VIII vs 3.7 ± 1.6 mm for VII; VIII's
-  junction midway between brainstem and meatus (13–54% of length). An editorial titled "On the myth of
-  the glial/Schwann junction (Obersteiner-Redlich zone)" (Xenellis & Linthicum, PMID 12544018) argues
-  the tumours do not arise at the zone (title only read).
-- **Adopted teaching:** the zone is real and the transition is in the cisternal segment; whether it
-  explains where schwannomas arise is contested. The misconception row "VS arises at the root entry
-  zone → the O-R zone of VIII lies in the canal" (spec §5.9) is **withdrawn**. The safe fact: the
-  tumours arise from vestibular Schwann cells, mostly within the canal (G7). `nv-orz` becomes a
-  short section ending in a Source conflict, not a mechanism.
-- **Owner:** confirm the withdrawal; read the Xenellis editorial if available.
+- **Adopted (owner, #355, from Radiopaedia "Transition zone (nerve)"):** a few millimetres where central
+  (glial) myelin gives way to peripheral (Schwann) myelin, with the central myelin extending further in
+  the nerve's core. Distance from the root entry zone: **VII 2–3 mm**, **VIII 9–14 mm** (also V 4 mm;
+  III, IV, VI < 1 mm; IX 1–2 mm). The zone is susceptible to vascular compression (hemifacial spasm for
+  VII, vestibular paroxysmia for VIII). That vestibular schwannomas arise at the zone is an **erroneous
+  myth** (Radiopaedia; Xenellis & Linthicum 2003, PMID 12544018).
+- **Source conflict (kept):** cadaver histomorphometry finds similar central segments, 3.6 mm (VIII)
+  vs 3.7 mm (VII), with VIII's junction midway along the cisternal nerve (Gupta 2023, PMID 37399929). The
+  guide adopts the Radiopaedia distances and shows Gupta as a Source conflict trap.
+- The blueprint's misconception row returns in corrected form: "VS arises at the transition zone" →
+  myth; they arise from vestibular Schwann cells within the canal (G7, G11).
 
 ### G5 · AICA loops and labyrinthine artery
 
@@ -141,48 +157,64 @@ references for I0.4 and can add columns later.
 
 ### G10 · MCF landmark geometry
 
-- **Adopted:** the superior canal makes a **45–60°** angle with the IAC (HCA3 p44); begin medially
-  at the porus, at about 60° to the arcuate eminence or on the line bisecting the angle between the
-  arcuate eminence and the GSPN (HCA3 p42, p49); the arcuate eminence–superior canal relation is
-  inconstant (HCA3 p42); geniculate dehiscent in ~16% (HCA3 p42); about 2.5 mm from cochlear base to
-  superior canal ampulla, so ≤ 2 mm diamond burs at the lateral IAC (HCA3 figs 3.6–3.7); the SVN can be
-  followed about half the length of the labyrinthine nerve before the ampulla (HCA3 p45); medially
-  270° of the circumference can be removed (HCA3 p45).
-- **Not verified:** eponyms (House = follow the GSPN; Fisch = 60° from the blue-lined superior canal;
-  Garcia-Ibañez = the bisector). HCA3 gives the methods without the names. The guide shows the methods,
-  and the names only once sourced.
+- **Adopted:** HCA3 as before (superior canal 45–60° to the IAC; ~60° to the arcuate eminence or the
+  bisector of the arcuate eminence–GSPN angle; start medially at the porus; arcuate eminence–canal
+  relation inconstant; geniculate dehiscent ~16%; cochlear base to superior canal ampulla ~2.5 mm; ≤ 2 mm
+  burrs laterally; SVN followed half the labyrinthine length; 270° medially).
+- **Eponyms now sourced:** *Garcia-Ibañez* = bisect the arcuate eminence–GSPN angle; *Fisch* = the
+  arcuate eminence–IAC angle; *House* = trace the GSPN back to the geniculate (House 1961, cited in
+  HCA3). CT of 100 sides (Sahana 2023, PMID 37141941, doi:10.1016/j.wneu.2023.04.110): arcuate
+  eminence–GSPN angle **126.2 ± 11.6°** (106–156), bisector **63 ± 5.8°**; arcuate eminence–IAC (Fisch)
+  **73.5 ± 11.7°** (51–105). Cadaver study (Maina 2007, PMID 18449332): the Garcia-Ibañez method is
+  "the simplest and most reliable"; landmark variability is large.
+- **Conflict:** the Fisch angle (73.5° on CT) vs "about 60°" (HCA3): shown in `appraisal`.
 
 ### G11 · Fundal branches and ganglion
 
-- **Adopted:** Voit's nerve is the nerve to the superior part of the saccule, through its own bony
-  channel (Büki & Ward, PMID 34260510); the posterior ampullary (singular) nerve leaves through its
-  canal posteroinferior to the IVN (K2, K31) and lies close to the round window membrane, the landmark
-  for singular neurectomy (K2). Fundus: the transverse crest divides a smaller upper zone from a larger
-  lower zone (K2). Anastomoses: vestibulofacial in 83%, vestibulocochlear in 80% of 30 bones (PMID
-  18253691).
-- **Not sourced:** vestibular (Scarpa) ganglion position along the canal. `nv-ganglion` waits for a
-  source.
+- **Adopted:** Voit's nerve supplies the superior part of the saccule (Büki & Ward, PMID 34260510). The
+  singular nerve leaves posteroinferior to the IVN (K2, K31) and lies near the round window membrane,
+  the singular neurectomy landmark (K2). Fundus: smaller upper zone, larger lower zone (K2).
+  Anastomoses: vestibulofacial 83%, vestibulocochlear 80% of 30 bones (PMID 18253691); Oort's (IVN →
+  cochlear) named by the owner (#355).
+- **Vestibular (Scarpa) ganglion, now sourced (K6):** at the bottom (lateral end) of the internal
+  auditory meatus, divided into superior (superior and lateral ampullae, utricle, anterosuperior
+  saccule) and inferior (posterior ampulla, rest of the saccule) parts.
+- **Labyrinthine artery (K6, Mazzoni 1990):** may arise from AICA, the superior cerebellar artery or
+  the basilar; it divides into the anterior vestibular artery (utricle, superior and lateral ampullae)
+  and the common cochlear artery (proper cochlear artery and vestibulocochlear artery, whose
+  vestibular ramus supplies the posterior ampulla, the saccule and parts of the utricle).
 
 ### G12 · Facial nerve displacement and hearing classes
 
-- **Adopted:** AAO-HNS hearing classes: A ≤ 30 dB and ≥ 70%; B > 30–50 dB and ≥ 50%; C > 50 dB and
-  ≥ 50%; D any PTA and < 50% (K31 table). > 90% are House-Brackmann I at diagnosis (K31). Meningiomas
-  displace rather than invade VII and VIII, so they leave better odds of hearing (HCA6 p69). With an
-  SVN tumour the plane is between tumour and VII; at the porus VII is most adherent and thinnest
-  (HCA6 p81).
-- **Not sourced:** displacement-pattern frequencies; Gardner-Robertson; the 50/50 rule. Not stated
-  with numbers until sourced.
+- **Adopted:** AAO-HNS classes A–D (K31 table, as before); > 90% HB I at diagnosis (K31); meningiomas
+  displace rather than invade VII and VIII (HCA6 p69); with an SVN tumour the plane is between tumour
+  and VII; at the porus VII is most adherent and thinnest (HCA6 p81); in retrosigmoid surgery VII is
+  found more anteriorly along the brainstem, its course variable (HCA5 p65). Nervus intermedius exits
+  the pons between motor VII and VIII; the distance before it joins VII varies (J9 figs 9.12–9.14).
+- **Still not sourced:** displacement-pattern frequencies; Gardner-Robertson thresholds (the 1988
+  paper, PMID 3277525, exists; its abstract gives no classes); the 50/50 rule. Taught without numbers;
+  Gardner-Robertson and 50/50 are not named.
 
 ### G13 · IP-III
 
-- **Adopted:** 13 XLD patients: bilateral IP-III, bulbous IACs, absent bony modiolus with preserved
-  interscalar septa, intact cochleovestibular and facial nerves, thin otic capsule; hypothalamic
-  anomalies common (Parlak et al. with Sennaroglu, PMID 34914607). POU3F4 is not in the abstract read;
-  name it once a source is added.
+- **Adopted:** bilateral IP-III, bulbous IACs, absent bony modiolus with preserved interscalar septa,
+  intact cochleovestibular and facial nerves, thin otic capsule; hypothalamic anomalies common (PMID
+  34914607). **POU3F4** mutations are the principal cause; X-linked recessive (Xu 2024, PMID 38498189,
+  doi:10.1007/s00405-024-08555-7). Implantation is the main treatment but surgically more complex; check
+  electrode position after surgery (same).
 
 ### G14 · Embryology of the IAC
 
-- **Not sourced.** `os-dev` waits for a source (Kirtane ch. 1 is the candidate) or is cut.
+- **Adopted (K1):** week 4, the acousticofacial ganglion splits: dorsal → geniculate ganglion (VII);
+  ventral → statoacoustic ganglion, whose superior part forms the superior vestibular nerve and whose
+  inferior part forms both the inferior vestibular nerve and the cochlear ganglion. The macular and
+  crista primordia split the same way (superior → utricle and superior and lateral cristae; inferior →
+  saccule and posterior crista). The otic capsule ossifies from week 15 from 14 centres, fused by week
+  23 with no sutures. The cochlear aqueduct forms between weeks 9 and 40, from a remnant of the
+  inferior cochlear vein; it is not a true duct.
+- **Not sourced:** that the canal forms around the nerve, so its calibre tracks the nerve. `os-dev`
+  teaches the ganglion split instead (it explains why IVN and cochlear fibres stay intertwined and
+  fuse mid-canal; G3).
 
 ### Other facts used by the outline
 
@@ -200,9 +232,5 @@ references for I0.4 and can add columns later.
 
 ## Changes to the spec this ledger forces
 
-1. §5.9: withdraw the Obersteiner-Redlich misconception row (G4).
-2. `nv-rotation`: no per-ear handedness (G3).
-3. `os-morph`, `im-cnd`: no stenosis, flaring or asymmetry cutoffs; BCNC < 1.4 mm (G1, G6).
-4. `ap-retrosig`: 5 mm reliable, up to 10 mm, medial two-thirds (G8).
-5. `ap-mcf-landmarks`: methods taught; eponyms only once sourced (G10).
-6. `nv-ganglion`, `os-dev`: wait for a source (G11, G14).
+Superseded by the chapter briefs in [`iac-briefs/`](iac-briefs/README.md), which apply every row above
+section by section. Briefs win over the spec's §5 outline where they differ.

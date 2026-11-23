@@ -3,8 +3,8 @@
 **Block:** `layers`, `mode: 'toggle'`. **Ledger:** G10 (HCA3: superior canal at 45–60° to the IAC;
 drill at about 60° to the arcuate eminence or on the bisector of the arcuate eminence–GSPN angle;
 follow the GSPN to the geniculate; arcuate eminence–canal relation inconstant; cochlea ≤ 1 mm in front
-of the labyrinthine segment; geniculate dehiscent in ~16%). Methods are labelled by what they do, not
-by eponym (ledger G10).
+of the labyrinthine segment; geniculate dehiscent in ~16%). Eponyms and CT angles from ledger G10
+(Sahana 2023; Maina 2007).
 
 viewBox `0 0 760 560`. Right middle fossa floor **viewed from above: anterior up, lateral right**.
 Compass: A up, P down, M left, L right; "Right ear". The geometry is built on one vertex
@@ -37,9 +37,9 @@ Compass: A up, P down, M left, L right; "Right ear". The geometry is built on on
 
 | `id` | file | label | Draws |
 |---|---|---|---|
-| `follow` | `mcf-follow-gspn.svg` | "Follow the GSPN back to the geniculate, then the labyrinthine segment into the canal" | guide arrows along (390,75) → (500,265) → F → P |
-| `sixty` | `mcf-sixty.svg` | "About 60° from the arcuate eminence" | guide lines on the arcuate ray and the IAC axis from V; arc r 60 between them; text "≈ 60°" and, secondary, "45–60° between the superior canal and the IAC (House Clinic Atlas)" |
-| `bisect` | `mcf-bisector.svg` | "Bisect the angle between the arcuate eminence and the GSPN" | guide lines on both rays from V, arc r 70 spanning 120°, the bisector dashed along the IAC axis to P; text "Bisector ≈ IAC" |
+| `follow` | `mcf-follow-gspn.svg` | "House: follow the GSPN back to the geniculate, then the labyrinthine segment into the canal" | guide arrows along (390,75) → (500,265) → F → P |
+| `sixty` | `mcf-sixty.svg` | "Fisch: the canal's angle from the arcuate eminence" | guide lines on the arcuate ray and the IAC axis from V; arc r 60 between them; text "≈ 60°" and, secondary, "45–60° (House Clinic Atlas); 73.5 ± 11.7° on CT (Sahana 2023)" |
+| `bisect` | `mcf-bisector.svg` | "Garcia-Ibañez: bisect the angle between the arcuate eminence and the GSPN" | guide lines on both rays from V, arc r 70 spanning 120°, the bisector dashed along the IAC axis to P; text "Bisector ≈ IAC"; secondary "126 ± 12° on CT, bisector 63° (Sahana 2023): the most reliable of the three (Maina 2007)" |
 
 Caption (chapter data): "Schematic, right side, from above. Start medially at the porus, the safe
 end; the fundus is tight between the cochlea in front and the ampulla behind. Source: House Clinic
