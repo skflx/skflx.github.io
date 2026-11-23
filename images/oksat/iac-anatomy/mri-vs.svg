@@ -2,21 +2,18 @@
   <title>Vestibular schwannoma (axial MRI, schematic)</title>
   <rect width="100%" height="100%" fill="#ffffff"/>
   <text x="380" y="28" text-anchor="middle" font-size="15" font-weight="bold">Vestibular schwannoma (ice-cream cone, schematic)</text>
-  <path d="M 120 80 L 640 360 L 640 80 Z" fill="#efe6d2" stroke="none"/>
-  <line x1="120" y1="80" x2="349" y2="203" stroke="#8a7b5f" stroke-width="2.5"/>
-  <line x1="411" y1="237" x2="640" y2="360" stroke="#8a7b5f" stroke-width="2.5"/>
-  <g data-g="iac">
-    <polygon points="355,206 518,118 534,148 405,233" fill="#555049" fill-opacity="0.85" stroke="#8a7b5f" stroke-width="1.4"/>
-  </g>
-  <g data-g="porus"><line x1="349" y1="203" x2="411" y2="237" stroke="#2F6E6A" stroke-width="1.4" stroke-dasharray="4 3"/></g>
-  <path d="M 355 206 L 516 120 L 531 148 L 405 233 A 70 70 0 1 1 355 206 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.5"/>
-  <path d="M 319.8 187 A 40 40 0 0 0 315 206" fill="none" stroke="#2F6E6A" stroke-width="2"/>
-  <path d="M 440.2 252 A 40 40 0 0 1 429.4 264.6" fill="none" stroke="#2F6E6A" stroke-width="2"/>
+  <path d="M 120 80 L 349.1 203.4 A 12 12 0 0 0 365.4 198.5 L 426.1 85.8 L 466.7 107.6 L 406 220.3 A 12 12 0 0 0 410.9 236.6 L 640 360 L 640 80 Z" fill="#efe6d2" stroke="none"/>
+  <g data-g="iac"><polygon points="365.4,198.5 426.1,85.8 466.7,107.6 406,220.3" fill="#555049" fill-opacity="0.85" stroke="none"/></g>
+  <path d="M 120 80 L 349.1 203.4 A 12 12 0 0 0 365.4 198.5 L 426.1 85.8 L 466.7 107.6 L 406 220.3 A 12 12 0 0 0 410.9 236.6 L 640 360" fill="none" stroke="#8a7b5f" stroke-width="2.5" stroke-linejoin="round"/>
+  <g data-g="porus"><line x1="349.2" y1="203.4" x2="410.8" y2="236.6" stroke="#2F6E6A" stroke-width="1.4" stroke-dasharray="4 3"/></g>
+  <path d="M 426.1 85.8 L 466.7 107.6 L 406 220.3 A 12 12 0 0 0 410.9 236.6 A 70 70 0 1 1 349.1 203.4 A 12 12 0 0 0 365.4 198.5 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M 314 184.4 A 40 40 0 0 0 309.2 203.4" fill="none" stroke="#2F6E6A" stroke-width="2"/>
+  <path d="M 446 255.6 A 40 40 0 0 1 431.8 270.6" fill="none" stroke="#2F6E6A" stroke-width="2"/>
   <g data-label="1" font-size="12.5">
-    <text x="270" y="202" text-anchor="end" font-weight="bold" fill="#2F6E6A">Acute angles;</text>
-    <text x="270" y="218" text-anchor="end" font-weight="bold" fill="#2F6E6A">centred on the porus</text>
-    <text x="546" y="134" text-anchor="start" fill="#555049">IAC plug</text>
-    <text x="348" y="360" text-anchor="middle" fill="#555049">Porus flared</text>
+    <text x="290" y="196" text-anchor="end" font-weight="bold" fill="#2F6E6A">Acute angles;</text>
+    <text x="290" y="212" text-anchor="end" font-weight="bold" fill="#2F6E6A">centred on the porus</text>
+    <text x="478" y="100" text-anchor="start" fill="#555049">IAC plug</text>
+    <text x="351" y="362" text-anchor="middle" fill="#555049">Porus flared</text>
   </g>
   <g data-label="1" font-size="11" fill="#555049">
     <line x1="46" y1="376" x2="82" y2="376" stroke="#555049" stroke-width="1.2"/>
