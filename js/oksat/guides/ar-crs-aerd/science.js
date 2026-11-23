@@ -21,6 +21,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'sci-1',
+            ref: ['Sinus/Type 2 CRS exhibits eosinophilic inflammation responsive to targeted biologics'],
             n: '1.1',
             title: 'Three immune programs',
             blocks: [
@@ -85,6 +86,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sci-2',
+            ref: ['Sinus/Epithelial tight junctions and antimicrobial peptides form the primary sinonasal mucosal barrier'],
             n: '1.2',
             title: 'The epithelium starts it',
             blocks: [
@@ -153,6 +155,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sci-3',
+            ref: ['Sinus/The Gell and Coombs classification delineates four distinct immunologic hypersensitivity mechanisms underlying otolaryngic disease'],
             n: '1.3',
             title: 'Sensitization: making allergen-specific IgE',
             blocks: [
@@ -339,6 +342,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sci-6',
+            ref: ['Sinus/The Vidian nerve carries parasympathetic secretomotor and sympathetic vasomotor fibers', 'Sinus/The nasal cycle provides alternating autonomic mucosal congestion and decongestion'],
             n: '1.6',
             title: 'Neural mechanisms',
             blocks: [
@@ -519,6 +523,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sci-10',
+            ref: ['Sinus/Nitric oxide produced in the paranasal sinuses provides host defense and ciliary stimulation'],
             n: '1.10',
             title: 'Vitamin D, nitric oxide, microbiome',
             blocks: [

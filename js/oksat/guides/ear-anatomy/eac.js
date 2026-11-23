@@ -95,6 +95,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'eac-gaps',
+            ref: ['Otology/The external auditory canal cartilaginous third harbors Fissures of Santorini and Foramen of Huschke as routes of disease spread'],
             n: '3.4',
             title: 'Dehiscences: Santorini and Huschke',
             blocks: [

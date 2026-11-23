@@ -21,6 +21,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'sy-fn',
+            ref: ['Otology/The facial nerve traverses six distinct anatomical segments from the pons to the parotid gland', 'Otology/The first genu marks the location of the geniculate ganglion and origin of the greater superficial petrosal nerve'],
             n: '12.1',
             title: 'The facial nerve, whole intratemporal course',
             blocks: [
@@ -88,6 +89,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sy-para',
+            ref: ['Otology/The greater and lesser petrosal nerves function as parasympathetic couriers connecting middle ear nerves to the lacrimal and parotid glands', 'Sinus/Gustatory sensation is transmitted via the chorda tympani, greater superficial petrosal, glossopharyngeal, and superior laryngeal nerves'],
             n: '12.2',
             title: 'Parasympathetic routes',
             blocks: [
@@ -207,6 +209,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'sy-dev',
+            ref: ['Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna'],
             n: '12.5',
             title: 'Embryology table',
             blocks: [

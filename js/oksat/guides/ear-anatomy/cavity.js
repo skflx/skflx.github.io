@@ -76,6 +76,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'cav-medial',
+            ref: ['Otology/The cochleariform process serves as the constant middle ear landmark triangulating the geniculate ganglion, tympanic CN VII, and tensor tympani tendon'],
             n: '5.3',
             title: 'Medial wall',
             blocks: [
@@ -107,6 +108,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'cav-roof-floor',
+            ref: ['Otology/Tegmen erosion with dural exposure increases the risk of meningoencephalocele and CSF leak'],
             n: '5.4',
             title: 'Roof and floor',
             blocks: [

@@ -22,6 +22,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'ma-surface',
+            ref: ['Otology/The Macewen triangle and Henle spine indicate the surface projection of the mastoid antrum'],
             n: '9.1',
             title: 'Surface landmarks',
             blocks: [
@@ -61,6 +62,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'ma-antrum',
+            ref: ['Otology/Complete cortical mastoidectomy unroofs the mastoid antrum and establishes dependent middle ear drainage'],
             n: '9.2',
             title: 'Antrum and Körner septum',
             blocks: [
@@ -162,6 +164,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'ma-fn',
+            ref: ['Otology/The facial nerve traverses six distinct anatomical segments from the pons to the parotid gland'],
             n: '9.5',
             title: 'The facial nerve in the mastoid',
             blocks: [
@@ -222,6 +225,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'ma-recess',
+            ref: ['Otology/The facial recess is bounded by the facial nerve, chorda tympani, and fossa incudis', 'Otology/Posterior tympanotomy facial recess approach opens the corridor between CN VII and chorda tympani'],
             n: '9.6',
             title: 'Facial recess',
             blocks: [
@@ -272,6 +276,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'ma-peds',
+            ref: ['Otology/The infant mastoid lacks a developed tip placing the facial nerve in a subcutaneous vulnerable position at the stylomastoid foramen'],
             n: '9.8',
             title: 'Pediatric shifts',
             blocks: [

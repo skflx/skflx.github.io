@@ -21,6 +21,7 @@ window.__OKSAT_CHAPTER = {
     sections: [
         {
             id: 'ap-arches',
+            ref: ['Otology/The six auricular hillocks of His derive from the first and second branchial arches to form the pinna'],
             n: '13.1',
             title: 'Ossicular arch origin and the hillocks of His',
             blocks: [
@@ -79,6 +80,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'ap-numbers',
+            ref: ['Otology/The middle ear transformer ratio provides twenty-seven decibels of acoustic impedance matching', 'Otology/The tympanic membrane areal ratio of seventeen to one provides the primary impedance gain', 'Otology/The lever ratio of the malleus to incus provides a one point three to one mechanical advantage'],
             n: '13.3',
             title: 'Transformer numbers and naming',
             blocks: [

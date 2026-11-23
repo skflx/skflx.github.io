@@ -72,6 +72,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'as-2',
+            ref: ['Otology/Eustachian tube dysfunction divides into dilatory and patulous forms with opposite treatment goals'],
             n: '9.2',
             title: 'Airway, eye, ear, sleep',
             blocks: [

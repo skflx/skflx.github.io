@@ -42,6 +42,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'pa-tracts',
+            ref: ['Otology/Infracochlear and infralabyrinthine approaches establish hearing-preserving drainage pathways for petrous apex cholesterol granulomas inferior to the otic capsule'],
             n: '10.2',
             title: 'Cell tracts to the apex',
             blocks: [
@@ -78,6 +79,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'pa-corridors',
+            ref: ['Otology/Infracochlear and infralabyrinthine approaches establish hearing-preserving drainage pathways for petrous apex cholesterol granulomas inferior to the otic capsule', 'Otology/Petrous apex cholesteatoma requires infracochlear, translabyrinthine, or middle cranial fossa exteriorization'],
             n: '10.3',
             title: 'Corridors (names and boundaries)',
             blocks: [
@@ -100,6 +102,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'pa-clinical',
+            ref: ['Otology/Gradenigo triad of otorrhea, retroorbital pain, and abducens nerve palsy indicates suppurative petrous apicitis', 'Otology/Petrous apex lesions are differentiated into cholesterol granuloma, cholesteatoma, and mucocele by T1, T2, and non-EPI diffusion-weighted MRI'],
             n: '10.4',
             title: 'Why the relations matter',
             blocks: [

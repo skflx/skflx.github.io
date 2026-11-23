@@ -41,6 +41,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'crs-2',
+            ref: ['Sinus/Type 2 CRS exhibits eosinophilic inflammation responsive to targeted biologics', 'Sinus/Non-Type 2 CRS features neutrophilic inflammation associated with cystic fibrosis and ciliopathies'],
             n: '6.2',
             title: 'EPOS 2020 classification',
             blocks: [
@@ -288,6 +289,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'crs-5',
+            ref: ['Sinus/The Lund-Mackay CT scoring system quantifies sinonasal opacification and ostiomeatal occlusion', 'Sinus/Steroid-eluting sinus implants deliver localized anti-inflammatory therapy to prevent restenosis'],
             n: '6.5',
             title: 'Surgery: when, what, and what to expect',
             blocks: [
@@ -372,6 +374,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'crs-6',
+            ref: ['Sinus/Allergic fungal rhinosinusitis presents with eosinophilic mucin and Charcot-Leyden crystals', 'Sinus/Chronic non-invasive fungal ball presents with dense maxillary mycetoma without tissue invasion', 'Sinus/Acute invasive fungal rhinosinusitis requires emergent surgical debridement and systemic amphotericin B'],
             n: '6.6',
             title: 'Fungal disease',
             blocks: [
@@ -453,6 +456,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'crs-7',
+            ref: ['Sinus/Granulomatosis with polyangiitis presents with necrotizing sinonasal granulomas and saddle nose', 'Sinus/Eosinophilic granulomatosis with polyangiitis causes asthma, peripheral eosinophilia, and necrotizing vasculitis', 'Sinus/Odontogenic sinusitis arises from periapical maxillary dental pathology and oroantral fistulas'],
             n: '6.7',
             title: 'Other phenotypes you must not miss',
             blocks: [
@@ -532,6 +536,7 @@ window.__OKSAT_CHAPTER = {
         },
         {
             id: 'crs-8',
+            ref: ['Sinus/Pediatric endoscopic sinus surgery employs a stepwise escalation algorithm following adenoidectomy and preserves midfacial growth centers through conservative mucosal sparing dissection'],
             n: '6.8',
             title: 'Pediatric CRS',
             blocks: [
