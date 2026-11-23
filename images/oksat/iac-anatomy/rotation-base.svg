@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Nerve rotation along the right IAC (base, schematic)</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="130" y="60" text-anchor="middle" font-size="14" font-weight="bold">1 · Cerebellopontine angle</text>
+  <circle cx="130" cy="200" r="90" fill="none" stroke="#555049" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="130" y="86" text-anchor="middle" font-size="11.5" fill="#555049">no canal: cistern</text>
+  <text x="370" y="60" text-anchor="middle" font-size="14" font-weight="bold">2 · Porus</text>
+  <circle cx="370" cy="200" r="90" fill="#f6e3d4" stroke="#8c4b3e" stroke-width="1.2"/>
+  <text x="610" y="60" text-anchor="middle" font-size="14" font-weight="bold">3 · Mid-canal</text>
+  <circle cx="610" cy="200" r="90" fill="#f6e3d4" stroke="#8c4b3e" stroke-width="1.2"/>
+  <text x="850" y="60" text-anchor="middle" font-size="14" font-weight="bold">4 · Fundus</text>
+  <circle cx="850" cy="200" r="90" fill="#f6e3d4" stroke="#8c4b3e" stroke-width="1.2"/>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="38" y1="300" x2="74" y2="300" stroke="#555049" stroke-width="1.2"/>
+    <line x1="56" y1="282" x2="56" y2="318" stroke="#555049" stroke-width="1.2"/>
+    <text x="56" y="278" text-anchor="middle" font-weight="bold">S</text>
+    <text x="56" y="330" text-anchor="middle" font-weight="bold">I</text>
+    <text x="33" y="304" text-anchor="end" font-weight="bold">A</text>
+    <text x="79" y="304" text-anchor="start" font-weight="bold">P</text>
+    <text x="56" y="345" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Right ear</text>
+  </g>
+  <text x="120" y="345" font-size="12" fill="#555049">One common pattern, schematic. The facial nerve's angle varies: 0–90° in one cadaver series, 180° in a surgical atlas. Only the fundus is fixed.</text>
+</svg>

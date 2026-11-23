@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Left IAC from above (middle fossa view): the facial nerve is on top, in front</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="15" font-weight="bold">Left IAC from above (middle fossa view): the facial nerve is on top, in front</text>
+  <rect x="250" y="90" width="260" height="390" rx="10" fill="#ffffff" stroke="#8a7b5f" stroke-width="1.4"/>
+  <g data-g="cochn"><rect x="395" y="140" width="90" height="320" rx="22" fill="#f7f1e3" fill-opacity="0.35" stroke="#555049" stroke-width="1.2" stroke-dasharray="5 4"/></g>
+  <g data-g="ivn"><rect x="275" y="140" width="90" height="320" rx="22" fill="#f7f1e3" fill-opacity="0.35" stroke="#555049" stroke-width="1.2" stroke-dasharray="5 4"/></g>
+  <g data-g="bills-bar"><rect x="373" y="90" width="14" height="60" rx="4" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="fn-meatal"><rect x="390" y="120" width="100" height="350" rx="30" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-g="fn-lab"><path d="M 460 120 L 475 60" fill="none" stroke="#d9a400" stroke-width="26" stroke-linecap="round"/><path d="M 460 120 L 475 60" fill="none" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-g="geniculate"><ellipse cx="470" cy="48" rx="26" ry="18" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-g="svn"><rect x="270" y="120" width="100" height="350" rx="30" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/></g>
+  <g data-g="cochlea"><circle cx="535" cy="100" r="34" fill="#c97b6b" fill-opacity="0.35"/></g>
+  <g data-g="ssc"><circle cx="240" cy="70" r="26" fill="#c97b6b" fill-opacity="0.35"/></g>
+  <g data-label="1" font-size="13">
+    <text x="380" y="80" text-anchor="middle" font-size="12" fill="#555049">Fundus</text>
+    <text x="380" y="500" text-anchor="middle" font-size="12" fill="#555049">Porus</text>
+    <text x="440" y="275" text-anchor="middle" font-weight="bold">Facial nerve</text>
+    <text x="440" y="294" text-anchor="middle" font-size="12">(superior, anterior)</text>
+    <text x="440" y="395" text-anchor="middle" font-size="11.5" fill="#555049">Cochlear (below)</text>
+    <text x="320" y="275" text-anchor="middle" font-weight="bold">Superior</text>
+    <text x="320" y="292" text-anchor="middle" font-weight="bold">vestibular</text>
+    <text x="320" y="395" text-anchor="middle" font-size="11.5" fill="#555049">IVN (below)</text>
+    <text x="578" y="96" text-anchor="start">Cochlea</text>
+    <text x="578" y="112" text-anchor="start" font-size="11.5" fill="#555049">(≤ 1 mm ant. to lab. VII)</text>
+    <text x="206" y="74" text-anchor="end">Superior canal ampulla</text>
+    <text x="502" y="52" text-anchor="start" font-size="12">Geniculate</text>
+    <text x="380" y="166" text-anchor="middle" font-size="12" fill="#555049">Bill's bar</text>
+  </g>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="50" y1="485" x2="86" y2="485" stroke="#555049" stroke-width="1.2"/>
+    <line x1="68" y1="467" x2="68" y2="503" stroke="#555049" stroke-width="1.2"/>
+    <text x="68" y="463" text-anchor="middle" font-weight="bold">L</text>
+    <text x="68" y="515" text-anchor="middle" font-weight="bold">M</text>
+    <text x="45" y="489" text-anchor="end" font-weight="bold">P</text>
+    <text x="91" y="489" text-anchor="start" font-weight="bold">A</text>
+    <text x="68" y="530" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Left ear</text>
+  </g>
+</svg>

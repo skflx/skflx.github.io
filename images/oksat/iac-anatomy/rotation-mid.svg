@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Mid-canal</title>
+  <g data-g="cn8">
+    <ellipse cx="635.1" cy="206.7" rx="42" ry="34" fill="#f7f1e3" stroke="#555049" stroke-width="1.4"/>
+    <line x1="601.1" y1="206.7" x2="669.1" y2="206.7" stroke="#555049" stroke-width="1" stroke-dasharray="3 3"/>
+  </g>
+  <g data-g="fn-meatal"><circle cx="556.9" cy="185.8" r="22" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <path d="M 530.8 221.2 A 82 82 0 0 1 530.8 178.8" fill="none" stroke="#9b7600" stroke-width="2"/>
+  <polygon points="530.8,178.8 537.8,182.8 531.8,186.8" fill="#9b7600"/>
+  <text x="556.9" y="189.8" text-anchor="middle" font-size="11.5" font-weight="bold">VII</text>
+  <text x="635.1" y="200.7" text-anchor="middle" font-size="11.5" font-weight="bold">VIII</text>
+  <text x="610" y="308" text-anchor="middle" font-size="11" fill="#555049">n. int. joined VII</text>
+</svg>

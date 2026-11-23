@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>The internal auditory canal as an opened box (right ear, schematic)</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="380" y="30" text-anchor="middle" font-size="15" font-weight="bold">The internal auditory canal as an opened box (right ear, schematic)</text>
+  <rect x="285" y="50" width="190" height="150" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <rect x="85" y="210" width="190" height="150" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <rect x="285" y="210" width="190" height="150" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <rect x="485" y="210" width="190" height="150" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <rect x="285" y="370" width="190" height="150" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <rect x="585" y="370" width="150" height="150" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <g data-label="1">
+    <text x="295" y="72" font-size="13.5" font-weight="bold">Superior: middle fossa</text>
+    <text x="95" y="232" font-size="13.5" font-weight="bold">Posterior</text>
+    <text x="295" y="232" font-size="13.5" font-weight="bold">Medial: the porus (open)</text>
+    <text x="495" y="232" font-size="13.5" font-weight="bold">Anterior</text>
+    <text x="295" y="392" font-size="13.5" font-weight="bold">Inferior</text>
+    <text x="595" y="392" font-size="13.5" font-weight="bold">Lateral: the fundus</text>
+  </g>
+  <g data-g="mcfdura">
+    <rect x="293" y="80" width="174" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="92" font-size="11.5">• Middle fossa floor and dura</text>
+  </g>
+  <g data-g="arcuate">
+    <rect x="293" y="101" width="174" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="113" font-size="11.5">• Arcuate eminence over SSCC</text>
+  </g>
+  <g data-g="gspn">
+    <rect x="293" y="122" width="174" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="134" font-size="11.5">• GSPN, anterior</text>
+  </g>
+  <g data-g="geniculate">
+    <rect x="293" y="143" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="155" font-size="11.5">• Geniculate ganglion,</text>
+    <text x="297" y="168" font-size="11.5">  anterolateral</text>
+  </g>
+  <g data-g="sps">
+    <rect x="293" y="174" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="186" font-size="11.5">• Superior petrosal sinus,</text>
+    <text x="297" y="199" font-size="11.5">  medial, on the ridge</text>
+  </g>
+  <g data-g="pfdura">
+    <rect x="93" y="240" width="174" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="97" y="252" font-size="11.5">• Posterior fossa dura</text>
+  </g>
+  <g data-g="vest-aq">
+    <rect x="93" y="261" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="97" y="273" font-size="11.5">• Vestibular aqueduct</text>
+    <text x="97" y="286" font-size="11.5">  and operculum</text>
+  </g>
+  <g data-g="pscc">
+    <rect x="93" y="292" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="97" y="304" font-size="11.5">• Posterior canal and</text>
+    <text x="97" y="317" font-size="11.5">  common crus, laterally</text>
+  </g>
+  <g data-g="porus">
+    <rect x="293" y="240" width="174" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="252" font-size="11.5">• Porus acusticus</text>
+  </g>
+  <g data-g="cpa">
+    <rect x="293" y="261" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="273" font-size="11.5">• Cerebellopontine angle</text>
+    <text x="297" y="286" font-size="11.5">  cistern</text>
+  </g>
+  <g fill="#555049">
+    <text x="297" y="304" font-size="11.5">• Brainstem beyond</text>
+  </g>
+  <g data-g="cochlea">
+    <rect x="493" y="240" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="497" y="252" font-size="11.5">• Basal turn of the cochlea,</text>
+    <text x="497" y="265" font-size="11.5">  laterally</text>
+  </g>
+  <g data-g="ica">
+    <rect x="493" y="271" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="497" y="283" font-size="11.5">• Petrous carotid, anterolateral</text>
+    <text x="497" y="296" font-size="11.5">  to the medial canal</text>
+  </g>
+  <g data-g="petapex">
+    <rect x="493" y="302" width="174" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="497" y="314" font-size="11.5">• Petrous apex, medially</text>
+  </g>
+  <g data-g="jb">
+    <rect x="293" y="400" width="174" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="412" font-size="11.5">• Jugular bulb (height varies)</text>
+  </g>
+  <g data-g="coch-aq">
+    <rect x="293" y="421" width="174" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="297" y="433" font-size="11.5">• Cochlear aqueduct:</text>
+    <text x="297" y="446" font-size="11.5">  the lower limit</text>
+  </g>
+  <g fill="#555049">
+    <text x="297" y="464" font-size="11.5">• Cranial nerves IX–XI below it</text>
+  </g>
+  <g data-g="iac-fundus">
+    <rect x="593" y="400" width="134" height="27" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="597" y="412" font-size="11.5">• Fundus (lamina</text>
+    <text x="597" y="425" font-size="11.5">  cribrosa)</text>
+  </g>
+  <g data-g="vestibule">
+    <rect x="593" y="431" width="134" height="18" rx="3" fill="#ffffff" fill-opacity="0"/>
+    <text x="597" y="443" font-size="11.5">• Vestibule</text>
+  </g>
+  <text x="30" y="545" font-size="12" fill="#555049">Fold the net and the canal is the inside of the box.</text>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="44" y1="480" x2="80" y2="480" stroke="#555049" stroke-width="1.2"/>
+    <line x1="62" y1="462" x2="62" y2="498" stroke="#555049" stroke-width="1.2"/>
+    <text x="62" y="458" text-anchor="middle" font-weight="bold">S</text>
+    <text x="62" y="510" text-anchor="middle" font-weight="bold">I</text>
+    <text x="39" y="484" text-anchor="end" font-weight="bold">P</text>
+    <text x="85" y="484" text-anchor="start" font-weight="bold">A</text>
+    <text x="62" y="525" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Right ear</text>
+  </g>
+</svg>
