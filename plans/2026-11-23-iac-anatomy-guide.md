@@ -280,7 +280,7 @@ case series; measurement plane; selection of referral populations).
 | A normal IAC rules out CND | Measure the BCNC; check the anteroinferior dot | `im-cnd` |
 | Retrosigmoid reaches the whole canal with hearing | PSCC / common crus block the lateral fundus | `ap-retrosig` |
 | In MCF the tumour sits on top of VII | VII is superior, superficial to the tumour | `ap-mcf` |
-| VS arises at the root entry zone | The Obersteiner-Redlich zone of VIII lies in the canal | `nv-orz` |
+| ~~VS arises at the root entry zone~~ | Withdrawn by the ledger (G4): the zone's position and its role are contested | — |
 | **[+]** VII sits at the same clock face along the whole canal | Positions are fixed at the fundus, variable mid-canal | `nv-rotation` |
 
 ### 5.10 Links into existing modules
@@ -317,6 +317,9 @@ Drawing references in Drive (scratchpad only): Jackler ch. 1, 9, 10, 11; House C
 6, 14, 15, 17; Kirtane ch. 2, 6, 9, 12, 31, 32 (their `FIGURES_LEGENDS.md` index the plates).
 
 ## 7. `[GROUND]` ledger (I0.2)
+
+Filled in [`2026-11-23-iac-anatomy-ledger.md`](2026-11-23-iac-anatomy-ledger.md); its last section lists the outline
+changes it forces, which the content WPs apply.
 
 `plans/2026-11-23-iac-anatomy-ledger.md`: one row per item, columns: claim · adopted value and wording
 · sources (book + chapter/page, or PMID) · disagreement · section(s). Sources ranked: primary
