@@ -162,5 +162,12 @@ window.__REVIEW_ITEMS = [
     title: 'OpenEar ZETA review',
     look: 'Review the OpenEar ZETA notes; they are a local file on your machine, not part of this repository.',
     links: [],
-    note: 'Text note only: open the local file where you keep it.' }
+    note: 'Text note only: open the local file where you keep it.' },
+
+  /* ---- IAC guide (#326) ---- */
+  { id: 'iac-guide-start', group: 'IAC guide (#326)', issue: '#335',
+    title: 'IAC guide: Start here',
+    look: 'Check the Start here chapter of the IAC guide: thesis bullets, learning map, tier targets, scope, source cards, and currency check.',
+    links: [{ label: 'Start here', href: 'oksat-learn.html' }],
+    note: 'Open oksat-learn.html?g=iac-anatomy&c=start directly (check-data rejects query strings in review-items hrefs).' }
 ];

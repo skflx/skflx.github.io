@@ -285,4 +285,16 @@ window.OKSAT_GUIDES = [
       { id: 'appraisal', k: 6, short: 'Conclusions & appraisal', min: 25, sections: 4, data: 'js/oksat/guides/jc-whisking-auditory-cortex/appraisal.js' },
     ],
   },
+  {
+    slug: 'iac-anatomy',
+    title: 'Internal Auditory Canal: Bony Box to Surgical Corridor',
+    kicker: 'Otology / Neurotology',
+    subspecialty: 'otology',
+    accent: '#2F6E6A',
+    draft: true,
+    desc: 'The IAC from first principles: the bony box and its six walls, the fundus and its crests, the rotating nerves and end arteries, how to read it on CT and MRI, and how it looks from each surgical corridor.',
+    chapters: [
+      { id: 'start', short: 'Start here', data: 'js/oksat/guides/iac-anatomy/start.js' },
+    ],
+  },
 ];
