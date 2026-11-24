@@ -1142,7 +1142,7 @@ function checkNoEmails() {
 
 /* review.html: js/review-items.js (window.__REVIEW_ITEMS) is the owner's review list. Every item has
    id/group/title/look; ids are unique; every href is a root .html page (relative, no scheme) with a
-   non-empty hash when it has one; issue, when set, is "#<n>". */
+   non-empty query or hash when it has one; issue, when set, is "#<n>". */
 function checkReviewItems() {
   console.log('\nreview: owner-review items');
   let items;
@@ -1150,7 +1150,7 @@ function checkReviewItems() {
   if (!Array.isArray(items) || items.length === 0) { fail('review-items.js: window.__REVIEW_ITEMS must be a non-empty array'); return; }
   const problems = [];
   const seen = new Set();
-  const HREF = /^([A-Za-z0-9_-]+\.html)(#.*)?$/;
+  const HREF = /^([A-Za-z0-9_-]+\.html)(\?[A-Za-z0-9_=&-]+)?(#.*)?$/;
   items.forEach((it, i) => {
     const tag = (it && typeof it.id === 'string' && it.id) || `item ${i}`;
     if (!it || typeof it !== 'object') { problems.push(`${tag}: not an object`); return; }
@@ -1165,7 +1165,7 @@ function checkReviewItems() {
       if (!l || typeof l.label !== 'string' || !l.label.trim() || typeof l.href !== 'string') { problems.push(`${tag}: a link needs label and href`); continue; }
       const m = HREF.exec(l.href);
       if (!m) { problems.push(`${tag}: href "${l.href}" is not a relative root .html link`); continue; }
-      if (l.href.includes('#') && m[2] === '#') problems.push(`${tag}: href "${l.href}" has an empty hash`);
+      if (l.href.includes('#') && m[3] === '#') problems.push(`${tag}: href "${l.href}" has an empty hash`);
       if (!fs.existsSync(rel(m[1]))) problems.push(`${tag}: href "${l.href}" names a missing page`);
     }
   });

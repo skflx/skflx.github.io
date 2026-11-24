@@ -44,6 +44,7 @@
   vestibular lower-back. Medially the vestibular nerves fuse (`nv-rotation`).
 - **Figure:** F2 frames 5–6 (`fundus-mri-*.svg`) as their own `hotspot` with find mode.
 - **Checks:** (1) "On oblique-sagittal MRI, which dot is the cochlear nerve?" → lower front (anteroinferior).
+  (2) "What happens to the two vestibular dots as you trace the canal medially?" → they fuse.
 - **Ref:** none. **Practice:** none. **Drill:** `im-4dot`.
 - **Items:** (a) orientation of the four dots. (b) which reconstruction plane (perpendicular to the canal).
   Do **not** write an item on relative nerve size (unsourced).
@@ -54,7 +55,9 @@
   precludes serviceable hearing even with a hearing-preservation technique [K31]. Retrosigmoid leaves tumour
   at the fundus in ~7% vs 0% translab [K31].
 - **Checks:** (1) "What does CSF at the fundus on T2 tell you?" → the tumour stops short of the fundus;
-  better odds of preserving hearing.
+  better odds of preserving hearing. (2) "What does tumour extending into the lateral fundus imply for
+  hearing preservation?" → it usually precludes serviceable hearing even with a hearing-preservation approach
+  (and retrosigmoid leaves residual tumour at the fundus in ~7% vs 0% for translab).
 - **Ref:** `Otology/The middle cranial fossa approach provides hearing preservation for intracanalicular schwannomas with lateral fundus extension`.
 - **Practice:** none. **Drill:** `im-fundal-cap`.
 - **Items:** (a) fundal cap meaning. (b) fundal extension precludes serviceable hearing.
