@@ -10,6 +10,8 @@ Each section is one case (keyed `case-*` so section ids match module synthesis c
 vignette paragraph, then 3 `check` prompts in order (each answer cites the section where it was taught), then
 a module case item (`concepts: [<section id>]`, MCQ, `section: 'Synthesis Cases'`, the case stem plus one
 question), and `drill: [{ m: 'iac-anatomy', c: ['<section id>'] }]`. Use only facts from the earlier briefs.
+Every vignette block that holds a number with a unit or % ends with the chip `[[src|Constructed case]]` (the
+guide lint rejects such a number without a chip).
 
 ## `case-mcf` · The small tumour at the fundus
 - **Vignette:** right 1.1 cm intracanalicular schwannoma filling the fundus (no CSF cap); PTA 15 dB,
@@ -57,4 +59,4 @@ question), and `drill: [{ m: 'iac-anatomy', c: ['<section id>'] }]`. Use only fa
   pneumatized ones (`os-cells`).
 - **Item:** the route.
 
-**Drill row** on the final section (`case-leak`): also include the earlier concepts consolidated across the six cases.
+**Drill row** on the final section (`case-leak`): also include every concept used above (the section ids each case's checks cite).

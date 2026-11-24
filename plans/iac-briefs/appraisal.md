@@ -23,14 +23,14 @@ what this guide teaches. Then 2 `check` prompts per section (`lint-oksat-guide` 
 - **Items:** (a) why IAC width norms differ across CT series (plane and measurement site).
 
 ## `apr-rotation` · How far the nerves turn
-- Card: ~90° inside the canal, right CCW (owner; Silverstein 1986; Schefter & Harner 1986) vs "gradual 180°"
+- Card: ~90° inside the canal, right ear counterclockwise tracing fundus to brainstem, viewed from medial (owner; Silverstein 1986; Schefter & Harner 1986) vs "gradual 180°"
   (Stanford/Jackler atlas caption) vs the facial nerve 0° in 37%, 30–90° in 63% (Tian 2008, 30 bones).
   Design: cadaver dissection vs surgical observation; "rotation" of VIII vs of VII. Taught: ~90° for VIII.
 - **Checks:** (1) "Why might an atlas say 180°?" → different structure or reference frame; 180° is not normal VIII
   anatomy (owner). (2) "What did Tian 2008 show about the facial nerve's position across 30 temporal bones?" →
-  it stayed anterosuperior throughout in 37% and rotated 30–90° in 63%.
+  it rotated 0° (none) in 37% and 30–90° in 63%.
 - **Ref:** none. **Practice:** none. **Drill:** `apr-rotation`.
-- **Items:** (a) Tian 2008 facial nerve variability (37% fixed anterosuperior vs 63% rotating 30–90°).
+- **Items:** (a) Tian 2008 facial nerve variability (0° in 37% vs 30–90° in 63%).
 
 ## `apr-orz` · The transition zone
 - Card: VIII 9–14 mm, VII 2–3 mm (Radiopaedia) vs 3.6 vs 3.7 mm (Gupta 2023, histomorphometry at "maximum

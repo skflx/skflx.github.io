@@ -14,7 +14,7 @@
   [HCA3] → jugular bulb height under the canal [K2] → vestibular aqueduct (≤ the posterior canal's width,
   < 1.5 mm) [K9] → petrous apex pneumatization [K31]. → bony cochlear nerve canal (< 1.4 mm) [G6].
 - **Figure:** `hotspot` with raster frames, UW axial 29, 32, 36 and coronal 14, 16 (`images/oksat/iac-anatomy/ct/…`
-  from I1.3; regions from the pipeline), explore and find. Caption credits "UW CT temporal bone module,
+  from I1.3; each frame written with `regions: []`, then filled by `python -I tools/tbone-pipeline/slices.py --guide iac-anatomy` and checked with `--check`; never hand-place a region), explore and find. Caption credits "UW CT temporal bone module,
   University of Washington Department of Radiology".
 - **Checks:** (1) "Upper limit of a normal vestibular aqueduct on axial CT?" → no wider than the posterior
   canal, < 1.5 mm. (2) "Two CT measurements to make before implanting a deaf child?" → IAC calibre and the
@@ -106,6 +106,6 @@
 - **Checks:** (1) "Strongest sign of meningioma?" → hyperostosis. (2) "Where does normal facial nerve
   enhancement start?" → at the geniculate (genu) and distally. (3) "Epidermoid vs arachnoid cyst?" → DWI.
 - **Ref:** `Otology/Facial nerve schwannomas present with slow progressive paralysis or facial twitching along the Fallopian canal` · `Otology/Internal auditory canal lipomas demonstrate T1 hyperintensity with fat saturation signal loss and mandate conservative observation`.
-- **Practice:** `vestibular-schwannoma:q22`, `vestibular-schwannoma:q26`. **Drill:** `im-lesions`.
+- **Practice:** `vestibular-schwannoma:q26` (`:q22` dropped: it calls the dural tail the strongest meningioma sign; here it is non-specific). **Drill:** `im-lesions`.
 - **Items:** (a) ice cream cone. (b) hyperostosis. (c) DWI epidermoid. (d) normal FN enhancement from the
   genu. (e) Bell's mimicking a schwannoma → repeat MRI.

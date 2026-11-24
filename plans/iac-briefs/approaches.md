@@ -67,7 +67,7 @@
   simplest and most reliable in a cadaver study [Maina 2007]. The arcuate eminence does not always sit over
   the superior canal [HCA3 p42].
 - **Figure:** F5 `layers` toggle.
-- **Call** `trap`, "Landmarks vary": all three angles have wide ranges [Sahana 2023; Maina 2007].
+- **Call** `trap`, "Source conflict": all three angles have wide ranges [Sahana 2023; Maina 2007].
 - **Checks:** (1) "Garcia-Ibañez method?" → bisect the arcuate eminence–GSPN angle. (2) "Why is the
   arcuate eminence unreliable alone?" → its relation to the superior canal is inconstant.
 - **Ref:** none. **Practice:** none. **Drill:** `ap-mcf-landmarks`.

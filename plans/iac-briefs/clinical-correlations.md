@@ -30,7 +30,7 @@
 - **Items:** (a) anterior most common. (b) adherence at the porus.
 - **Figure:** `figure` `images/oksat/iac-anatomy/stanford-fig-6.jpg`. The drawing shows nerve positions around a
   superior vs an inferior vestibular schwannoma, with the middle fossa, translabyrinthine and retrosigmoid
-  views marked (MF, TL, PF). Caption (from the atlas caption, ST6): "As a general rule the facial nerve is
+  views marked (MF middle fossa, TL translabyrinthine, PF posterior fossa, i.e. retrosigmoid). Caption (from the atlas caption, ST6): "As a general rule the facial nerve is
   displaced opposite to the vestibular nerve of origin. An inferior vestibular schwannoma puts the facial nerve
   between the tumour and the surgeon in a middle fossa approach." Credit line: "Stanford Skull Base Surgery
   Atlas, © RK Jackler; used with the atlas's educational permission." Do not quote the atlas's "180°" rotation
@@ -44,7 +44,7 @@
 - **Checks:** (1) "AAO-HNS class B?" → > 30–50 dB PTA with ≥ 50% discrimination. (2) "How often is hearing
   loss progressive versus sudden at presentation?" → progressive in almost 90%, sudden in 10%.
 - **Ref:** `Otology/Acoustic reflex thresholds and reflex decay testing identify retrocochlear lesions and facial nerve pathology` · `Otology/Auditory brainstem response waves I through V identify retrocochlear and brainstem pathology`.
-- **Practice:** `vestibular-schwannoma:q24`. **Drill:** `cc-audiometry`.
+- **Practice:** none (`vestibular-schwannoma:q24` is about ABR, not the hearing classes). **Drill:** `cc-audiometry`.
 - **Items:** (a) classes A–D (recall). (b) 90% progressive / 10% sudden.
 
 ## `cc-grades` · Grading by anatomy (anchor only)
@@ -65,9 +65,8 @@
   inferior vestibular fibres mid-canal risks the cochlear nerve [owner, G3]. Once a tumour involves the
   cochlea, the chance of preserving hearing is lost [K31].
 - **Checks:** (1) "Why dissect medial to lateral?" → lateral-to-medial pulls on cochlear fibres at the
-  habenula perforata. (2) "Where does the internal auditory artery run in the middle fossa view, and what
-  happens once tumour involves the cochlea?" → between VII and the cochlear nerve (not visible); cochlear
-  involvement ends the chance of preserving hearing.
+  habenula perforata. (2) "Once tumour involves the cochlea, what happens to hearing preservation?" → the chance
+  is lost.
 - **Ref:** `Otology/Intraoperative facial nerve and cochlear nerve monitoring minimize cranial nerve morbidity in skull base surgery`.
 - **Practice:** none. **Drill:** `cc-hearing-mech`.
 - **Items:** (a) IAA preservation. (b) medial-to-lateral rationale. (c) cochlear invasion ends preservation.
@@ -97,7 +96,7 @@
   (2) "What electrodiagnostic criterion is extrapolated to traumatic facial nerve paralysis?" → greater than
   90% degeneration on ENoG within 2 weeks.
 - **Ref:** `Trauma/Temporal bone fractures classified as otic capsule violating carry high risks of sensorineural hearing loss and facial nerve transection` · `Otology/Temporal bone longitudinal and transverse fractures cause delayed or immediate facial paralysis`.
-- **Practice:** `temporal-bone-trauma:q7`, `temporal-bone-trauma:q21`. **Drill:** `cc-trauma`.
+- **Practice:** `temporal-bone-trauma:q7` (`:q21` dropped: it names the geniculate the likeliest site; here the second genu and meatal foramen are commonest). **Drill:** `cc-trauma`.
 - **Items:** (a) injury sites. (b) extrapolated ENoG criterion.
 
 ## `cc-nvc` · Vessels against nerves
