@@ -76,12 +76,12 @@ expect('PTH 30, GFR < 60, Cr worse', { setting: 'ip', pth: '30', gfr: 'yes', cr:
 expect('PTH 30, GFR < 60, Cr same', { setting: 'ip', pth: '30', gfr: 'yes', cr: 'same' }, 'dc', ['ip.gt20', 'ip.renal']);
 
 console.log('hypocalcemia: a value at a cutoff counts as exceeding it (owner)');
-for (const [p, t] of [[9, 'lt10'], [9.9, 'lt10'], [10, 'low'], [14.9, 'low'], [15, 'mid'], [19.9, 'mid'], [20, 'gt20']]) {
+for (const [p, t] of [[9, 'lt10'], [9.9, 'lt10'], [10, 'low'], [14.9, 'low'], [15, 'mid'], [19.9, 'mid'], [20, 'mid'], [20.1, 'gt20']]) {
     check(tierOf(p) === t, `recovery-room PTH ${p} → ${t}`, tierOf(p));
 }
 expect('overnight PTH 15 → 15–20', { setting: 'ip', pth: '15' }, 'wait', ['ip.mid']);
-expect('overnight PTH 20 → > 20', { setting: 'ip', pth: '20' }, 'dc', ['ip.gt20']);
-expect('outpatient PTH 20 → > 20', { setting: 'op', pth: '20' }, 'dc', ['op.gt20']);
+expect('overnight PTH 20 stays 15–20 (written inclusive)', { setting: 'ip', pth: '20' }, 'wait', ['ip.mid']);
+expect('outpatient PTH 20 stays 15–20', { setting: 'op', pth: '20' }, 'dc', ['op.mid']);
 
 console.log('hypocalcemia: overnight PTH 15–20');
 const mid = { setting: 'ip', pth: '17' };
@@ -116,8 +116,10 @@ expect('standing orders', v, 'wait', ['v.1', 'v.2', 'v.3', 'v.att', 'g.2'], noIv
 expect('evening cramping', { ...v, dos: 'sx', cramp: 'yes' }, 'wait', ['v.dos'], hasIv);
 expect('evening sx, dose not given', { ...v, dos: 'sx', cramp: 'no', dose: 'not' }, 'wait', ['v.dos2'], noIv);
 expect('evening sx, dose given', { ...v, dos: 'sx', cramp: 'no', dose: 'given' }, 'wait', ['v.dos2'], noIv);
-expect('5 AM 8.4: no item', { ...v, amCa: '8.4' }, 'gap', ['v.crit']);
-expect('5 AM exactly 8 counts as above 8: no item', { ...v, amCa: '8' }, 'gap');
+expect('5 AM 8.4: still asks the 11 AM calcium', { ...v, amCa: '8.4' }, 'wait', ['v.2'], noIv);
+check(run({ ...v, amCa: '8.4' }).asks.includes('ca11'), '5 AM 8.4 asks for the 11 AM calcium');
+expect('5 AM 8.4, 11 AM entered: no item', { ...v, amCa: '8.4', ca11: '8.6' }, 'gap', ['v.crit']);
+expect('5 AM exactly 8 counts as above 8', { ...v, amCa: '8' }, 'wait', ['v.2']);
 expect('5 AM exactly 7 is in 7–8', { ...v, amCa: '7', amSx: 'no' }, 'wait', ['v.5']);
 expect('5 AM 7.5 needs symptoms', { ...v, amCa: '7.5' }, 'wait');
 

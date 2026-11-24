@@ -17,7 +17,8 @@
    (Ca + 0.8 × (4.0 − albumin)), which the protocol names without a
    formula; and a value exactly at a cutoff counts as exceeding it
    (PTH 10 as above 10, calcium 8.5 as above 8.5), except where the
-   text writes the equality itself ("< or = 8.5", PTH 10–15 item 2).
+   text writes the equality itself ("< or = 8.5", PTH 10–15 item 2;
+   "PTH 15 – 20", which keeps 20).
    ============================================================= */
 (function () {
     'use strict';
@@ -61,11 +62,12 @@
     }
 
     /* Recovery-room tier. A value at a cutoff counts as exceeding it (owner):
-       10 is 10–15, 15 is 15–20, 20 is > 20. */
+       10 is 10–15, 15 is 15–20. "15 – 20" is written inclusive, so 20 stays
+       in it (owner). */
     function tierOf(p) {
         if (p < 10) return 'lt10';
         if (p < 15) return 'low';
-        if (p < 20) return 'mid';
+        if (p <= 20) return 'mid';
         return 'gt20';
     }
 
@@ -291,9 +293,14 @@
         if (a === null) return waitCa('5:00 AM');
 
         if (a >= 8) {
-            gap('am', '5:00 AM corrected calcium 8 or above (a value at 8 counts as above): the protocol has no item for this (items 4–6 cover 7–8 and below 7). Not specified; the standing orders continue. Decide with the attending.', ['v.4', 'v.5', 'v.6']);
+            /* No item 4–6 covers this; the 11:00 AM calcium of item 2 still runs (owner). */
+            step('am', 'note', '8 or above (a value at 8 counts as above): items 4–6 give no extra dose. Continue the standing orders and check the 11:00 AM calcium.', ['v.2']);
+            ask('ca11', { hint: 'Compared with 5:00 AM: ' + a });
+            var g11 = cc('ca11');
+            if (g11 === null) return waitCa('11:00 AM');
+            gap('h11', 'The protocol has no item for what follows a 5:00 AM calcium of 8 or above. Calcium every 6 hours continues (item 2); decide the next step with the attending.', ['v.2', 'v.4', 'v.5', 'v.6']);
             step('pod2', 'note', 'For reference, the PTH < 10 discharge criteria: asymptomatic, no clinical signs of hypocalcemia (e.g. EKG change), corrected calcium above 7.8 mg/dL and trending up; discharge on the in-hospital doses unless the attending says otherwise.', ['v.crit']);
-            return done('gap', 'Not specified: 5:00 AM calcium 8 or above');
+            return done('gap', 'Not specified after 11:00 AM: 5 AM calcium 8 or above');
         }
 
         var hint11 = { hint: 'Compared with 5:00 AM: ' + a };

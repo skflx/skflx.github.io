@@ -133,9 +133,11 @@ protocol, verbatim in `js/hypocalcemia-protocol.js`, driven by a DOM-free
 `evaluate()` in `js/hypocalcemia.js`: questions appear as the protocol needs
 them, the plan groups steps by time and quotes each cited line, and the full
 text sits below with cited lines ruled. A value at a cutoff counts as exceeding
-it (owner: PTH 10 as above 10, calcium 8.5 as above 8.5), except "< or = 8.5" in
-PTH 10–15 item 2, which the text writes. Shown as "not specified": AM PTH < 10
-with calcium < 8.5 (10–15 tier); 5 AM calcium 8 or above (< 10 tier); 11 AM
+it (owner: PTH 10 as above 10, calcium 8.5 as above 8.5), except where the
+text writes the equality: "< or = 8.5" (PTH 10–15 item 2) and "PTH 15 – 20"
+(20 stays in it). Shown as "not specified": AM PTH < 10
+with calcium < 8.5 (10–15 tier); what follows the 11 AM calcium after a 5 AM calcium of 8 or above
+(< 10 tier); 11 AM
 equal to 5 AM; item 4 vs 4b (still symptomatic at 7–8; below 7 and
 asymptomatic); items 6a vs 6b. Corrected calcium is Payne; PTH in pg/mL (both
 owner). No storage.
