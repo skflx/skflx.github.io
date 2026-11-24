@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Retrosigmoid: from behind, through the posterior lip</title>
+  <polygon points="470,548 545,318 622,342" fill="#2F6E6A" fill-opacity="0.12" stroke="#2F6E6A" stroke-width="2" stroke-dasharray="6 4"/>
+  <rect x="622" y="318" width="38" height="24" fill="#c97b6b" fill-opacity="0.35" stroke="#8c4b3e" stroke-width="1"/>
+  <text x="360" y="544" text-anchor="end" font-size="12" font-weight="bold" fill="#8c4b3e">Lateral third: behind the posterior canal and common crus</text>
+</svg>

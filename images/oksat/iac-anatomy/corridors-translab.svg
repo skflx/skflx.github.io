@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Translabyrinthine: from lateral, through the labyrinth</title>
+  <polygon points="760,520 660,312 660,348" fill="#2F6E6A" fill-opacity="0.12" stroke="#2F6E6A" stroke-width="2" stroke-dasharray="6 4"/>
+  <circle cx="690" cy="338" r="16" fill="#ffffff" fill-opacity="0.7" stroke="#8a7b5f" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <path d="M 655 372 A 26 26 0 1 0 705 380" fill="none" stroke="#ffffff" stroke-width="5" stroke-opacity="0.7"/>
+  <text x="460" y="520" text-anchor="end" font-size="12" font-weight="bold" fill="#2F6E6A">Whole canal exposed, hearing sacrificed</text>
+</svg>

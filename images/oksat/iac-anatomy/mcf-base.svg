@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Right middle fossa floor landmarks (base, schematic)</title>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect x="20" y="40" width="720" height="480" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+  <line x1="540" y1="430" x2="200" y2="234" stroke="#8a7b5f" stroke-width="3"/>
+  <g data-g="sps"><line x1="543" y1="435" x2="203" y2="239" stroke="#2f5d8a" stroke-width="4" stroke-linecap="round"/></g>
+  <text x="275" y="314" text-anchor="end" font-size="12" fill="#555049" transform="rotate(30 275 314)">Petrous ridge &amp; SPS</text>
+  <circle cx="560" cy="110" r="8" fill="#b8352a" stroke="#8c4b3e" stroke-width="1.2"/>
+  <text x="574" y="106" font-size="12" fill="#8c4b3e">Middle meningeal artery:</text>
+  <text x="574" y="122" font-size="12" fill="#8c4b3e">the anterior limit</text>
+  <g data-g="arcuate"><ellipse cx="475" cy="378" rx="46" ry="22" transform="rotate(-60 475 378)" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4"/></g>
+  <g data-g="ssc"><path d="M 495 343 A 42 22 -60 0 1 455 413" fill="none" stroke="#555049" stroke-width="2.5" stroke-dasharray="5 3"/></g>
+  <g data-g="cochlea"><circle cx="452" cy="248" r="28" fill="#c97b6b" fill-opacity="0.35" stroke="#8c4b3e" stroke-width="1" stroke-dasharray="3 3"/></g>
+  <circle cx="508" cy="322" r="14" fill="#c97b6b" fill-opacity="0.35" stroke="#8c4b3e" stroke-width="1" stroke-dasharray="3 3"/>
+  <g data-g="iac"><rect x="330" y="283" width="160" height="34" rx="4" fill="#f7f1e3" fill-opacity="0.6" stroke="#555049" stroke-width="1.4" stroke-dasharray="5 4"/></g>
+  <g data-g="fn-lab"><line x1="490" y1="300" x2="500" y2="265" stroke="#d9a400" stroke-width="4" stroke-linecap="round"/></g>
+  <g data-g="gspn"><line x1="500" y1="265" x2="390" y2="75" stroke="#d9a400" stroke-width="4" stroke-linecap="round"/></g>
+  <g data-g="geniculate"><ellipse cx="500" cy="265" rx="16" ry="12" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"/></g>
+  <g data-label="1" font-size="12">
+    <text x="360" y="334" text-anchor="middle" font-weight="bold">IAC (under bone)</text>
+    <text x="384" y="72" text-anchor="end" font-weight="bold">GSPN</text>
+    <text x="522" y="264" text-anchor="start" font-weight="bold">Geniculate (bare in about 1 in 6)</text>
+    <text x="418" y="244" text-anchor="end">Cochlea</text>
+    <text x="526" y="326" text-anchor="start">Ampulla</text>
+    <text x="514" y="388" text-anchor="start" font-size="11.5" fill="#555049">Superior canal</text>
+    <text x="514" y="403" text-anchor="start" font-size="11.5" fill="#555049">(under the eminence, inconstantly)</text>
+  </g>
+  <g data-label="1" font-size="11" fill="#555049">
+    <line x1="50" y1="472" x2="86" y2="472" stroke="#555049" stroke-width="1.2"/>
+    <line x1="68" y1="454" x2="68" y2="490" stroke="#555049" stroke-width="1.2"/>
+    <text x="68" y="450" text-anchor="middle" font-weight="bold">A</text>
+    <text x="68" y="502" text-anchor="middle" font-weight="bold">P</text>
+    <text x="45" y="476" text-anchor="end" font-weight="bold">M</text>
+    <text x="91" y="476" text-anchor="start" font-weight="bold">L</text>
+    <text x="68" y="514" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Right ear</text>
+  </g>
+</svg>
