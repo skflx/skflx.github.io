@@ -113,8 +113,11 @@
         'WAYPOINT': 'phase 3 trial: tezepelumab in CRSwNP',
 
         /* ---- anatomy and nerves ---- */
+        'AICA': 'anterior inferior cerebellar artery',
         'GSPN': 'greater (superficial) petrosal nerve',
+        'IP-III': 'incomplete partition type III; X-linked incomplete partition',
         'OMC': 'ostiomeatal complex',
+        'PGY': 'postgraduate year',
         'PNN': 'posterior nasal nerve',
 
         /* ---- cells ---- */
@@ -226,6 +229,8 @@
         'C2', 'C3', 'CN', 'dB', 'TMJ', 'V3',
         /* journal club: units, citation tokens, general statistics */
         'kHz', 'DOI', 'CC', 'BY', 'SD', 'JNEUROSCI', 'ANOVA',
+        /* IAC guide: author initials */
+        'RK',
     ]);
     /* Roman numerals (Draf IIa, type III), interleukins and their chains by number, figure panels (1A, S4). */
     const PLAIN_RE = /^(?:(?:I{1,3}|IV|VI{0,3}|IX|XI{0,3})[ab]?|IL-\d+[A-F]?|[DE]4|S?\d[A-J]?)$/;
