@@ -126,6 +126,24 @@ vendored (`js/vendor/README.md`). Reads the PDF in memory; writes nothing to sto
 
 ---
 
+## Postop hypocalcemia (`hypocalcemia.html`)
+
+**State:** listed tool (one-pager Tools, hero index, palette). The OHSU OTO-HNS
+protocol, verbatim in `js/hypocalcemia-protocol.js`, driven by a DOM-free
+`evaluate()` in `js/hypocalcemia.js`: questions appear as the protocol needs
+them, the plan groups steps by time and quotes each cited line, and the full
+text sits below with cited lines ruled. Gaps the owner chose to show as "not
+specified" rather than resolve: PTH exactly 15 overnight; calcium exactly 8.5
+where the text has only > and <; AM PTH exactly 10; AM PTH < 10 with calcium
+≤ 8.5 (10–15 tier); 5 AM calcium > 8 (< 10 tier); 11 AM equal to 5 AM; item 4
+vs 4b (still symptomatic at 7–8; below 7 and asymptomatic); items 6a vs 6b.
+Corrected calcium is Payne (owner). No storage.
+
+**Next (owner):** vet the step wording against the quoted lines. The protocol
+gives PTH as "ng/ml"; the page labels the inputs pg/mL.
+
+---
+
 ## Atlas (`atlas.html`)
 
 **State:** unlisted (`noindex`). Hand-authored midsagittal SVG; values are draft until

@@ -13,13 +13,14 @@ node tools/test-oksat-learn.mjs            # Interactive learning viewer
 node tools/test-search.mjs                 # search.html and the CPT deep link
 node tools/test-palette.mjs                # Cmd/Ctrl-K palette: lazy load, filter, Enter, Esc, opt-outs, wiki failing
 node tools/test-airway-resume.mjs          # Airway Rounds saved games
+node tools/test-hypocalcemia.mjs           # postop hypocalcemia protocol: every branch (deps-free)
 node tools/lint-oksat.mjs [slug ...]       # OKSAT modules vs the quality spec (no slug: all)
 node tools/lint-oksat-guide.mjs [slug ...] # OKSAT guides vs the teaching-shape spec (no slug: all)
 node tools/test-ssb.mjs [--only a,b]       # SSB sections (names: SECTIONS in the file)
 node tools/test-a11y.mjs [--check]         # axe-core scan, every page, light and dark (report-only unless --check)
 ```
 
-CI always runs `check-data`, `lint-oksat`, `lint-oksat-guide` and the page
+CI always runs `check-data`, `test-hypocalcemia`, `lint-oksat`, `lint-oksat-guide` and the page
 smoke test. The OKSAT engine and learning suites run when their files change;
 the SSB suite runs as two parallel jobs (`node tools/test-ssb.mjs --shard i/2`).
 `SHARDS` in `tools/test-ssb.mjs` holds the split and refuses a section that is
@@ -173,6 +174,16 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   is route-stubbed; nothing is fetched before the first press; opt-out pages stay
   off; Enter opens a wiki note, module and CPT row; the wiki failing still leaves a
   working palette.
+
+### Postop hypocalcemia (`hypocalcemia.html`)
+- `test-hypocalcemia.mjs` runs `evaluate()` in Node over every branch of the
+  protocol: the disposition, the source ids each step cites (all must exist), IV
+  calcium always bringing telemetry (General Rule 1) once, the renal hold, and a
+  "not specified" answer at each boundary or conflict the protocol leaves open.
+- Smoke: the protocol text renders; a PTH below 10 overnight builds the plan,
+  marks cited lines and asks for the 5:00 AM calcium. Zero remote requests (in
+  `SELF_CONTAINED`, `tools/check-data.mjs`).
+- By eye after a protocol change: each plan step against its quoted line.
 
 ### PDF chapter splitter (`pdf-chapter-splitter.html`)
 - Zero console errors, with `PDFLib` and `JSZip` defined (smoke).
