@@ -13,8 +13,8 @@
 - **Call** `trap`, "Bill's bar is upper-zone only": it never divides the lower zone; the cochlear and
   inferior vestibular nerves are separated by position, not by a bar [K2].
 - **Figure:** F2 frame 1 (`fundus-rs-right.svg`) as a single `hotspot` frame here (full explorer in `fu-views`).
-- **Checks:** (1) "Which crest is present in both zones?" → none; the transverse crest separates the
-  zones, the vertical crest is in the upper zone only. (2) "What does Bill's bar separate?" → facial nerve
+- **Checks:** (1) "Which crest divides the fundus into upper and lower zones, and which divides only
+  the upper?" → transverse (falciform) crest; vertical crest (Bill's bar). (2) "What does Bill's bar separate?" → facial nerve
   (anterior) from superior vestibular nerve (posterior).
 - **Ref:** none. **Practice:** `vestibular-schwannoma:q3`. **Drill:** `fu-crests`.
 - **Items:** (a) Bill's bar only in the upper zone. (b) upper zone smaller than the lower zone. (c) Bill's
@@ -57,6 +57,7 @@
   cochlear nerve abnormality; > 3.0 mm suggests other anomalies [Stjernholm 2002, PMID 11876597].
 - **Call** `trap`: "Cutoffs vary between series; < 1.4 mm is the one used here."
 - **Checks:** (1) "Below what BCNC diameter should you suspect cochlear nerve deficiency?" → 1.4 mm.
+  (2) "And above what diameter should you look for other anomalies?" → 3.0 mm.
 - **Ref:** none. **Practice:** none. **Drill:** `fu-cnc`.
 - **Items:** (a) < 1.4 mm. (b) normal ~2 mm on CT.
 
@@ -69,10 +70,13 @@
   here (glossary `meatal-for`).
 - **Call** `mech`, "Why edema strangles here": a tight bony ring the nerve already nearly fills, so
   swelling becomes ischaemia; the greatest site of entrapment in Bell's palsy [K30] (→ `cc-bell`).
+- **Call** `trap`, label "Source conflict": some sources call the labyrinthine segment itself the narrowest
+  part of the canal; K30 places the narrowest point at the meatal foramen, at that segment's entrance. This
+  guide teaches the meatal foramen.
 - **Checks:** (1) "Narrowest point of the facial canal, and its diameter?" → meatal foramen, 0.68 mm.
   (2) "What fraction of the canal does the nerve fill there?" → 83%.
 - **Ref:** `Otology/The labyrinthine segment is the narrowest portion of the Fallopian canal and most vulnerable to edema`.
-- **Practice:** `facial-reanimation:q2`. **Drill:** `fu-meatal`.
+- **Practice:** none (`facial-reanimation:q2` names the labyrinthine segment the narrowest). **Drill:** `fu-meatal`.
 - **Items:** (a) 0.68 mm. (b) 83% vs 73/64%. (c) labyrinthine 3–5 mm with its boundaries.
 
 ## `fu-views` · Turning the fundus

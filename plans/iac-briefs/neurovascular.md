@@ -42,7 +42,7 @@
 - **Checks:** (1) "How far does the bundle turn, and where?" → about 90°, almost all inside the canal.
   (2) "At the brainstem, where is the cochlear nerve relative to the vestibular bundle?" → inferior.
   (3) "Right ear, fundus → brainstem, seen from medial: which way?" → counterclockwise.
-- **Ref:** none. **Practice:** `vestibular-schwannoma:q5`. **Drill:** `nv-rotation`.
+- **Ref:** none. **Practice:** none (`vestibular-schwannoma:q5` dropped: its explanation puts VII anterior at the fundus, against `fu-quadrants`). **Drill:** `nv-rotation`.
 - **Items:** (a) ~90°, in the canal. (b) cleavage plane vertical at fundus → horizontal at CPA. (c) cochlear
   inferior at the brainstem. (d) right CCW / left CW (state the viewpoint in the stem). (e) no plane in ~25%.
 
@@ -80,7 +80,7 @@
   III were associated with unilateral hearing loss there. An AICA loop may lie in the canal [K2].
 - **Figure:** F4 `layers` (`vessels-*.svg`).
 - **Call** `trap`, "Source conflict": in 58 patients the Chavda type did not predict hearing loss; only a
-  loop running between VII and VIII did [Gorrie 2010].
+  loop running between VII and VIII did [Gorrie 2010, PMID 19887989].
 - **Deep · Senior**: distal AICA infarction after surgery gives ipsilateral dysmetria
   (`vestibular-schwannoma:q39`).
 - **Checks:** (1) "Chavda type II?" → loop at the porus extending up to 50% of the canal. (2) "Commonest
@@ -92,7 +92,7 @@
 
 ## `nv-labyrinthine` · The end artery
 - **Teach** [G5, G11]: the labyrinthine (internal auditory) artery usually arises from AICA's meatal loop
-  (90% vs basilar 10% in 10 cranial bases [Haidara 2015]; the superior cerebellar artery is also possible
+  (90% vs basilar 10% in 10 cranial bases [Haidara 2015, PMID 26242329]; the superior cerebellar artery is also possible
   [K6]); single trunk 60%, two 40% [Haidara 2015]. It divides into the anterior vestibular artery (utricle,
   superior and lateral ampullae) and the common cochlear artery (proper cochlear artery and the
   vestibulocochlear artery, whose vestibular ramus supplies the posterior ampulla, saccule and parts of the
@@ -109,7 +109,8 @@
   centre of the superior canal's loop [J10 fig 10.9]. Coagulate and divide it before retracting the
   cerebellum: avulsion can tear AICA (glossary `subarc-a`).
 - **Checks:** (1) "Where does the subarcuate artery enter bone?" → the subarcuate fossa, above and lateral
-  to the porus, under the superior canal's arch.
+  to the porus, under the superior canal's arch. (2) "Why coagulate and divide it before retracting the
+  cerebellum?" → avulsion can tear AICA.
 - **Ref:** none. **Practice:** none. **Drill:** `nv-subarcuate`.
 - **Items:** (a) location. (b) why divide it.
 
@@ -120,5 +121,6 @@
   and facial nerve, and the superior vestibular nerve is dissected away from VII to create it; at the porus
   VII is most adherent and thinnest [HCA6 p81].
 - **Checks:** (1) "Where is the facial nerve most adherent to a schwannoma?" → at the porus.
+  (2) "Where does the dura merge with the nerves?" → at their foramina.
 - **Ref:** none. **Practice:** none. **Drill:** `nv-meninges`.
 - **Items:** (a) dura merges with nerves at foramina. (b) adherence at the porus.
