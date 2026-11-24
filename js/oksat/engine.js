@@ -119,16 +119,24 @@
     // opens fresh, at the gate, and can be answered once per review; the first
     // attempt in `answers`/`firstCorrect` stays the locked, honest record.
     const [reviewAnswers, setReviewAnswers] = useState({});
-    const [answers, setAnswers] = useState(() => load(PROGRESS_KEY, {}).answers || {});
-    // A self-graded partial is null (neither pass nor miss). Progress written
-    // before that stored it as true; read those back as partial.
-    const [firstCorrect, setFirstCorrect] = useState(() => {
+    const readProgress = () => {
       const p = load(PROGRESS_KEY, {}), fc = { ...(p.firstCorrect || {}) }, md = p.modes || {};
       Object.keys(p.answers || {}).forEach((q) => { if (p.answers[q] === 'partial' && md[q] !== 'mcq') fc[q] = null; });
-      return fc;
-    });
-    const [modes, setModes] = useState(() => load(PROGRESS_KEY, {}).modes || {});
-    const [srs, setSrs] = useState(() => load(SRS_KEY, { v: 1, items: {} }));
+      return { answers: p.answers || {}, firstCorrect: fc, modes: md };
+    };
+    // A self-graded partial is null (neither pass nor miss). Progress written
+    // before that stored it as true; read those back as partial.
+    const [answers, setAnswers] = useState(() => readProgress().answers);
+    const [firstCorrect, setFirstCorrect] = useState(() => readProgress().firstCorrect);
+    const [modes, setModes] = useState(() => readProgress().modes);
+    // Items that left the module no longer count as due; the locked answer record is never touched.
+    const readSrs = () => {
+      const r = load(SRS_KEY, { v: 1, items: {} }), ids = new Set(ITEMS.map((q) => q.id));
+      const items = {};
+      Object.keys(r.items || {}).forEach((id) => { if (ids.has(id)) items[id] = r.items[id]; });
+      return { ...r, items, dropped: Object.keys(items).length !== Object.keys(r.items || {}).length };
+    };
+    const [srs, setSrs] = useState(() => { const { dropped, ...r } = readSrs(); return r; });
     const [showDetailed, setShowDetailed] = useState(false);
     const [revealed, setRevealed] = useState(false);   // recall path: answer shown, no choices
     const [choicesShown, setChoicesShown] = useState(false); // MCQ path: options revealed
@@ -147,14 +155,38 @@
     // stay distinguishable. Absent on progress written before this existed.
     const progMountedRef = useRef(false);
     const srsMountedRef = useRef(false);
+    const progSkipRef = useRef(false);
+    const srsSkipRef = useRef(false);
     useEffect(() => {
       if (!progMountedRef.current) { progMountedRef.current = true; return; }
+      if (progSkipRef.current) { progSkipRef.current = false; return; }
       save(PROGRESS_KEY, { v: 1, answers, firstCorrect, modes, updated: new Date().toISOString() });
     }, [answers, firstCorrect, modes]);
     useEffect(() => {
-      if (!srsMountedRef.current) { srsMountedRef.current = true; return; }
+      if (!srsMountedRef.current) {
+        srsMountedRef.current = true;
+        if (readSrs().dropped) save(SRS_KEY, { ...srs, updated: new Date().toISOString() });
+        return;
+      }
+      if (srsSkipRef.current) { srsSkipRef.current = false; return; }
       save(SRS_KEY, { ...srs, updated: new Date().toISOString() });
     }, [srs]);
+    // Another tab saved this module: take its record, without writing it back (that would ping-pong).
+    useEffect(() => {
+      const onStorage = (e) => {
+        if (e.key === PROGRESS_KEY) {
+          const p = readProgress();
+          progSkipRef.current = true;
+          setAnswers(p.answers); setFirstCorrect(p.firstCorrect); setModes(p.modes);
+        } else if (e.key === SRS_KEY) {
+          const { dropped, ...r } = readSrs();
+          srsSkipRef.current = true;
+          setSrs(r);
+        }
+      };
+      window.addEventListener('storage', onStorage);
+      return () => window.removeEventListener('storage', onStorage);
+    }, []);
 
     const dueIds = useMemo(() => {
       const t = today();

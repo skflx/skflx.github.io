@@ -371,6 +371,38 @@ async function main() {
     await ctx2.close();
   }
 
+  /* ---- Case 11: two tabs, same module: each tab's answer survives the other's save ---- */
+  {
+    const { context, page: a } = await openStudy(browser, base);
+    const b = await context.newPage();
+    await b.goto(base + `/oksat-study.html?m=${SLUG}`, { waitUntil: 'domcontentloaded' });
+    await mounted(b);
+    await begin(a); await begin(b);
+    await b.keyboard.press('ArrowRight');           // B moves on to the next item
+    await b.waitForTimeout(300);
+    await openChoices(a);
+    await (await a.$$(optionButtons))[0].click();
+    await a.waitForTimeout(LOCK_WAIT);
+    await openChoices(b);
+    await (await b.$$(optionButtons))[0].click();
+    await b.waitForTimeout(LOCK_WAIT);
+    await a.reload({ waitUntil: 'domcontentloaded' });
+    await mounted(a);
+    const prog = await ls(a, PROGRESS);
+    check('11: answers from two tabs both persist', prog && Object.keys(prog.answers || {}).length === 2, JSON.stringify(prog && prog.answers));
+    await context.close();
+  }
+
+  /* ---- Case 12: SRS entries for items no longer in the module are dropped; answers are kept ---- */
+  {
+    const seed = `try{if(!sessionStorage.getItem('s12')){sessionStorage.setItem('s12','1');localStorage.setItem('${SRS}',JSON.stringify({v:1,items:{gone:{nextReview:'2020-01-01'}}}));localStorage.setItem('${PROGRESS}',JSON.stringify({v:1,answers:{gone:'a'},firstCorrect:{},modes:{}}));}}catch(e){}`;
+    const { context, page } = await openStudy(browser, base, seed);
+    await page.waitForTimeout(500);
+    const srs = await ls(page, SRS), prog = await ls(page, PROGRESS);
+    check('12: unknown SRS id dropped, locked answer kept', srs && !srs.items.gone && prog && prog.answers.gone === 'a', JSON.stringify([srs, prog]));
+    await context.close();
+  }
+
   /* ---- Case 10: export / clear / import round trip; malformed import writes nothing ---- */
   {
     const prog = JSON.stringify({ v: 1, answers: { q1: 'a' }, firstCorrect: { q1: false }, modes: { q1: 'mcq' } });
