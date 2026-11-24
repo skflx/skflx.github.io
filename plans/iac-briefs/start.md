@@ -43,6 +43,8 @@ schwannoma management choices (see the `vestibular-schwannoma` module); trauma w
   permission.
 Primary papers are cited by PMID in each chapter, not in a card.
 
+**Terms** (`js/oksat/terms.js`): add `AICA` and `PGY` as terms, and `RK` (an author's initials in the Stanford credit) to `PLAIN`; check-data names any other the text needs.
+
 **Currency check** (`call k:'trap'`, label "Currency check", second `intro` block): "Checked 2026-11. The
 bony anatomy does not change; what moves is the degree of nerve rotation taught (this guide: about 90°),
 cutoffs for a narrow canal and a narrow cochlear nerve canal, and the share of schwannomas that start on
