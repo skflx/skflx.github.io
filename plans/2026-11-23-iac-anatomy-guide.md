@@ -122,7 +122,7 @@ const DOMAINS = {
     neurovascular: { label: 'Neurovascular Contents',   color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
     imaging:       { label: 'Imaging',                  color: '#4F5B66', hex: 'rgba(79,91,102,0.14)' },
     approaches:    { label: 'Surgical Corridors',       color: '#8A6A2F', hex: 'rgba(138,106,47,0.14)' },
-    clinical:      { label: 'Clinical Correlations',    color: '#6E4A6B', hex: 'rgba(110,74,107,0.14)' },
+    'clinical-correlations': { label: 'Clinical Correlations',    color: '#6E4A6B', hex: 'rgba(110,74,107,0.14)' },
     synthesis:     { label: 'Synthesis Cases',          color: '#7A3F4F', hex: 'rgba(122,63,79,0.14)' },
     appraisal:     { label: 'The Evidence',             color: '#5B5F8A', hex: 'rgba(91,95,138,0.14)' },
 };

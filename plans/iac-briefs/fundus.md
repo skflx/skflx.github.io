@@ -67,14 +67,16 @@
   it and the nerve fills **83%** of the canal there, vs 73% tympanic and 64% mastoid [Proctor & Nager 1982,
   via K30]. The labyrinthine segment beyond it is the shortest and thinnest, **3–5 mm** [K30], bounded by
   the cochlea in front, the superior canal behind and the vestibule below [K2]. The arachnoid sleeve ends
-  here (glossary `meatal-for`). The meatal foramen is the entrance of the labyrinthine segment, which is why
-  sources call that segment "the narrowest" (as `facial-reanimation:q2` does).
+  here (glossary `meatal-for`).
 - **Call** `mech`, "Why edema strangles here": a tight bony ring the nerve already nearly fills, so
   swelling becomes ischaemia; the greatest site of entrapment in Bell's palsy [K30] (→ `cc-bell`).
+- **Call** `trap`, label "Source conflict": some sources call the labyrinthine segment itself the narrowest
+  part of the canal; K30 places the narrowest point at the meatal foramen, at that segment's entrance. This
+  guide teaches the meatal foramen.
 - **Checks:** (1) "Narrowest point of the facial canal, and its diameter?" → meatal foramen, 0.68 mm.
   (2) "What fraction of the canal does the nerve fill there?" → 83%.
 - **Ref:** `Otology/The labyrinthine segment is the narrowest portion of the Fallopian canal and most vulnerable to edema`.
-- **Practice:** `facial-reanimation:q2`. **Drill:** `fu-meatal`.
+- **Practice:** none (`facial-reanimation:q2` names the labyrinthine segment the narrowest). **Drill:** `fu-meatal`.
 - **Items:** (a) 0.68 mm. (b) 83% vs 73/64%. (c) labyrinthine 3–5 mm with its boundaries.
 
 ## `fu-views` · Turning the fundus
