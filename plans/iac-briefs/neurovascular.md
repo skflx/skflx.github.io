@@ -59,7 +59,7 @@
 - **Items:** (a) exits between VII and VIII. (b) variable distance to joining VII.
 
 ## `nv-orz` · The transition zone
-- **Teach** [G4, owner via Radiopaedia]: where central (glial) myelin changes to peripheral (Schwann)
+- **Teach** [G4, owner via Radiopaedia]: the transition zone (Obersteiner-Redlich zone, ledger G4), where central (glial) myelin changes to peripheral (Schwann)
   myelin over a few millimetres, the central myelin reaching further in the nerve's core. Distance from the
   root entry zone: VII 2–3 mm; VIII 9–14 mm. The zone is vulnerable to vascular compression (hemifacial
   spasm, vestibular paroxysmia; `cc-nvc`).

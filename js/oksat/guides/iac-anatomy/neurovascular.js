@@ -9,8 +9,8 @@ window.__OKSAT_CHAPTER = {
     title: 'The wiring',
     kicker: '3 · Neurovascular contents',
     review: 'draft',
-    lede: 'Two nerve bundles leave the brainstem and rotate inside a single dural sleeve while end arteries loop beside them. Tracing the 90° turn, the transition zone, the arterial loops and the arachnoid plane explains where tumours arise and how hearing and facial function are saved or lost.',
-    src: 'K2 · K6 · K31 · J9 · J10 · HCA3 · HCA5 · HCA6 · PMIDs 12544018, 12680822, 19887989, 26242329, 37399929',
+    lede: 'The cochleovestibular bundle turns about 90° inside the canal, the nervus intermedius lies between VII and VIII, and VIII\'s transition zone lies 9–14 mm from the brainstem. The labyrinthine artery is an end artery, usually from an AICA loop, and the plane between tumour and facial nerve is what saves the nerve.',
+    src: 'K2 · K6 · K31 · J9 · J10 · HCA3 · HCA5 · HCA6 · PMIDs 12544018, 12680822, 19887989, 26242329, 37399929, 3108792, 3963686',
     tldr: [
         '**CN VIII** turns about **90°** inside the canal; only the fundus is fixed.',
         'The **nervus intermedius** leaves the brainstem between **VII** and **VIII**.',
@@ -43,7 +43,7 @@ window.__OKSAT_CHAPTER = {
             n: '3.2',
             title: 'The 90° turn',
             blocks: [
-                { t: 'p', x: 'Tracing from fundus to brainstem, the cochleovestibular bundle rotates about **90°**, almost all of it inside the canal. At the fundus, the cochlear nerve lies in front of the inferior vestibular nerve, so the cochleovestibular cleavage plane is **vertical** (superior–inferior). Mid-canal, the cochlear and inferior vestibular nerves fuse and the plane is poorly defined. At the porus and in the **CPA**, the cochlear nerve lies **inferior** (anteroinferior) to the vestibular bundle, so the plane is **horizontal** (anterior–posterior). Viewed from medial while tracing fundus to brainstem, the **right ear** turns **counterclockwise** and the **left ear** turns **clockwise**. [[src|Owner]]' },
+                { t: 'p', x: 'Tracing from fundus to brainstem, the cochleovestibular bundle rotates about **90°**, almost all of it inside the canal. At the fundus, the cochlear nerve lies in front of the inferior vestibular nerve, and the cochleovestibular cleavage plane is **vertical** (superior–inferior). Mid-canal, the cochlear and inferior vestibular nerves fuse and the plane is poorly defined. At the porus and in the **CPA**, the cochlear nerve lies **inferior** (anteroinferior) to the vestibular bundle, and the plane is **horizontal** (anterior–posterior). Viewed from medial while tracing fundus to brainstem, the **right ear** turns **counterclockwise** and the **left ear** turns **clockwise**. [[src|Owner]]' },
                 {
                     t: 'layers',
                     id: 'nv-rot-ly',
@@ -54,8 +54,8 @@ window.__OKSAT_CHAPTER = {
                     layers: [
                         { id: 'fundus', label: 'At the fundus: four separate nerves', src: 'images/oksat/iac-anatomy/rotation-fundus.svg' },
                         { id: 'mid', label: 'Mid-canal: cochlear and inferior vestibular fused', src: 'images/oksat/iac-anatomy/rotation-mid.svg' },
-                        { id: 'porus', label: 'At the porus: cochlear inferior to vestibular', src: 'images/oksat/iac-anatomy/rotation-porus.svg' },
-                        { id: 'cpa', label: 'At the brainstem: horizontal cleavage plane; nervus intermedius between VII and VIII', src: 'images/oksat/iac-anatomy/rotation-cpa.svg' },
+                        { id: 'porus', label: 'At the porus', src: 'images/oksat/iac-anatomy/rotation-porus.svg' },
+                        { id: 'cpa', label: 'At the brainstem', src: 'images/oksat/iac-anatomy/rotation-cpa.svg' },
                     ],
                     cap: 'Right ear, four cuts from fundus to brainstem viewed from medial (anterior left, superior up); the left ear mirrors it and turns clockwise. Schematic.',
                 },

@@ -9,7 +9,7 @@ window.__OKSAT_CHAPTER = {
     title: 'The fundus',
     kicker: '2 · Fundus & crests',
     review: 'draft',
-    lede: 'The lateral end of the IAC, divided by two bony crests into four nerve compartments plus the singular canal, the bony cochlear nerve canal, and the narrow meatal foramen where the facial nerve enters the temporal bone.',
+    lede: 'The lateral end of the IAC, divided by two bony crests into four nerve compartments plus the singular canal, the bony cochlear nerve canal, and the meatal foramen, the narrowest point of the fallopian canal.',
     src: 'K2 · K6 · K30 · K31 · HCA3 · HCA6 · J10 · Stjernholm 2002 · Büki & Ward 2021',
     tldr: [
         'A horizontal crest (**transverse** or **falciform** crest) everywhere; a vertical crest (**Bill’s bar**) above it only.',
@@ -77,7 +77,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'hook',
                     label: 'Seven-up, Coke down',
                     blocks: [
-                        { t: 'p', x: '**VII** upper front, **cochlear** lower front. It is a mnemonic for the fundus, not anatomy that holds medially toward the brainstem.' },
+                        { t: 'p', x: '**VII** upper front, **cochlear** lower front. It is a mnemonic for the fundus, not anatomy that holds medially.' },
                     ],
                 },
                 {
@@ -117,7 +117,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'trap',
                     label: 'Cutoff caution',
                     blocks: [
-                        { t: 'p', x: 'Cutoffs vary between series; **< 1.4 mm** is the one used here. [[src|Stjernholm 2002, PMID 11876597]]' },
+                        { t: 'p', x: 'Cutoffs vary between series.' },
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Below what BCNC diameter should you suspect cochlear nerve deficiency?', a: '1.4 mm.' },

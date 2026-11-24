@@ -9,7 +9,7 @@ window.__OKSAT_CHAPTER = {
     title: 'The bony box',
     kicker: '1 · Osteology & six walls',
     review: 'draft',
-    lede: 'The internal auditory canal is a bony tube running mediolaterally in line with the external auditory canal, bounded by six surgical walls from the porus to the fundus.',
+    lede: 'The internal auditory canal is a bony tube running mediolaterally in line with the external auditory canal, bounded by six walls from the porus to the fundus.',
     src: 'Kirtane Ch. 1–2, 31 · House Clinic Atlas Ch. 3, 5, 6 · PubMed primary series',
     tldr: [
         'About 1 cm long, 4–8 mm wide, in line with the ear canal.',
@@ -134,7 +134,7 @@ window.__OKSAT_CHAPTER = {
                     blocks: [
                         {
                             t: 'p',
-                            x: 'Marques 2012 measured 110 normal CTs: adult vertical diameter 4.47 mm, opening width 7.10 mm, and length 9.84 mm; children measured slightly larger in length and diameter. [[src|PMID 23329967]] Cutoffs vary between series. [[src|Owner]]',
+                            x: 'Marques 2012 measured 110 normal CTs: adult vertical diameter 4.47 mm, opening width 7.10 mm, and length 9.84 mm; children measured slightly larger in length and diameter. [[src|PMID 23329967]] Cutoffs vary between series.',
                         },
                     ],
                 },
