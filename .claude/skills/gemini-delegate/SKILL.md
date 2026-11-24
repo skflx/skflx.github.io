@@ -22,7 +22,10 @@ checks the result, and commits. Gemini is the **executor**, or the **reviewer** 
    backticked paths, globs, or directories ending in `/`; the wrapper refuses a brief without it and rejects any
    changed file outside it. Put the judgment in the brief (data, ids, numbers); Gemini adds nothing it does not state.
 2. `node tools/gemini-run.mjs <brief.md>`. It runs in a throwaway worktree under `.claude/worktrees/` with
-   `--approval-mode yolo`, so the blast radius is that worktree. Commit what the brief needs first: the worktree
+   `--approval-mode yolo --sandbox`. A worktree isolates files, not commands, so the wrapper also blocks `git push`
+   (child-only `GIT_CONFIG_*` pushInsteadOf) and hides gh credentials (no `GH_TOKEN`, empty `GH_CONFIG_DIR`: gh reads
+   fail too). It refuses to run without a sandbox backend (sandbox-exec, docker or podman) unless you pass
+   `--no-sandbox`; only do that when the owner says so. Commit what the brief needs first: the worktree
    starts from `HEAD`.
 3. Exit 3 means **REVIEW BEFORE APPLYING**: read each line (outside Touch, Gemini committed). Do not apply a patch
    with an unexplained violation.

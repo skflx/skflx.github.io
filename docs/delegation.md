@@ -138,7 +138,10 @@ Playbook: `.claude/skills/gemini-delegate/SKILL.md`. Wrapper: `tools/gemini-run.
 
 - **Brief:** the §2 WP format, kept in the scratchpad, never committed. `Touch:` is machine-checked, so it lists
   backticked paths, globs, or directories ending in `/`.
-- **Work mode:** a throwaway worktree under `.claude/worktrees/`, Gemini on `--approval-mode yolo`, no commit.
+- **Work mode:** a throwaway worktree under `.claude/worktrees/`, Gemini on `--approval-mode yolo --sandbox` (sandbox-exec, docker or podman; the wrapper refuses to run without
+  one unless `--no-sandbox`), no commit. A worktree isolates files, not commands, so the child also gets `git push`
+  made to fail (`GIT_CONFIG_*` pushInsteadOf, child env only) and no gh credentials (`GH_TOKEN`/`GITHUB_TOKEN`
+  removed, empty `GH_CONFIG_DIR`; gh reads fail too).
   The wrapper checks the changed files against `Touch:`, flags a moved `HEAD`, and writes a patch; Claude reviews it,
   re-runs the Accept commands itself, applies it on its own branch and commits.
 - **Read mode:** `--approval-mode plan` in the checkout; the tree is compared before and after.
