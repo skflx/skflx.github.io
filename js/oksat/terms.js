@@ -127,6 +127,27 @@
         'PNN': 'posterior nasal nerve',
         'SVN': 'superior vestibular nerve',
 
+        /* ---- IAC imaging, approaches, clinical correlations ---- */
+        'AAO-HNS': 'American Academy of Otolaryngology–Head and Neck Surgery',
+        'ABI': 'auditory brainstem implant',
+        'ANSD': 'auditory neuropathy spectrum disorder',
+        'CISS': 'constructive interference in steady state (heavily T2-weighted 3D MRI sequence)',
+        'CND': 'cochlear nerve deficiency',
+        'DRIVE': 'driven equilibrium radiofrequency reset pulse (heavily T2-weighted 3D MRI sequence)',
+        'DWI': 'diffusion-weighted imaging',
+        'ENoG': 'electroneuronography',
+        'FIESTA': 'fast imaging employing steady-state acquisition (heavily T2-weighted 3D MRI sequence)',
+        'HB': 'House–Brackmann (facial nerve grading scale)',
+        'MF': 'middle fossa (approach)',
+        'NF2': 'neurofibromatosis type 2',
+        'PF': 'posterior fossa (retrosigmoid approach)',
+        'POU3F4': 'POU domain class 3 transcription factor 4',
+        'PTA': 'pure-tone average',
+        'SNHL': 'sensorineural hearing loss',
+        'TL': 'translabyrinthine (approach)',
+        'VEMP': 'vestibular evoked myogenic potential',
+        'vHIT': 'video head impulse test',
+
         /* ---- cells ---- */
         'ADCC': 'antibody-dependent cell-mediated cytotoxicity',
         'ILC': 'innate lymphoid cell',
@@ -236,8 +257,8 @@
         'C2', 'C3', 'CN', 'dB', 'TMJ', 'V3',
         /* journal club: units, citation tokens, general statistics */
         'kHz', 'DOI', 'CC', 'BY', 'SD', 'JNEUROSCI', 'ANOVA',
-        /* IAC guide: author initials */
-        'RK',
+        /* IAC guide: units, modalities, author initials */
+        '3D', 'EMG', 'RK',
     ]);
     /* Roman numerals (Draf IIa, type III), interleukins and their chains by number, figure panels (1A, S4). */
     const PLAIN_RE = /^(?:(?:I{1,3}|IV|VI{0,3}|IX|XI{0,3})[ab]?|IL-\d+[A-F]?|[DE]4|S?\d[A-J]?)$/;

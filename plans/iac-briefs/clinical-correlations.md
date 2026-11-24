@@ -100,7 +100,7 @@
 - **Items:** (a) injury sites. (b) extrapolated ENoG criterion.
 
 ## `cc-nvc` · Vessels against nerves
-- **Teach:** the transition zone is vulnerable to vascular compression: hemifacial spasm (VII), vestibular
+- **Teach:** the transition zone (Obersteiner-Redlich zone, ledger G4) is vulnerable to vascular compression: hemifacial spasm (VII), vestibular
   paroxysmia (VIII) [G4, owner]. Chavda II–III loops were associated with unilateral hearing loss in one
   series but not another (`nv-aica`).
 - **Checks:** (1) "Which syndrome does compression of VIII's transition zone cause?" → vestibular paroxysmia.
