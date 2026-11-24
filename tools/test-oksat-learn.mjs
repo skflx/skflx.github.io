@@ -193,6 +193,16 @@ async function main() {
     await page.reload({ waitUntil: 'domcontentloaded' });
     await chapterReady(page);
     check('1k: progress survives a reload', await page.evaluate(() => document.querySelector('#sci-1 .lr-mark').getAttribute('aria-pressed') === 'true' && document.querySelector('#sci-1 .lr-q').classList.contains('is-graded')));
+    // A second tab marks sci-2; this (older) tab then marks sci-3: both must persist.
+    const tab2 = await context.newPage();
+    await tab2.goto(base + `/oksat-learn.html?g=${SLUG}&c=science`, { waitUntil: 'domcontentloaded' });
+    await chapterReady(tab2);
+    await tab2.click('#sci-2 .lr-mark');
+    await page.waitForTimeout(300);
+    await page.click('#sci-3 .lr-mark');
+    const both = (await ls(page, KEY)).done;
+    check('1k2: sections marked in two tabs both persist', both['science/sci-1'] === 1 && both['science/sci-2'] === 1 && both['science/sci-3'] === 1, JSON.stringify(both));
+    await tab2.close();
     await page.waitForFunction(() => [...document.querySelectorAll('#sci-1 .lr-drill-link')].every((l) => /\(\d+\)$/.test(l.textContent)), null, { timeout: 12000 });
     check('1l: drill links from two different modules both load (each module in its own frame)', (await page.$$eval('#sci-1 .lr-drill-link', (e) => e.length)) === 2);
     await page.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });

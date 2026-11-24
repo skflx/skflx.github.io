@@ -1711,6 +1711,8 @@
     mount();
     const first = routeFromLocation();
     render(first.id, first.sec);
+    // Another tab saved this guide's progress: adopt it so our next write does not drop it.
+    window.addEventListener('storage', (e) => { if (e.key && e.key.indexOf('oksat:learn:' + guide.slug + ':') === 0) rec = OKSATStore.getLearn(guide.slug, reviewer); });
     window.addEventListener('popstate', () => { const r = routeFromLocation(); render(r.id, r.sec); });
     document.addEventListener('keydown', (e) => {
         if (rec.ui.mode !== 'step' || e.target.closest('textarea, input, select, summary')) return;
