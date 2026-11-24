@@ -15,7 +15,7 @@ vm.createContext(ctx);
 for (const f of ['js/hypocalcemia-protocol.js', 'js/hypocalcemia.js']) {
     vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
 }
-const { evaluate, corrected } = ctx.window.HypoCa;
+const { evaluate, corrected, tierOf } = ctx.window.HypoCa;
 const SRC = ctx.window.__HYPOCA_SOURCE;
 
 let fails = 0, passes = 0;
@@ -75,17 +75,19 @@ expect('PTH 30, GFR < 60, Cr unknown', { setting: 'ip', pth: '30', gfr: 'yes' },
 expect('PTH 30, GFR < 60, Cr worse', { setting: 'ip', pth: '30', gfr: 'yes', cr: 'worse' }, 'stay', ['ip.renal']);
 expect('PTH 30, GFR < 60, Cr same', { setting: 'ip', pth: '30', gfr: 'yes', cr: 'same' }, 'dc', ['ip.gt20', 'ip.renal']);
 
-console.log('hypocalcemia: PTH 15 overnight is in two tiers');
-expect('PTH 15 overnight', { setting: 'ip', pth: '15' }, 'gap', ['ip.mid', 'ip.low']);
-expect('PTH 15 overnight, chose 15–20', { setting: 'ip', pth: '15', tier15: 'mid' }, 'wait', ['ip.mid']);
-check(run({ setting: 'ip', pth: '20' }).R.tier === 'mid', 'PTH 20 is in 15–20');
-check(run({ setting: 'ip', pth: '10' }).R.tier === 'low', 'PTH 10 is in 10–15');
+console.log('hypocalcemia: a value at a cutoff counts as exceeding it (owner)');
+for (const [p, t] of [[9, 'lt10'], [9.9, 'lt10'], [10, 'low'], [14.9, 'low'], [15, 'mid'], [19.9, 'mid'], [20, 'gt20']]) {
+    check(tierOf(p) === t, `recovery-room PTH ${p} → ${t}`, tierOf(p));
+}
+expect('overnight PTH 15 → 15–20', { setting: 'ip', pth: '15' }, 'wait', ['ip.mid']);
+expect('overnight PTH 20 → > 20', { setting: 'ip', pth: '20' }, 'dc', ['ip.gt20']);
+expect('outpatient PTH 20 → > 20', { setting: 'op', pth: '20' }, 'dc', ['op.gt20']);
 
 console.log('hypocalcemia: overnight PTH 15–20');
 const mid = { setting: 'ip', pth: '17' };
 expect('AM Ca 9', { ...mid, amCa: '9' }, 'dc', ['ip.mid.1']);
 expect('AM Ca 8.0', { ...mid, amCa: '8.0', lab: 'local' }, 'dc', ['ip.mid.2a', 'ip.mid.2b', 'g.3.1']);
-expect('AM Ca exactly 8.5', { ...mid, amCa: '8.5' }, 'gap');
+expect('AM Ca exactly 8.5 counts as > 8.5', { ...mid, amCa: '8.5' }, 'dc', ['ip.mid.1']);
 expect('AM Ca 8.2 + albumin 3.0 → 9.0', { ...mid, amCa: '8.2', alb: '3.0' }, 'dc', ['ip.mid.1']);
 expect('albumin implausible blocks', { ...mid, amCa: '8.2', alb: '30' }, 'wait');
 expect('GFR < 60: BMP, Cr worse holds', { ...mid, gfr: 'yes', amCa: '9', cr: 'worse' }, 'stay', ['ip.renal']);
@@ -95,11 +97,14 @@ const low = { setting: 'ip', pth: '12' };
 expect('awaiting AM', low, 'wait', ['ip.low', 'ip.low.att']);
 expect('AM PTH 14, Ca 9', { ...low, amPth: '14', amCa: '9' }, 'dc', ['ip.low.1']);
 expect('AM PTH 14, Ca 8.5 (≤ 8.5 is written)', { ...low, amPth: '14', amCa: '8.5' }, 'dc', ['ip.low.2a', 'ip.low.2b']);
-expect('AM PTH exactly 10', { ...low, amPth: '10', amCa: '9' }, 'gap');
+expect('AM PTH exactly 10 counts as > 10', { ...low, amPth: '10', amCa: '9' }, 'dc', ['ip.low.1']);
+expect('AM PTH 10, Ca 8.2', { ...low, amPth: '10', amCa: '8.2' }, 'dc', ['ip.low.2a']);
+expect('AM PTH 6, Ca exactly 8.5 counts as > 8.5', { ...low, amPth: '6', amCa: '8.5' }, 'wait', ['ip.low.3']);
 expect('AM PTH 6, Ca 8.2: no item', { ...low, amPth: '6', amCa: '8.2' }, 'gap', ['ip.low.3']);
 expect('AM PTH 6, Ca 9 → 11 AM', { ...low, amPth: '6', amCa: '9' }, 'wait', ['ip.low.3']);
 expect('11 AM 9', { ...low, amPth: '6', amCa: '9', ca11: '9' }, 'dc', ['ip.low.3a.i', 'ip.low.3a.ii']);
-expect('11 AM exactly 8.5', { ...low, amPth: '6', amCa: '9', ca11: '8.5' }, 'gap');
+expect('11 AM exactly 8.5 counts as > 8.5', { ...low, amPth: '6', amCa: '9', ca11: '8.5' }, 'dc', ['ip.low.3a.i']);
+expect('5 PM exactly 8.5 counts as > 8.5', { ...low, amPth: '6', amCa: '9', ca11: '8.2', ca17: '8.5' }, 'dc', ['ip.low.3b.i.1']);
 expect('11 AM 8.2 → 5 PM', { ...low, amPth: '6', amCa: '9', ca11: '8.2' }, 'wait', ['ip.low.3b']);
 expect('5 PM 8.8', { ...low, amPth: '6', amCa: '9', ca11: '8.2', ca17: '8.8' }, 'dc', ['ip.low.3b.i.1', 'ip.low.3b.i.2']);
 expect('5 PM 8.1', { ...low, amPth: '6', amCa: '9', ca11: '8.2', ca17: '8.1' }, 'stay', ['ip.low.3b.ii', 'ip.low.crit']);
@@ -112,12 +117,15 @@ expect('evening cramping', { ...v, dos: 'sx', cramp: 'yes' }, 'wait', ['v.dos'],
 expect('evening sx, dose not given', { ...v, dos: 'sx', cramp: 'no', dose: 'not' }, 'wait', ['v.dos2'], noIv);
 expect('evening sx, dose given', { ...v, dos: 'sx', cramp: 'no', dose: 'given' }, 'wait', ['v.dos2'], noIv);
 expect('5 AM 8.4: no item', { ...v, amCa: '8.4' }, 'gap', ['v.crit']);
+expect('5 AM exactly 8 counts as above 8: no item', { ...v, amCa: '8' }, 'gap');
+expect('5 AM exactly 7 is in 7–8', { ...v, amCa: '7', amSx: 'no' }, 'wait', ['v.5']);
 expect('5 AM 7.5 needs symptoms', { ...v, amCa: '7.5' }, 'wait');
 
 /* item 4: 7–8 symptomatic */
 const i4 = { ...v, amCa: '7.5', amSx: 'yes' };
 expect('4: IV over 2 h', i4, 'wait', ['v.4', 'v.4q6'], hasIv);
 expect('4a: 11 AM 8.3', { ...i4, ca11: '8.3', sx11: 'no' }, 'stay', ['v.4a', 'v.4c']);
+expect('4a: 11 AM exactly 8', { ...i4, ca11: '8', sx11: 'no' }, 'stay', ['v.4a']);
 expect('4b: 11 AM 7.3 lower, asymptomatic', { ...i4, ca11: '7.3', sx11: 'no' }, 'stay', ['v.4b', 'v.4c']);
 expect('4: 11 AM 7.6 not lower, asymptomatic', { ...i4, ca11: '7.6', sx11: 'no' }, 'stay', ['v.4b']);
 expect('4 vs 4b: 11 AM 7.6 still symptomatic', { ...i4, ca11: '7.6', sx11: 'yes' }, 'gap', ['v.4', 'v.4b']);

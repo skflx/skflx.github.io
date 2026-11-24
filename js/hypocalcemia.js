@@ -13,9 +13,11 @@
       asks for, renders the plan and the protocol text, and copies the
       plan as plain text. Nothing is stored: a reload is a clean slate.
 
-   The only content not in the protocol is the corrected-calcium
-   formula (Payne: Ca + 0.8 × (4.0 − albumin)); the protocol names
-   corrected calcium without one. Owner decision.
+   Two owner rules sit on top of the text: corrected calcium is Payne
+   (Ca + 0.8 × (4.0 − albumin)), which the protocol names without a
+   formula; and a value exactly at a cutoff counts as exceeding it
+   (PTH 10 as above 10, calcium 8.5 as above 8.5), except where the
+   text writes the equality itself ("< or = 8.5", PTH 10–15 item 2).
    ============================================================= */
 (function () {
     'use strict';
@@ -58,13 +60,12 @@
         return round2(ca + 0.8 * (4.0 - alb));
     }
 
-    /* Recovery-room tier. "PTH 15 – 20" and "PTH 10 – 15" both contain 15
-       overnight; outpatient "< 15" makes 15 unambiguous there. */
-    function tierOf(p, setting) {
+    /* Recovery-room tier. A value at a cutoff counts as exceeding it (owner):
+       10 is 10–15, 15 is 15–20, 20 is > 20. */
+    function tierOf(p) {
         if (p < 10) return 'lt10';
         if (p < 15) return 'low';
-        if (p === 15) return setting === 'ip' ? 'amb' : 'mid';
-        if (p <= 20) return 'mid';
+        if (p < 20) return 'mid';
         return 'gt20';
     }
 
@@ -165,20 +166,10 @@
         ask('tier');
 
         var pth = val('pth');
-        var tier = pth !== null ? tierOf(pth, s.setting) : (TIER_LABEL[s.tier] ? s.tier : null);
+        var tier = pth !== null ? tierOf(pth) : (TIER_LABEL[s.tier] ? s.tier : null);
         if (!tier) return done('wait', R.invalid.pth ? 'Check the PTH value' : 'Enter the recovery-room PTH');
         R.tier = tier;
 
-        if (tier === 'amb') {
-            ask('tier15');
-            if (!s.tier15) {
-                gap('rr', 'PTH 15 sits in both "PTH 15 – 20" and "PTH 10 – 15" as written. The protocol does not say which applies: choose the tier with the attending.', ['ip.mid', 'ip.low']);
-                return done('gap', 'Not specified: PTH exactly 15');
-            }
-            step('rr', 'note', 'PTH 15 is in both tiers as written; you chose ' + TIER_LABEL[s.tier15] + '.', ['ip.mid', 'ip.low']);
-            tier = s.tier15 === 'low' ? 'low' : 'mid';
-            R.tier = tier;
-        }
 
         /* ---- outpatient, same-day discharge ---- */
         if (s.setting === 'op') {
@@ -212,11 +203,7 @@
             ask('alb'); ask('amCa', { label: 'POD 1 AM calcium' });
             var c = cc('amCa');
             if (c === null) return waitCa('AM');
-            if (c === 8.5) {
-                gap('am', 'Corrected calcium exactly 8.5: the protocol gives "> 8.5" and "< 8.5" only. Not specified; decide with the attending.', ['ip.mid.1', 'ip.mid.2']);
-                return done('gap', 'Not specified: AM calcium exactly 8.5');
-            }
-            if (c > 8.5) {
+            if (c >= 8.5) {
                 if (blocked()) return R;
                 step('dc', 'dc', 'Discharge without any supplements.', ['ip.mid.1']);
                 return done('dc', 'Discharge, no supplements');
@@ -236,11 +223,8 @@
             var c1 = cc('amCa');
             if (p2 === null) return done('wait', R.invalid.amPth ? 'Check the AM PTH value' : 'Enter the AM PTH');
             if (c1 === null) return waitCa('AM');
-            if (p2 === 10) {
-                gap('am', 'AM PTH exactly 10: the protocol gives "> 10" and "< 10" only. Not specified; decide with the attending.', ['ip.low.1', 'ip.low.2', 'ip.low.3']);
-                return done('gap', 'Not specified: AM PTH exactly 10');
-            }
-            if (p2 > 10) {
+            if (p2 >= 10) {
+                /* "< or = 8.5" is written here, so 8.5 stays on the supplement side. */
                 if (c1 > 8.5) {
                     if (blocked()) return R;
                     step('dc', 'dc', 'Discharge without supplements.', ['ip.low.1']);
@@ -251,19 +235,15 @@
                 outLab(['ip.low.2b']);
                 return done('dc', 'Discharge on calcium 600 mg q8h; calcium tomorrow AM');
             }
-            if (c1 <= 8.5) {
-                gap('am', 'AM PTH below 10 with corrected calcium 8.5 or lower: the protocol has no item for this combination. Not specified; decide with the attending.', ['ip.low.3']);
-                return done('gap', 'Not specified: AM PTH < 10 with calcium ≤ 8.5');
+            if (c1 < 8.5) {
+                gap('am', 'AM PTH below 10 with corrected calcium below 8.5: the protocol has no item for this combination. Not specified; decide with the attending.', ['ip.low.3']);
+                return done('gap', 'Not specified: AM PTH < 10 with calcium < 8.5');
             }
             step('am', 'do', 'Start calcitriol 0.25 mcg BID. Repeat calcium at 11:00 AM.', ['ip.low.3']);
             ask('ca11');
             var c11 = cc('ca11');
             if (c11 === null) return waitCa('11:00 AM');
-            if (c11 === 8.5) {
-                gap('h11', '11:00 AM calcium exactly 8.5: the protocol gives "> 8.5" and "< 8.5" only. Not specified; decide with the attending.', ['ip.low.3a', 'ip.low.3b']);
-                return done('gap', 'Not specified: 11:00 AM calcium exactly 8.5');
-            }
-            if (c11 > 8.5) {
+            if (c11 >= 8.5) {
                 if (blocked()) return R;
                 step('dc', 'dc', 'Discharge on calcium 600 mg elemental every 8 hours and calcitriol 0.25 mcg BID.', ['ip.low.3a', 'ip.low.3a.i']);
                 outLab(['ip.low.3a.ii']);
@@ -273,11 +253,7 @@
             ask('ca17');
             var c17 = cc('ca17');
             if (c17 === null) return waitCa('5:00 PM');
-            if (c17 === 8.5) {
-                gap('h17', '5:00 PM calcium exactly 8.5: the protocol gives "> 8.5" and "< 8.5" only. Not specified; decide with the attending.', ['ip.low.3b.i', 'ip.low.3b.ii']);
-                return done('gap', 'Not specified: 5:00 PM calcium exactly 8.5');
-            }
-            if (c17 > 8.5) {
+            if (c17 >= 8.5) {
                 if (blocked()) return R;
                 step('dc', 'dc', 'Discharge home on calcium 600 mg every 8 hours and calcitriol 0.5 mcg BID.', ['ip.low.3b.i', 'ip.low.3b.i.1']);
                 outLab(['ip.low.3b.i.2']);
@@ -314,10 +290,10 @@
         var a = cc('amCa');
         if (a === null) return waitCa('5:00 AM');
 
-        if (a > 8) {
-            gap('am', '5:00 AM corrected calcium above 8: the protocol has no item for this (items 4–6 cover 7–8 and below 7). Not specified; the standing orders continue. Decide with the attending.', ['v.4', 'v.5', 'v.6']);
+        if (a >= 8) {
+            gap('am', '5:00 AM corrected calcium 8 or above (a value at 8 counts as above): the protocol has no item for this (items 4–6 cover 7–8 and below 7). Not specified; the standing orders continue. Decide with the attending.', ['v.4', 'v.5', 'v.6']);
             step('pod2', 'note', 'For reference, the PTH < 10 discharge criteria: asymptomatic, no clinical signs of hypocalcemia (e.g. EKG change), corrected calcium above 7.8 mg/dL and trending up; discharge on the in-hospital doses unless the attending says otherwise.', ['v.crit']);
-            return done('gap', 'Not specified: 5:00 AM calcium above 8');
+            return done('gap', 'Not specified: 5:00 AM calcium 8 or above');
         }
 
         var hint11 = { hint: 'Compared with 5:00 AM: ' + a };
@@ -361,8 +337,8 @@
             if (d === null) return waitCa('11:00 AM');
             if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
             var unresolved = false;
-            if (d > 8) {
-                step('h11', 'do', 'Above 8: continue labs every 6 hours.', ['v.4a']);
+            if (d >= 8) {
+                step('h11', 'do', '8 or above: continue labs every 6 hours.', ['v.4a']);
             } else if (d >= 7) {
                 if (s.sx11 === 'yes') {
                     unresolved = true;
@@ -445,7 +421,6 @@
         { k: 'gfr', g: 'pt', type: 'radio', label: 'Preop GFR below 60 (renal insufficiency)?', opts: YN },
         { k: 'pth', g: 'rr', type: 'num', label: 'Intraop PTH, recovery room', unit: 'pg/mL' },
         { k: 'tier', g: 'rr', type: 'radio', label: 'or choose the tier', opts: [['lt10', '< 10'], ['low', '10 – 15'], ['mid', '15 – 20'], ['gt20', '> 20']] },
-        { k: 'tier15', g: 'rr', type: 'radio', label: 'PTH 15: which tier?', opts: [['low', '10 – 15'], ['mid', '15 – 20']] },
         { k: 'dos', g: 'eve', type: 'radio', label: 'Hypocalcemia symptoms?', hint: 'Perioral, or bilateral hands/feet numbness or tingling', opts: [['none', 'None'], ['sx', 'Symptoms']] },
         { k: 'cramp', g: 'eve', type: 'radio', label: 'Hand or leg cramping or spasm?', opts: YN },
         { k: 'dose', g: 'eve', type: 'radio', label: 'Ordered evening oral dose given?', opts: [['not', 'Not yet'], ['given', 'Given']] },
@@ -537,12 +512,12 @@
 
     function onRadio(k, v) {
         state[k] = v;
-        if (k === 'tier') { state.pth = ''; state.tier15 = null; if (nodes.pth.input) nodes.pth.input.value = ''; }
+        if (k === 'tier') { state.pth = ''; if (nodes.pth.input) nodes.pth.input.value = ''; }
         render();
     }
     function onNum(k, v) {
         state[k] = v;
-        if (k === 'pth') { state.tier = null; state.tier15 = null; }
+        if (k === 'pth') { state.tier = null; }
         render();
     }
 
@@ -599,7 +574,7 @@
             if (!a) return;
             if (q.type === 'radio') {
                 var cur = state[q.k];
-                if (q.k === 'tier' && !cur && R.tier && R.tier !== 'amb') cur = R.tier;
+                if (q.k === 'tier' && !cur && R.tier) cur = R.tier;
                 n.wrap.querySelectorAll('input').forEach(function (r) { r.checked = r.value === cur; });
                 return;
             }

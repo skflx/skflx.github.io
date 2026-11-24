@@ -179,7 +179,8 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - `test-hypocalcemia.mjs` runs `evaluate()` in Node over every branch of the
   protocol: the disposition, the source ids each step cites (all must exist), IV
   calcium always bringing telemetry (General Rule 1) once, the renal hold, and a
-  "not specified" answer at each boundary or conflict the protocol leaves open.
+  "not specified" answer where the protocol is silent or contradicts itself, and
+  every cutoff value landing on the "exceeds" side (owner rule).
 - Smoke: the protocol text renders; a PTH below 10 overnight builds the plan,
   marks cited lines and asks for the 5:00 AM calcium. Zero remote requests (in
   `SELF_CONTAINED`, `tools/check-data.mjs`).
