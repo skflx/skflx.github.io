@@ -36,7 +36,7 @@
         { title: 'OKSAT study hub', href: 'oksat.html', tags: 'oksat ohns self assessment modules guides questions' },
         { title: 'Search', href: 'search.html', tags: 'search find modules cpt codes' },
         { title: 'CPT code search', href: 'cpt-search.html', tags: 'cpt codes procedures coding' },
-        { title: 'Postop hypocalcemia protocol', href: 'hypocalcemia.html', tags: 'hypocalcemia calcium pth thyroidectomy parathyroidectomy calcitriol tums ohsu protocol' },
+        { title: 'Shindo Protocol (postop hypocalcemia)', href: 'hypocalcemia.html', tags: 'shindo hypocalcemia calcium pth thyroidectomy parathyroidectomy calcitriol tums ohsu protocol' },
         { title: 'PDF chapter splitter', href: 'pdf-chapter-splitter.html', tags: 'pdf chapters split textbook zip' },
         { title: 'Airway Rounds', href: 'airway-jeopardy.html', tags: 'airway quiz jeopardy game larynx rounds' },
     ];

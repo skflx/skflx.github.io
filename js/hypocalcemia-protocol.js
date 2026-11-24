@@ -22,6 +22,7 @@
     'use strict';
 
     window.__HYPOCA_SOURCE = {
+        name: 'Shindo Protocol',
         title: 'Postoperative Management of Hypocalcemia Protocol for OTO HNS Department',
         origin: 'OHSU Department of Otolaryngology – Head & Neck Surgery',
         sections: [
@@ -68,6 +69,7 @@
                             { id: 'ip.low.3b.ii', n: 'ii.', ref: 'PTH 10–15 · 3b.ii', text: 'IF 5 pm calcium < 8.5, give one extra dose of calcium 300 mg and continue to monitor with q 6 hr calcium checks.' },
                         ] },
                     ] },
+                    { id: 'x.low', added: true, n: '', ref: 'Owner rule · PTH 10–15, AM PTH < 10, Ca < 8.5', text: 'If AM repeat PTH < 10 and corrected calcium < 8.5 mg/dL, move to the PTH < 10 pathway: start its orders now and manage the AM calcium by its items.' },
                     { id: 'ip.low.crit', n: '', ref: 'PTH 10–15 · discharge criteria', text: 'Criteria for discharge the following AM is, patient must be asymptomatic, not exhibit clinical signs of hypocalcemia, and corrected calcium by the next morning must be > 7.8 mg/dL and trending up.' },
                     { id: 'ip.low.att', n: '', ref: 'PTH 10–15 · attending', text: 'Attending must be updated in the afternoon with the patient’s status.' },
                 ] },
@@ -98,6 +100,8 @@
                         { id: 'v.6c', n: 'c.', ref: 'PTH < 10 · 6c', text: 'IF 11 AM corrected calcium is higher than 5 AM calcium, keep on same oral regiment and check calcium q 6 until the next morning. Add magnesium level to AM labs' },
                     ] },
                     { id: 'x.ge8', added: true, n: '', ref: 'Owner rule · PTH < 10, 5 AM ≥ 8', text: 'If 1st postop day AM corrected calcium is 8 mg/dL or above, check the 11 AM calcium and follow its trend as in item 5: if the same or higher and asymptomatic, may discharge as in 5a; if lower, give an extra dose of calcium once and check a 5 pm calcium, then follow 5b.i–iii.' },
+                    { id: 'x.4lt7', added: true, n: '', ref: 'Owner rule · item 4, 11 AM < 7', text: 'Under item 4, if the 11 AM corrected calcium is < 7 mg/dL and the patient is not symptomatic, treat as item 6: one gram of IV calcium gluconate, calcitriol 0.75 mcg bid and calcium 900 mg q8hr.' },
+                    { id: 'x.6b', added: true, n: '', ref: 'Owner rule · 6a vs 6b', text: 'When the 11 AM corrected calcium is lower than 5 AM and the patient is not symptomatic, item 6b applies: administer 1 gm IV calcium.' },
                     { id: 'x.eq', added: true, n: '', ref: 'Owner rule · equal values', text: 'An 11 AM calcium equal to the 5 AM calcium counts as stable (with "higher") when the patient has no symptoms.' },
                     { id: 'x.sx', added: true, n: '', ref: 'Owner rule · symptoms', text: 'Evaluate for symptoms of hypocalcemia at every calcium check. If symptoms are present, treat in an escalating fashion using clinical judgement.' },
                     { id: 'v.crit', n: '', ref: 'PTH < 10 · discharge criteria', text: 'Criteria for discharge the following AM is, patient must be asymptomatic, not exhibit clinical signs of hypocalcemia (i.e, EKG change), and corrected calcium by the next morning must be > 7.8 mg/dL and trending up. They should be discharged with whatever calcium and calcitriol dose they are taking in hospital, unless specified otherwise by attending surgeon.' },

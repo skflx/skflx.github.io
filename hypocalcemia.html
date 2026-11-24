@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Postop Hypocalcemia | skflx.MD</title>
-    <meta name="description" content="The OHSU OTO-HNS postoperative hypocalcemia protocol as a step-by-step plan, with the protocol text it comes from.">
+    <title>Shindo Protocol: Postop Hypocalcemia | skflx.MD</title>
+    <meta name="description" content="The Shindo Protocol: OHSU OTO-HNS postop hypocalcemia protocol as a step-by-step plan, with protocol text.">
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=97e91d2e">
@@ -79,8 +79,6 @@
         .hc-dispo.is-stay .hc-dispo-k { color: var(--signal); }
         .hc-dispo.is-stop { border-left-color: var(--bad); }
         .hc-dispo.is-stop .hc-dispo-k { color: var(--bad); }
-        .hc-dispo.is-gap { border-left-style: dashed; border-left-color: var(--ink); }
-        .hc-dispo.is-gap .hc-dispo-k { color: var(--ink); }
 
         .hc-plan-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin: 0.9rem 0 0.25rem; }
         .hc-toggle { display: inline-flex; align-items: center; gap: 0.45rem; margin-right: auto; font-size: var(--step--1); color: var(--ink-muted); cursor: pointer; }
@@ -94,13 +92,11 @@
         .hc-step.is-iv::before, .hc-step.is-stay::before { background: var(--signal); }
         .hc-step.is-dc::before { background: var(--ok); }
         .hc-step.is-stop::before { background: var(--bad); }
-        .hc-step.is-gap::before { background: none; border-left: 2px dashed var(--ink); }
         .hc-step.is-note .hc-step-t { color: var(--ink-muted); }
         .hc-step-k { display: block; margin-bottom: 0.2rem; font: 500 0.68rem/1.2 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
         .hc-step.is-iv .hc-step-k, .hc-step.is-stay .hc-step-k { color: var(--signal); }
         .hc-step.is-dc .hc-step-k { color: var(--ok); }
         .hc-step.is-stop .hc-step-k { color: var(--bad); }
-        .hc-step.is-gap .hc-step-k { color: var(--ink); }
         .hc-step-t { margin: 0; line-height: 1.5; }
         .hc-quote {
             margin: 0.55rem 0 0; padding: 0.1rem 0 0.1rem 0.75rem; border-left: 1px solid var(--rule-strong);
@@ -145,7 +141,6 @@
             .hc-dock.is-dc { border-left-color: var(--ok); }
             .hc-dock.is-stay { border-left-color: var(--signal); }
             .hc-dock.is-stop { border-left-color: var(--bad); }
-            .hc-dock.is-gap { border-left-style: dashed; border-left-color: var(--ink); }
             .hc-dock.is-away { display: none; }
             #hc-dock-text { flex: 1; min-width: 0; font-weight: 600; line-height: 1.25; }
             .hc-dock a { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
@@ -155,7 +150,7 @@
 <body data-no-hotkey>
     <header class="site-topbar">
         <a class="site-wordmark" href="index.html">skflx<span class="wm-md">.MD</span></a>
-        <span class="site-topbar-title">Postop Hypocalcemia</span>
+        <span class="site-topbar-title">Shindo Protocol</span>
         <div class="site-topbar-actions">
             <a class="site-navlink" href="search.html">Search</a>
             <a class="site-navlink" href="index.html#tools">Tools</a>
@@ -167,13 +162,13 @@
 
     <main class="hc" id="hc">
         <div class="hc-head">
-            <p class="site-kicker">Tool &middot; Thyroid &amp; parathyroid</p>
-            <h1>Postop hypocalcemia</h1>
-            <p class="hc-lede">The OHSU OTO-HNS protocol after thyroid and parathyroid surgery, one step at a time. Answer from the top: the plan builds beside it, and every step quotes the protocol line it comes from. Where the protocol is silent or contradicts itself, the plan says so instead of choosing.</p>
+            <p class="site-kicker">Tool &middot; Postop hypocalcemia</p>
+            <h1>Shindo Protocol</h1>
+            <p class="hc-lede">OHSU OTO-HNS postop hypocalcemia protocol after thyroid and parathyroid surgery. Each step cites its protocol line.</p>
             <p class="hc-cite">Source: <cite>Postoperative Management of Hypocalcemia Protocol for OTO HNS Department</cite>, OHSU Department of Otolaryngology &ndash; Head &amp; Neck Surgery. <a href="#hc-source">Full text below</a>.</p>
         </div>
 
-        <noscript><p>This tool needs JavaScript to build the plan and show the protocol text.</p></noscript>
+        <noscript><p>Requires JavaScript.</p></noscript>
 
         <div class="hc-grid">
             <div id="hc-form" class="hc-form" role="group" aria-label="Patient values"></div>
@@ -182,19 +177,19 @@
                 <h2 id="hc-plan-h" class="visually-hidden">Plan</h2>
                 <div id="hc-dispo" class="hc-dispo is-wait" aria-live="polite"></div>
                 <div class="hc-plan-tools">
-                    <label class="hc-toggle"><input type="checkbox" id="hc-quotes" checked> Protocol text under each step</label>
+                    <label class="hc-toggle"><input type="checkbox" id="hc-quotes" checked> Show protocol text</label>
                     <button type="button" id="hc-copy" class="site-btn site-btn-sm">Copy plan</button>
                     <button type="button" id="hc-reset" class="site-btn site-btn-sm">Clear</button>
                     <span id="hc-status" class="hc-status" role="status"></span>
                 </div>
                 <div id="hc-plan-body"></div>
-                <p class="hc-note">Corrected calcium = Ca + 0.8 &times; (4.0 &minus; albumin), the Payne formula (owner rule). Tablet counts are General Rule 2: one TUMS-EX is 300 mg elemental calcium.</p>
+                <p class="hc-note">Corrected Ca = Ca + 0.8 &times; (4.0 &minus; albumin), Payne (owner rule). TUMS-EX = 300 mg elemental calcium (General Rule 2).</p>
             </aside>
         </div>
 
         <section class="hc-source" id="hc-source" aria-labelledby="hc-source-h">
             <h2 id="hc-source-h">Protocol</h2>
-            <p class="hc-cite">Verbatim, with the document&rsquo;s own numbering and spelling. Lines marked <span class="hc-src-added">Owner rule</span> are not in the document: they settle what it leaves open, each in the section it belongs to. Lines the current plan cites are ruled in blue.</p>
+            <p class="hc-cite">Verbatim. <span class="hc-src-added">Owner rule</span> lines are not in the document; they settle what it leaves open. Cited lines are ruled in blue.</p>
             <div id="hc-source-body"></div>
         </section>
     </main>
@@ -203,12 +198,12 @@
 
     <footer class="site-footer">
         <a href="index.html">skflx.MD</a>
-        <span>Reproduces the OHSU protocol as a workflow aid; it does not replace clinical judgment or the attending.</span>
-        <span class="push">Nothing you enter is stored or sent.</span>
+        <span>Workflow aid; does not replace clinical judgment or the attending.</span>
+        <span class="push">Nothing is stored or sent.</span>
     </footer>
 
-    <script src="js/hypocalcemia-protocol.js?v=d5dd8f9f"></script>
-    <script src="js/hypocalcemia.js?v=47e16f48"></script>
-    <script src="js/site.js?v=b05ada7d"></script>
+    <script src="js/hypocalcemia-protocol.js?v=fdca0e5a"></script>
+    <script src="js/hypocalcemia.js?v=92bc5f2e"></script>
+    <script src="js/site.js?v=70de32dc"></script>
 </body>
 </html>

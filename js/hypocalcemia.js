@@ -6,9 +6,10 @@
    1. evaluate(state): DOM-free. Walks the protocol (the verbatim text
       is js/hypocalcemia-protocol.js) and returns the questions to ask,
       the plan steps (each citing source ids) and a disposition. Where
-      the protocol is silent or contradicts itself, it says so (kind
-      'gap') and never picks a branch. tools/test-hypocalcemia.mjs runs
-      it in Node.
+      the protocol is silent or contradicts itself, it follows the
+      owner's rules (the `added` items of js/hypocalcemia-protocol.js)
+      and cites them. tools/test-hypocalcemia.mjs runs it in Node and
+      fails if any input combination lands nowhere.
    2. The page: builds every question once, shows the ones evaluate()
       asks for, renders the plan and the protocol text, and copies the
       plan as plain text. Nothing is stored: a reload is a clean slate.
@@ -82,7 +83,7 @@
         function done(kind, text) { R.dispo = { kind: kind, text: text }; return R; }
         function iv(when, text, src) {
             step(when, 'iv', text, src);
-            if (!ivDone) { ivDone = true; step(when, 'iv', 'Order remote telemetry monitoring while giving IV calcium.', ['g.1']); }
+            if (!ivDone) { ivDone = true; step(when, 'iv', 'Order remote telemetry during IV calcium.', ['g.1']); }
         }
         function val(k) {
             var n = parseNum(s[k]);
@@ -103,16 +104,16 @@
             if (!gfr) return false;
             ask('cr');
             if (!s.cr) {
-                step('dc', 'do', 'Before discharge, creatinine must be the same as or better than preop (preop GFR below 60).', ['ip.renal']);
-                done('wait', 'Discharge waits on creatinine vs preop');
+                step('dc', 'do', 'Before discharge: creatinine same as or better than preop (preop GFR below 60).', ['ip.renal']);
+                done('wait', 'Hold discharge: creatinine vs preop');
                 return true;
             }
             if (s.cr === 'worse') {
-                step('dc', 'stay', 'Creatinine worse than preop: stay another day for IV hydration, and repeat the BMP to confirm creatinine is stable before discharge.', ['ip.renal']);
+                step('dc', 'stay', 'Creatinine worse than preop: stay another day, IV hydration, repeat BMP to confirm stable creatinine before discharge.', ['ip.renal']);
                 done('stay', 'Stay another day: IV hydration, repeat BMP');
                 return true;
             }
-            step('dc', 'note', 'Creatinine the same as or better than preop: the renal criterion is met.', ['ip.renal']);
+            step('dc', 'note', 'Creatinine same as or better than preop: renal criterion met.', ['ip.renal']);
             return false;
         }
 
@@ -120,28 +121,96 @@
         function outLab(src) {
             ask('lab');
             src = (src || []).concat('g.3');
-            if (!s.lab) { step('next', 'do', 'Outpatient calcium check tomorrow morning. Choose where (OHSU or an external lab) for the orders.', src); return; }
+            if (!s.lab) { step('next', 'do', 'Outpatient calcium tomorrow morning. Choose lab: OHSU or external.', src); return; }
             if (s.lab === 'local') {
-                step('next', 'do', 'Outpatient calcium tomorrow morning at OHSU (PPV 3rd floor or CHH). Place the order in EPIC, through the discharge order process or a new ambulatory order encounter.', src.concat('g.3.1'));
+                step('next', 'do', 'Outpatient calcium tomorrow morning at OHSU (PPV 3rd floor or CHH). Order in EPIC via discharge orders or a new ambulatory order encounter.', src.concat('g.3.1'));
                 return;
             }
-            step('next', 'do', 'External outpatient order for serum calcium. Discharge instructions: blood draw in the morning, then call the surgeon’s office to say where the lab was done.', src.concat('g.3.2'));
-            step('next', 'do', 'Sign out to the Thyroid Parathyroid Center nurse or MAs in Area 4 (EPIC message to the Thyroid Triage Pool, or Outlook secure message) to follow up the result the next day.', ['g.3.3']);
+            step('next', 'do', 'External outpatient order for serum calcium. Instruct: morning blood draw, then call the surgeon’s office with the lab location.', src.concat('g.3.2'));
+            step('next', 'do', 'Sign out to Thyroid Parathyroid Center nurse or MAs in Area 4 (EPIC message to Thyroid Triage Pool, or Outlook secure message) to follow up the result next day.', ['g.3.3']);
         }
 
         /* Outpatient PTH 15–20 has its own lab wording (op.mid.1–3). */
         function opLab() {
             ask('lab');
-            if (!s.lab) { step('next', 'do', 'Calcium level tomorrow morning. Choose where (OHSU or an external lab) for the orders.', ['op.mid']); return; }
+            if (!s.lab) { step('next', 'do', 'Calcium level tomorrow morning. Choose lab: OHSU or external.', ['op.mid']); return; }
             if (s.lab === 'local') {
-                step('next', 'do', 'Outpatient order in EPIC for ' + (gfr ? 'a BMP instead of plasma calcium (preop GFR below 60: renal function, electrolytes and calcium)' : 'a calcium level') + ' tomorrow morning at OHSU (PPV 3rd floor or CHH), through the discharge order process or a new ambulatory order encounter.', ['op.mid.1']);
+                step('next', 'do', 'Outpatient EPIC order for ' + (gfr ? 'BMP instead of plasma calcium (preop GFR below 60: renal function, electrolytes, calcium)' : 'calcium level') + ' tomorrow morning at OHSU (PPV 3rd floor or CHH), via discharge orders or a new ambulatory order encounter.', ['op.mid.1']);
                 return;
             }
-            step('next', 'do', 'External outpatient order for serum calcium. Discharge instructions: blood draw in the morning, then call the surgeon’s office to say where the lab was done.', ['op.mid.2']);
-            step('next', 'do', 'Sign out to the Thyroid Parathyroid Center nurse or MAs in Area 4 (EPIC message or Outlook secure message) to follow up the result the next day.', ['op.mid.3']);
+            step('next', 'do', 'External outpatient order for serum calcium. Instruct: morning blood draw, then call the surgeon’s office with the lab location.', ['op.mid.2']);
+            step('next', 'do', 'Sign out to Thyroid Parathyroid Center nurse or MAs in Area 4 (EPIC message or Outlook secure message) to follow up the result next day.', ['op.mid.3']);
         }
 
-        function gap(when, text, src) { step(when, 'gap', text, src); }
+
+        /* PTH < 10, from the POD 1 AM calcium a (items 4–6 and the owner rules). */
+        function vlowFrom(a) {
+            if (a >= 8) {
+                step('am', 'note', '8 or above: no extra dose. Continue standing orders; check 11:00 AM calcium for trend.', ['x.ge8', 'x.cut']);
+                return trend11(a, ['x.ge8']);
+            }
+
+            var hint11 = { hint: '5:00 AM: ' + a };  /* items 4 and 6; item 5 uses trend11 */
+            if (a < 7) {
+                iv('am', 'Below 7, regardless of symptoms: 1 g IV calcium gluconate.', ['v.6']);
+                step('am', 'do', 'Increase calcitriol to 0.75 mcg BID and calcium to 900 mg elemental q8h.', ['v.6']);
+                ask('ca11', hint11); ask('sx11');
+                var b = cc('ca11');
+                if (b === null) return waitCa('11:00 AM');
+                if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
+                if (s.sx11 === 'yes') {
+                    iv('h11', 'Symptomatic: 1 g IV calcium. Repeat if still symptomatic.', ['v.6b']);
+                    step('h11', 'do', 'Calcium q6h; add magnesium to AM labs.', ['v.6b']);
+                    critVlow();
+                    return done('stay', 'Stay overnight: IV calcium, calcium q6h');
+                }
+                if (b < a) {
+                    iv('h11', 'Lower than 5:00 AM, asymptomatic: 1 g IV calcium (item 6b; owner rule over 6a).', ['x.6b', 'v.6b']);
+                    step('h11', 'do', 'Calcium q6h until next morning; add magnesium to AM labs.', ['v.6b']);
+                    critVlow();
+                    return done('stay', 'Stay overnight: IV calcium, calcium q6h');
+                }
+                step('h11', 'do', (b === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': keep same oral regimen. Calcium q6h until next morning; add magnesium to AM labs.', b === a ? ['v.6c', 'x.eq'] : ['v.6c']);
+                critVlow();
+                return done('stay', 'Stay overnight: same oral regimen, calcium q6h');
+            }
+
+            /* 7 ≤ a ≤ 8 */
+            ask('amSx');
+            if (!s.amSx) return done('wait', 'Symptomatic at 5:00 AM?');
+
+            if (s.amSx === 'yes') {
+                iv('am', 'Symptomatic: IV calcium gluconate 1 g over 2 hours. If symptoms persist, give another gram.', ['v.4']);
+                step('am', 'do', 'Calcium q6h. Magnesium level next morning.', ['v.4q6']);
+                ask('ca11', hint11); ask('sx11');
+                var d = cc('ca11');
+                if (d === null) return waitCa('11:00 AM');
+                if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
+                if (d >= 8) {
+                    step('h11', 'do', '8 or above: continue labs q6h.', ['v.4a']);
+                    if (s.sx11 === 'yes') step('h11', 'stay', 'Still symptomatic: escalate by clinical judgement; update attending.', ['x.sx']);
+                } else if (d >= 7) {
+                    if (s.sx11 === 'yes') {
+                        step('h11', 'stay', 'Still symptomatic at 7–8: escalate by clinical judgement. Item 4 allows another gram of IV calcium if symptoms persist; item 4b limits IV calcium to below 7.', ['x.sx', 'v.4', 'v.4b']);
+                    } else if (d < a) {
+                        step('h11', 'do', 'Asymptomatic and lower than 5:00 AM: extra TUMS tablet.', ['v.4b', 'g.2']);
+                    } else {
+                        step('h11', 'note', 'Asymptomatic and not lower than 5:00 AM: no extra dose; IV calcium only if symptomatic and below 7. Continue calcium q6h.', ['v.4b', 'v.4q6']);
+                    }
+                } else if (s.sx11 === 'yes') {
+                    iv('h11', 'Symptomatic and below 7: IV calcium.', ['v.4b']);
+                } else {
+                    iv('h11', 'Below 7 and asymptomatic: treat as item 6. 1 g IV calcium gluconate.', ['x.4lt7', 'v.6']);
+                    step('h11', 'do', 'Increase calcitriol to 0.75 mcg BID; calcium 900 mg elemental q8h.', ['x.4lt7', 'v.6']);
+                }
+                step('pod2', 'do', 'Monitor at least 12 hours after last IV calcium dose, then discharge on same calcium doses if calcium stable or trending up.', ['v.4c']);
+                renalCrit();
+                return done('stay', 'Stay: at least 12 h after the last IV calcium');
+            }
+
+            step('am', 'do', 'Asymptomatic: extra oral calcium 300 mg elemental (TUMS-EX, 1 tablet). Check calcium at 11:00 AM.', ['v.5', 'g.2']);
+            return trend11(a, []);
+        }
 
         /* PTH < 10 after a 5:00 AM calcium a of 7 or above: item 5's 11:00 AM
            and 5:00 PM trend, also used for 5:00 AM ≥ 8 (owner rule x.ge8).
@@ -154,57 +223,57 @@
             if (e === null) return waitCa('11:00 AM');
             if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
             if (s.sx11 === 'yes') {
-                step('h11', 'stay', 'Symptomatic: treat in an escalating fashion by clinical judgement, and update the attending.', ['x.sx']);
+                step('h11', 'stay', 'Symptomatic: escalate by clinical judgement; update attending.', ['x.sx']);
                 return done('stay', 'Symptomatic at 11:00 AM: escalate by clinical judgement');
             }
             if (e >= a) {
                 if (blocked()) return R;
-                step('dc', 'dc', (e === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': may discharge home on calcium 900 mg elemental every 8 hours and calcitriol 0.5 mcg BID.', ['v.5a'].concat(own, e === a ? ['x.eq'] : []));
+                step('dc', 'dc', (e === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': may discharge home on calcium 900 mg elemental q8h and calcitriol 0.5 mcg BID.', ['v.5a'].concat(own, e === a ? ['x.eq'] : []));
                 outLab(['v.5a']);
                 return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
             }
-            step('h11', 'do', 'Lower than 5:00 AM: give an extra dose of calcium once. Check calcium at 5:00 PM.', ['v.5b'].concat(own));
+            step('h11', 'do', 'Lower than 5:00 AM: one extra dose of calcium. Check calcium at 5:00 PM.', ['v.5b'].concat(own));
             ask('ca17', hint); ask('sx17');
             var f = cc('ca17');
             if (f === null) return waitCa('5:00 PM');
             if (!s.sx17) return done('wait', 'Symptomatic at 5:00 PM?');
             if (f >= a) {
                 if (s.sx17 === 'yes') {
-                    step('h17', 'stay', 'Stable or improved but symptomatic: treat in an escalating fashion by clinical judgement, and update the attending.', ['x.sx']);
+                    step('h17', 'stay', 'Stable or improved but symptomatic: escalate by clinical judgement; update attending.', ['x.sx']);
                     return done('stay', 'Symptomatic at 5:00 PM: escalate by clinical judgement');
                 }
                 if (blocked()) return R;
-                step('dc', 'dc', 'Stable or improved from the morning: may discharge home on calcium 900 mg elemental every 8 hours and calcitriol 0.5 mcg BID.', ['v.5b.i'].concat(own));
+                step('dc', 'dc', 'Stable or improved from morning: may discharge home on calcium 900 mg elemental q8h and calcitriol 0.5 mcg BID.', ['v.5b.i'].concat(own));
                 outLab(['v.5b.i']);
                 return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
             }
             if (s.sx17 === 'yes') {
-                iv('h17', 'Lower and symptomatic: give 1 g IV calcium.', ['v.5b.iii'].concat(own));
-                step('h17', 'do', 'One extra TUMS; increase calcitriol to 1 mcg BID. Calcium every 6 hours until the next morning.', ['v.5b.iii', 'g.2']);
+                iv('h17', 'Lower and symptomatic: 1 g IV calcium.', ['v.5b.iii'].concat(own));
+                step('h17', 'do', 'One extra TUMS; increase calcitriol to 1 mcg BID. Calcium q6h until next morning.', ['v.5b.iii', 'g.2']);
                 critVlow();
                 return done('stay', 'Stay overnight: IV calcium, calcitriol 1 mcg BID');
             }
-            step('h17', 'do', 'Lower and asymptomatic: one extra TUMS; increase calcitriol to 0.75 mcg BID. Calcium every 6 hours until the next morning.', ['v.5b.ii', 'g.2'].concat(own));
+            step('h17', 'do', 'Lower and asymptomatic: one extra TUMS; increase calcitriol to 0.75 mcg BID. Calcium q6h until next morning.', ['v.5b.ii', 'g.2'].concat(own));
             critVlow();
             return done('stay', 'Stay overnight: calcitriol 0.75 mcg BID, calcium q6h');
         }
 
         function renalCrit() {
-            if (gfr) step('pod2', 'do', 'Renal insufficiency: creatinine must also be the same as or better than preop. If worse, another day of IV hydration and a repeat BMP.', ['ip.renal']);
+            if (gfr) step('pod2', 'do', 'Renal insufficiency: creatinine must also be same as or better than preop. If worse, another day of IV hydration and repeat BMP.', ['ip.renal']);
         }
         function critLow() {
-            step('pod2', 'do', 'Discharge the following morning only if asymptomatic, with no clinical signs of hypocalcemia, and corrected calcium above 7.8 mg/dL and trending up.', ['ip.low.crit']);
+            step('pod2', 'do', 'Discharge next morning only if asymptomatic, no clinical signs of hypocalcemia, and corrected calcium above 7.8 mg/dL and trending up.', ['ip.low.crit']);
             renalCrit();
         }
         function critVlow() {
-            step('pod2', 'do', 'Discharge the following morning only if asymptomatic, with no clinical signs of hypocalcemia (e.g. EKG change), and corrected calcium above 7.8 mg/dL and trending up. Discharge on the in-hospital calcium and calcitriol doses unless the attending says otherwise.', ['v.crit']);
+            step('pod2', 'do', 'Discharge next morning only if asymptomatic, no clinical signs of hypocalcemia (e.g. EKG change), and corrected calcium above 7.8 mg/dL and trending up. Discharge on in-hospital calcium and calcitriol doses unless attending says otherwise.', ['v.crit']);
             renalCrit();
         }
 
         /* ---- scope ---- */
         ask('excluded');
         if (s.excluded === 'yes') {
-            step('rr', 'stop', 'Do not use this protocol for secondary hyperparathyroidism on dialysis or tertiary hyperparathyroidism. They have a separate protocol.', ['scope', 'v.2']);
+            step('rr', 'stop', 'Not for secondary hyperparathyroidism on dialysis or tertiary hyperparathyroidism; separate protocol.', ['scope', 'v.2']);
             return done('stop', 'This protocol does not apply');
         }
         ask('setting');
@@ -226,11 +295,11 @@
                 return done('dc', 'Discharge home, no supplements');
             }
             if (tier === 'mid') {
-                step('rr', 'dc', 'Discharge home today on calcium carbonate 300 mg elemental every 8 hours (TUMS-EX, 1 tablet).', ['op.mid', 'g.2']);
+                step('rr', 'dc', 'Discharge home today on calcium carbonate 300 mg elemental q8h (TUMS-EX, 1 tablet).', ['op.mid', 'g.2']);
                 opLab();
                 return done('dc', 'Discharge home on calcium 300 mg q8h; calcium tomorrow AM');
             }
-            step('rr', 'stay', 'PTH below 15: admit overnight as Observation status, not Inpatient. The overnight orders for this PTH follow.', ['op.lt15', 'ip.check']);
+            step('rr', 'stay', 'PTH below 15: admit overnight, Observation status (not Inpatient). Overnight orders follow.', ['op.lt15', 'ip.check']);
         }
 
         /* ---- overnight or inpatient ---- */
@@ -246,7 +315,7 @@
         }
 
         if (tier === 'mid') {
-            step('rr', 'do', 'Start calcium carbonate 300 mg elemental every 8 hours (TUMS-EX, 1 tablet).', ['ip.mid', 'g.2']);
+            step('rr', 'do', 'Start calcium carbonate 300 mg elemental q8h (TUMS-EX, 1 tablet).', ['ip.mid', 'g.2']);
             step('am', 'do', gfr ? 'AM BMP instead of plasma calcium (preop GFR below 60: renal function, electrolytes and calcium).' : 'AM calcium level.', ['ip.mid']);
             ask('alb'); ask('amCa', { label: 'POD 1 AM calcium' });
             var c = cc('amCa');
@@ -257,15 +326,15 @@
                 return done('dc', 'Discharge, no supplements');
             }
             if (blocked()) return R;
-            step('dc', 'dc', 'Discharge on calcium 300 mg elemental every 8 hours (TUMS-EX, 1 tablet).', ['ip.mid.2', 'ip.mid.2a']);
+            step('dc', 'dc', 'Discharge on calcium 300 mg elemental q8h (TUMS-EX, 1 tablet).', ['ip.mid.2', 'ip.mid.2a']);
             outLab(['ip.mid.2b']);
             return done('dc', 'Discharge on calcium 300 mg q8h; calcium tomorrow AM');
         }
 
         if (tier === 'low') {
-            step('rr', 'do', 'Start calcium carbonate 600 mg elemental every 8 hours with food (TUMS-EX, 2 tablets). Order "every 8 hours", not TID.', ['ip.low', 'g.2']);
+            step('rr', 'do', 'Start calcium carbonate 600 mg elemental q8h with food (TUMS-EX, 2 tablets). Order "every 8 hours", not TID.', ['ip.low', 'g.2']);
             step('am', 'do', 'AM labs: PTH (select Urgent) and ' + (gfr ? 'BMP (preop GFR below 60).' : 'plasma calcium.'), ['ip.low']);
-            step('pm', 'do', 'Update the attending in the afternoon with the patient’s status.', ['ip.low.att']);
+            step('pm', 'do', 'Update attending in the afternoon.', ['ip.low.att']);
             ask('alb'); ask('amPth'); ask('amCa', { label: 'POD 1 AM calcium' });
             var p2 = val('amPth');
             var c1 = cc('amCa');
@@ -279,13 +348,14 @@
                     return done('dc', 'Discharge, no supplements');
                 }
                 if (blocked()) return R;
-                step('dc', 'dc', 'Discharge on calcium 600 mg elemental every 8 hours (TUMS-EX, 2 tablets).', ['ip.low.2', 'ip.low.2a']);
+                step('dc', 'dc', 'Discharge on calcium 600 mg elemental q8h (TUMS-EX, 2 tablets).', ['ip.low.2', 'ip.low.2a']);
                 outLab(['ip.low.2b']);
                 return done('dc', 'Discharge on calcium 600 mg q8h; calcium tomorrow AM');
             }
             if (c1 < 8.5) {
-                gap('am', 'AM PTH below 10 with corrected calcium below 8.5: the protocol has no item for this combination. Not specified; decide with the attending.', ['ip.low.3']);
-                return done('gap', 'Not specified: AM PTH < 10 with calcium < 8.5');
+                step('am', 'do', 'AM PTH below 10 with calcium below 8.5: move to PTH < 10 pathway. Start calcitriol 0.5 mcg BID and calcium 900 mg elemental q8h with food (TUMS-EX, 3 tablets); plasma calcium q6h from 11:00 AM; AM magnesium, replace to normal range.', ['x.low', 'v.1', 'v.2', 'v.3', 'g.2']);
+                R.tier = 'lt10';
+                return vlowFrom(c1);
             }
             step('am', 'do', 'Start calcitriol 0.25 mcg BID. Repeat calcium at 11:00 AM.', ['ip.low.3']);
             ask('ca11');
@@ -293,7 +363,7 @@
             if (c11 === null) return waitCa('11:00 AM');
             if (c11 >= 8.5) {
                 if (blocked()) return R;
-                step('dc', 'dc', 'Discharge on calcium 600 mg elemental every 8 hours and calcitriol 0.25 mcg BID.', ['ip.low.3a', 'ip.low.3a.i']);
+                step('dc', 'dc', 'Discharge on calcium 600 mg elemental q8h and calcitriol 0.25 mcg BID.', ['ip.low.3a', 'ip.low.3a.i']);
                 outLab(['ip.low.3a.ii']);
                 return done('dc', 'Discharge on calcium 600 mg q8h and calcitriol 0.25 mcg BID');
             }
@@ -303,34 +373,34 @@
             if (c17 === null) return waitCa('5:00 PM');
             if (c17 >= 8.5) {
                 if (blocked()) return R;
-                step('dc', 'dc', 'Discharge home on calcium 600 mg every 8 hours and calcitriol 0.5 mcg BID.', ['ip.low.3b.i', 'ip.low.3b.i.1']);
+                step('dc', 'dc', 'Discharge home on calcium 600 mg q8h and calcitriol 0.5 mcg BID.', ['ip.low.3b.i', 'ip.low.3b.i.1']);
                 outLab(['ip.low.3b.i.2']);
                 return done('dc', 'Discharge on calcium 600 mg q8h and calcitriol 0.5 mcg BID');
             }
-            step('h17', 'stay', 'Give one extra dose of calcium 300 mg. Keep in hospital with calcium checks every 6 hours.', ['ip.low.3b.ii']);
+            step('h17', 'stay', 'One extra dose of calcium 300 mg. Keep in hospital; calcium q6h.', ['ip.low.3b.ii']);
             critLow();
             return done('stay', 'Stay overnight: extra calcium 300 mg, calcium q6h');
         }
 
         /* tier === 'lt10' */
-        step('eve', 'do', 'Start calcitriol 0.5 mcg BID and calcium carbonate 900 mg elemental every 8 hours with food (TUMS-EX, 3 tablets). Order "every 8 hours", not TID. First dose this evening.', ['v.1', 'g.2']);
-        step('eve', 'do', 'Order BMP and magnesium for POD 1 5:00 AM. Replace magnesium to keep it in the normal range.', ['v.2', 'v.3']);
-        step('eve', 'do', 'Order plasma calcium every 6 hours from POD 1 11:00 AM. The order defaults to now: change the time to "tomorrow 11:00 am".', ['v.2']);
-        step('eve', 'note', 'No calcium level tonight unless the patient has hypocalcemia symptoms (perioral, bilateral hands/feet numbness or tingling).', ['v.2']);
-        step('pm', 'do', 'Update the attending in the afternoon with the patient’s status.', ['v.att']);
+        step('eve', 'do', 'Start calcitriol 0.5 mcg BID and calcium carbonate 900 mg elemental q8h with food (TUMS-EX, 3 tablets). Order "every 8 hours", not TID. First dose this evening.', ['v.1', 'g.2']);
+        step('eve', 'do', 'Order BMP and magnesium for POD 1 5:00 AM. Replace magnesium to normal range.', ['v.2', 'v.3']);
+        step('eve', 'do', 'Order plasma calcium q6h from POD 1 11:00 AM. Order defaults to now: change time to "tomorrow 11:00 am".', ['v.2']);
+        step('eve', 'note', 'No calcium level tonight unless hypocalcemia symptoms (perioral, bilateral hands/feet numbness or tingling).', ['v.2']);
+        step('pm', 'do', 'Update attending in the afternoon.', ['v.att']);
 
         ask('dos');
         if (s.dos === 'sx') {
             ask('cramp');
             if (s.cramp === 'yes') {
-                iv('eve', 'Hand or leg cramping or spasm: order 1 g IV calcium, and draw a STAT calcium immediately, before the infusion.', ['v.dos']);
+                iv('eve', 'Hand or leg cramping or spasm: order 1 g IV calcium; draw STAT calcium immediately, before infusion.', ['v.dos']);
             } else if (s.cramp === 'no') {
                 ask('dose');
-                if (s.dose === 'not') step('eve', 'do', 'No cramping, evening dose not yet given: have the nurse give the ordered oral supplement now. Order a STAT calcium and check it.', ['v.dos2']);
-                else if (s.dose === 'given') step('eve', 'do', 'No cramping, evening dose already given: one additional 300 mg elemental TUMS. Order a STAT calcium and check it.', ['v.dos2', 'g.2']);
-                else step('eve', 'do', 'No cramping: was the ordered evening oral dose given?', ['v.dos2']);
+                if (s.dose === 'not') step('eve', 'do', 'No cramping, evening dose not yet given: nurse gives ordered oral supplement now. Order and check STAT calcium.', ['v.dos2']);
+                else if (s.dose === 'given') step('eve', 'do', 'No cramping, evening dose already given: one additional 300 mg elemental TUMS. Order and check STAT calcium.', ['v.dos2', 'g.2']);
+                else step('eve', 'do', 'No cramping: evening oral dose given?', ['v.dos2']);
             } else {
-                step('eve', 'do', 'Symptoms this evening: assess clinically for hand or leg cramping or spasm.', ['v.dos']);
+                step('eve', 'do', 'Symptoms this evening: assess for hand or leg cramping or spasm.', ['v.dos']);
             }
         }
 
@@ -338,73 +408,7 @@
         var a = cc('amCa');
         if (a === null) return waitCa('5:00 AM');
 
-        if (a >= 8) {
-            step('am', 'note', '8 or above (a value at 8 counts as above): no extra dose. Continue the standing orders and check the 11:00 AM calcium for its trend.', ['x.ge8', 'x.cut']);
-            return trend11(a, ['x.ge8']);
-        }
-
-        var hint11 = { hint: 'Compared with 5:00 AM: ' + a };  /* items 4 and 6; item 5 uses trend11 */
-        if (a < 7) {
-            iv('am', 'Below 7, regardless of symptoms: give 1 g IV calcium gluconate.', ['v.6']);
-            step('am', 'do', 'Increase calcitriol to 0.75 mcg BID and calcium to 900 mg elemental every 8 hours.', ['v.6']);
-            ask('ca11', hint11); ask('sx11');
-            var b = cc('ca11');
-            if (b === null) return waitCa('11:00 AM');
-            if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
-            if (s.sx11 === 'yes') {
-                iv('h11', 'Symptomatic: give 1 g IV calcium. Repeat if still symptomatic.', ['v.6b']);
-                step('h11', 'do', 'Calcium every 6 hours; add magnesium to the AM labs.', ['v.6b']);
-                critVlow();
-                return done('stay', 'Stay overnight: IV calcium, calcium q6h');
-            }
-            if (b < a) {
-                gap('h11', 'Lower than 5:00 AM and asymptomatic: the protocol gives two actions. Item 6a: an extra TUMS tablet. Item 6b: 1 g IV calcium. Not resolved by the protocol; decide with the attending.', ['v.6a', 'v.6b']);
-                step('h11', 'do', 'Under either item: calcium every 6 hours until the next morning; add magnesium to the AM labs.', ['v.6a', 'v.6b']);
-                critVlow();
-                return done('gap', 'Conflict: items 6a and 6b');
-            }
-            step('h11', 'do', (b === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': keep the same oral regimen. Calcium every 6 hours until the next morning; add magnesium to the AM labs.', b === a ? ['v.6c', 'x.eq'] : ['v.6c']);
-            critVlow();
-            return done('stay', 'Stay overnight: same oral regimen, calcium q6h');
-        }
-
-        /* 7 ≤ a ≤ 8 */
-        ask('amSx');
-        if (!s.amSx) return done('wait', 'Symptomatic at 5:00 AM?');
-
-        if (s.amSx === 'yes') {
-            iv('am', 'Symptomatic: give IV calcium gluconate 1 g over 2 hours. If symptoms do not subside, give another gram.', ['v.4']);
-            step('am', 'do', 'Calcium every 6 hours. Magnesium level the following morning.', ['v.4q6']);
-            ask('ca11', hint11); ask('sx11');
-            var d = cc('ca11');
-            if (d === null) return waitCa('11:00 AM');
-            if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
-            var unresolved = false;
-            if (d >= 8) {
-                step('h11', 'do', '8 or above: continue labs every 6 hours.', ['v.4a']);
-                if (s.sx11 === 'yes') step('h11', 'stay', 'Still symptomatic: treat in an escalating fashion by clinical judgement, and update the attending.', ['x.sx']);
-            } else if (d >= 7) {
-                if (s.sx11 === 'yes') {
-                    step('h11', 'stay', 'Still symptomatic at 7–8: treat in an escalating fashion by clinical judgement. Item 4 allows another gram of IV calcium if symptoms do not subside; item 4b limits IV calcium to below 7.', ['x.sx', 'v.4', 'v.4b']);
-                } else if (d < a) {
-                    step('h11', 'do', 'Asymptomatic and lower than 5:00 AM: give an extra TUMS tablet.', ['v.4b', 'g.2']);
-                } else {
-                    step('h11', 'note', 'Asymptomatic and not lower than 5:00 AM: no extra dose is given; IV calcium only if symptomatic and below 7. Calcium every 6 hours continues.', ['v.4b', 'v.4q6']);
-                }
-            } else if (s.sx11 === 'yes') {
-                iv('h11', 'Symptomatic and below 7: give IV calcium.', ['v.4b']);
-            } else {
-                unresolved = true;
-                gap('h11', 'Below 7 but asymptomatic: item 4b gives IV calcium only if symptomatic and names no other step. Not specified; decide with the attending.', ['v.4b']);
-            }
-            step('pod2', 'do', 'Monitor for at least 12 hours after the last IV calcium dose, then discharge on the same calcium doses if calcium is stable or trending up.', ['v.4c']);
-            renalCrit();
-            return unresolved ? done('gap', 'Not resolved by the protocol at 11:00 AM')
-                : done('stay', 'Stay: at least 12 h after the last IV calcium');
-        }
-
-        step('am', 'do', 'Asymptomatic: give an extra oral calcium 300 mg elemental (TUMS-EX, 1 tablet). Check calcium at 11:00 AM.', ['v.5', 'g.2']);
-        return trend11(a, []);
+        return vlowFrom(a);
     }
 
     var api = { evaluate: evaluate, corrected: corrected, tierOf: tierOf, parseNum: parseNum, WHEN: WHEN, RANGE: RANGE };
@@ -434,7 +438,7 @@
         { k: 'dos', g: 'eve', type: 'radio', label: 'Hypocalcemia symptoms?', hint: 'Perioral, or bilateral hands/feet numbness or tingling', opts: [['none', 'None'], ['sx', 'Symptoms']] },
         { k: 'cramp', g: 'eve', type: 'radio', label: 'Hand or leg cramping or spasm?', opts: YN },
         { k: 'dose', g: 'eve', type: 'radio', label: 'Ordered evening oral dose given?', opts: [['not', 'Not yet'], ['given', 'Given']] },
-        { k: 'alb', g: 'am', type: 'num', label: 'Albumin (optional)', unit: 'g/dL', hint: 'Corrects every calcium below: Ca + 0.8 × (4.0 − albumin). Leave blank to enter corrected values.' },
+        { k: 'alb', g: 'am', type: 'num', label: 'Albumin (optional)', unit: 'g/dL', hint: 'Corrects all calcium values: Ca + 0.8 × (4.0 − albumin). Blank = values already corrected.' },
         { k: 'amPth', g: 'am', type: 'num', label: 'AM PTH (urgent)', unit: 'pg/mL' },
         { k: 'amCa', g: 'am', type: 'ca', label: 'POD 1 AM calcium', unit: 'mg/dL' },
         { k: 'amSx', g: 'am', type: 'radio', label: 'Symptomatic at 5:00 AM?', opts: YN },
@@ -443,7 +447,7 @@
         { k: 'ca17', g: 'h17', type: 'ca', label: '5:00 PM calcium', unit: 'mg/dL' },
         { k: 'sx17', g: 'h17', type: 'radio', label: 'Symptomatic at 5:00 PM?', opts: YN },
         { k: 'cr', g: 'dc', type: 'radio', label: 'Creatinine vs preop', opts: [['same', 'Same or better'], ['worse', 'Worse']] },
-        { k: 'lab', g: 'dc', type: 'radio', label: 'Tomorrow-morning lab', opts: [['local', 'OHSU (lives locally)'], ['ext', 'External lab']] },
+        { k: 'lab', g: 'dc', type: 'radio', label: 'Tomorrow-morning lab', opts: [['local', 'OHSU'], ['ext', 'External lab']] },
     ];
     var GROUPS = [
         ['pt', 'Patient'], ['rr', 'Recovery room'], ['eve', 'Evening of surgery'],
@@ -568,8 +572,8 @@
     var quotesBox = doc.getElementById('hc-quotes');
     var last = null;
 
-    var DISPO_KICKER = { wait: 'Next', dc: 'Discharge', stay: 'In hospital', gap: 'Not specified by the protocol', stop: 'Stop' };
-    var KIND_LABEL = { iv: 'IV calcium', gap: 'Not specified', stop: 'Stop', dc: 'Discharge', stay: 'Stay' };
+    var DISPO_KICKER = { wait: 'Next', dc: 'Discharge', stay: 'In hospital', stop: 'Stop' };
+    var KIND_LABEL = { iv: 'IV calcium', stop: 'Stop', dc: 'Discharge', stay: 'Stay' };
 
     function fmt(n) { return String(round2(n)); }
 
@@ -594,7 +598,7 @@
             var bad = !!R.invalid[q.k];
             n.input.setAttribute('aria-invalid', bad ? 'true' : 'false');
             var hintText = a.hint || q.hint || '';
-            if (bad) hintText = 'Not a plausible value in ' + q.unit + '.';
+            if (bad) hintText = 'Implausible value (' + q.unit + ').';
             n.hint.textContent = hintText;
             n.hint.hidden = !hintText;
             n.hint.classList.toggle('is-bad', bad);
@@ -620,7 +624,7 @@
         dispoHost.appendChild(el('p', 'site-kicker hc-dispo-k', DISPO_KICKER[R.dispo.kind] || ''));
         dispoHost.appendChild(el('p', 'hc-dispo-t', R.dispo.text));
         if (dock) {
-            ['wait', 'dc', 'stay', 'gap', 'stop'].forEach(function (k) { dock.classList.toggle('is-' + k, k === R.dispo.kind); });
+            ['wait', 'dc', 'stay', 'stop'].forEach(function (k) { dock.classList.toggle('is-' + k, k === R.dispo.kind); });
             dockText.textContent = R.dispo.text;
         }
 
@@ -668,7 +672,7 @@
             if (refs.childNodes.length) li.appendChild(refs);
             ol.appendChild(li);
         });
-        if (!steps.length) planHost.appendChild(el('p', 'hc-empty', 'Answer the questions; the plan builds here, each step with the protocol text it comes from.'));
+        if (!steps.length) planHost.appendChild(el('p', 'hc-empty', 'No plan yet.'));
 
         Object.keys(srcNodes).forEach(function (id) { srcNodes[id].classList.toggle('is-cited', !!cited[id]); });
     }
@@ -676,7 +680,7 @@
     /* ---- plain-text plan ---- */
     function planText() {
         var R = last || evaluate(state);
-        var lines = ['Postop hypocalcemia: ' + (SRC.origin || 'OHSU') + ' protocol', ''];
+        var lines = [(SRC.name || 'Shindo Protocol') + ': postop hypocalcemia (' + (SRC.origin || 'OHSU') + ')', ''];
         QUESTIONS.forEach(function (q) {
             if (!R.ask[q.k]) return;
             var v = state[q.k];
@@ -704,10 +708,10 @@
         steps.forEach(function (o) {
             if (o.st.when !== cur) { cur = o.st.when; lines.push('', WHEN[order[cur]][1]); }
             var refs = o.st.src.map(function (id) { return BY_ID[id] ? BY_ID[id].ref : null; }).filter(Boolean);
-            var tag = o.st.kind === 'gap' ? '[NOT SPECIFIED] ' : (o.st.kind === 'iv' ? '[IV] ' : '');
+            var tag = o.st.kind === 'iv' ? '[IV] ' : '';
             lines.push('- ' + tag + o.st.text + (refs.length ? ' [' + refs.join('; ') + ']' : ''));
         });
-        lines.push('', 'Corrected Ca = Ca + 0.8 × (4.0 − albumin), Payne; the protocol does not name a formula.');
+        lines.push('', 'Corrected Ca = Ca + 0.8 × (4.0 − albumin), Payne (owner rule).');
         return lines.join('\n');
     }
 
@@ -724,7 +728,7 @@
         var ok = false;
         try { ok = doc.execCommand('copy'); } catch (e) { ok = false; }
         doc.body.removeChild(ta);
-        say(ok ? 'Plan copied.' : 'Copy failed: select the plan and copy it.');
+        say(ok ? 'Plan copied.' : 'Copy failed: select and copy manually.');
     }
     if (copyBtn) copyBtn.addEventListener('click', function () {
         var text = planText();

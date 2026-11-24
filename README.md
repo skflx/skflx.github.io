@@ -25,7 +25,7 @@ decoration. A day/night toggle flips `html[data-theme]`, persisted as `sk_theme`
 - **OKSAT** (`oksat.html`): OHNS self-assessment study modules with a recall gate and
   Leitner spaced repetition, plus interactive first-pass guides (`oksat-learn.html`).
 - **CPT Code Search** (`cpt-search.html`): surgical CPT lookup for otolaryngology.
-- **Postop Hypocalcemia** (`hypocalcemia.html`): the OHSU OTO-HNS postoperative
+- **Shindo Protocol** (`hypocalcemia.html`): the OHSU OTO-HNS postoperative
   hypocalcemia protocol as a step-by-step plan; each step quotes the protocol line it
   comes from, and the full text is on the page.
 - **Search** (`search.html`): one box over the OKSAT question modules and the CPT table.

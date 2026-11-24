@@ -126,7 +126,7 @@ vendored (`js/vendor/README.md`). Reads the PDF in memory; writes nothing to sto
 
 ---
 
-## Postop hypocalcemia (`hypocalcemia.html`)
+## Shindo Protocol: postop hypocalcemia (`hypocalcemia.html`)
 
 **State:** listed tool (one-pager Tools, hero index, palette). The OHSU OTO-HNS
 protocol, verbatim in `js/hypocalcemia-protocol.js`, driven by a DOM-free
@@ -137,9 +137,10 @@ leaves open are marked "Owner rule" in their sections (`added: true`, ids
 `x.*`): cutoffs count as exceeding unless the text writes the equality; Payne;
 PTH in pg/mL; PTH < 10 always checks the 11 AM calcium for its trend (5 AM ≥ 8
 follows item 5); an equal value counts as stable when asymptomatic; symptoms
-are asked at every check and escalated by clinical judgement. Still "not
-specified": AM PTH < 10 with calcium < 8.5 (10–15 tier); below 7 and
-asymptomatic at 11 AM after item 4; items 6a vs 6b. No storage.
+are asked at every PTH < 10 check and escalated by clinical judgement; item 4
+below 7 is treated as item 6; 6b over 6a; PTH 10–15 with AM PTH < 10 and
+calcium < 8.5 moves to the PTH < 10 pathway. No input combination is left
+unspecified. No storage.
 
 **Next (owner):** vet the step wording against the quoted lines.
 

@@ -175,12 +175,12 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   off; Enter opens a wiki note, module and CPT row; the wiki failing still leaves a
   working palette.
 
-### Postop hypocalcemia (`hypocalcemia.html`)
+### Shindo Protocol (`hypocalcemia.html`)
 - `test-hypocalcemia.mjs` runs `evaluate()` in Node over every branch of the
   protocol: the disposition, the source ids each step cites (all must exist), IV
-  calcium always bringing telemetry (General Rule 1) once, the renal hold, and a
-  "not specified" answer where the protocol is silent or contradicts itself, and
-  every cutoff value landing on the "exceeds" side (owner rule).
+  calcium always bringing telemetry (General Rule 1) once, the renal hold, each
+  owner rule (marked `added` items) where it applies, and a sweep over the
+  inputs in which every combination reaches a disposition.
 - Smoke: the protocol text renders; a PTH below 10 overnight builds the plan,
   marks cited lines and asks for the 5:00 AM calcium. Zero remote requests (in
   `SELF_CONTAINED`, `tools/check-data.mjs`).

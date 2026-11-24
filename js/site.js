@@ -51,7 +51,7 @@
     var palette = { state: 'idle', ret: null };   /* idle | loading | ready | failed */
 
     /* palette.js is fetched here, not in the HTML: its ?v= is this constant, which tools/stamp-assets.mjs rewrites to palette.js's own hash */
-    var PALETTE_V = '0a1fc0e5'; /* stamp:js/palette.js */
+    var PALETTE_V = 'f3510571'; /* stamp:js/palette.js */
 
     function paletteSrc() {
         return 'js/palette.js?v=' + PALETTE_V;

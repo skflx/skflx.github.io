@@ -103,7 +103,11 @@ expect('AM PTH 14, Ca 8.5 (≤ 8.5 is written)', { ...low, amPth: '14', amCa: '8
 expect('AM PTH exactly 10 counts as > 10', { ...low, amPth: '10', amCa: '9' }, 'dc', ['ip.low.1']);
 expect('AM PTH 10, Ca 8.2', { ...low, amPth: '10', amCa: '8.2' }, 'dc', ['ip.low.2a']);
 expect('AM PTH 6, Ca exactly 8.5 counts as > 8.5', { ...low, amPth: '6', amCa: '8.5' }, 'wait', ['ip.low.3']);
-expect('AM PTH 6, Ca 8.2: no item', { ...low, amPth: '6', amCa: '8.2' }, 'gap', ['ip.low.3']);
+expect('AM PTH 6, Ca 8.2 → PTH < 10 pathway (owner)', { ...low, amPth: '6', amCa: '8.2' }, 'wait', ['x.low', 'v.1', 'x.ge8']);
+expect('AM PTH 6, Ca 8.2, 11 AM higher', { ...low, amPth: '6', amCa: '8.2', ca11: '8.4', sx11: 'no' }, 'dc', ['x.low', 'v.5a']);
+expect('AM PTH 6, Ca 7.5 asks symptoms', { ...low, amPth: '6', amCa: '7.5' }, 'wait', ['x.low']);
+check(run({ ...low, amPth: '6', amCa: '7.5' }).asks.includes('amSx'), 'AM PTH 6, Ca 7.5 asks AM symptoms');
+expect('AM PTH 6, Ca 6.8 → item 6', { ...low, amPth: '6', amCa: '6.8' }, 'wait', ['x.low', 'v.6'], hasIv);
 expect('AM PTH 6, Ca 9 → 11 AM', { ...low, amPth: '6', amCa: '9' }, 'wait', ['ip.low.3']);
 expect('11 AM 9', { ...low, amPth: '6', amCa: '9', ca11: '9' }, 'dc', ['ip.low.3a.i', 'ip.low.3a.ii']);
 expect('11 AM exactly 8.5 counts as > 8.5', { ...low, amPth: '6', amCa: '9', ca11: '8.5' }, 'dc', ['ip.low.3a.i']);
@@ -144,7 +148,7 @@ expect('4: 11 AM 7.6 not lower, asymptomatic', { ...i4, ca11: '7.6', sx11: 'no' 
 expect('4: 11 AM 7.6 still symptomatic → escalate (owner)', { ...i4, ca11: '7.6', sx11: 'yes' }, 'stay', ['x.sx', 'v.4', 'v.4b']);
 expect('4a: 11 AM 8.3 but symptomatic → escalate', { ...i4, ca11: '8.3', sx11: 'yes' }, 'stay', ['v.4a', 'x.sx']);
 expect('4b: 11 AM 6.8 symptomatic', { ...i4, ca11: '6.8', sx11: 'yes' }, 'stay', ['v.4b']);
-expect('4b: 11 AM 6.8 asymptomatic', { ...i4, ca11: '6.8', sx11: 'no' }, 'gap', ['v.4b']);
+expect('4: 11 AM 6.8 asymptomatic → as item 6 (owner)', { ...i4, ca11: '6.8', sx11: 'no' }, 'stay', ['x.4lt7', 'v.6', 'v.4c'], hasIv);
 
 /* item 5: 7–8 asymptomatic */
 const i5 = { ...v, amCa: '7.5', amSx: 'no' };
@@ -163,10 +167,26 @@ expect('5a with Cr worse holds', { ...i5, gfr: 'yes', cr: 'worse', ca11: '7.9', 
 const i6 = { ...v, amCa: '6.6' };
 expect('6: IV regardless', i6, 'wait', ['v.6'], hasIv);
 expect('6b: symptomatic', { ...i6, ca11: '7.0', sx11: 'yes' }, 'stay', ['v.6b', 'v.crit']);
-expect('6a vs 6b: lower, asymptomatic', { ...i6, ca11: '6.4', sx11: 'no' }, 'gap', ['v.6a', 'v.6b']);
+expect('6b over 6a: lower, asymptomatic (owner)', { ...i6, ca11: '6.4', sx11: 'no' }, 'stay', ['x.6b', 'v.6b', 'v.crit'], hasIv);
 expect('6c: higher, asymptomatic', { ...i6, ca11: '7.0', sx11: 'no' }, 'stay', ['v.6c', 'v.crit']);
 expect('6: equal, asymptomatic → 6c (owner)', { ...i6, ca11: '6.6', sx11: 'no' }, 'stay', ['v.6c', 'x.eq']);
 expect('5b.i: 5 PM stable but symptomatic → escalate', { ...i5, ca11: '7.2', sx11: 'no', ca17: '7.5', sx17: 'yes' }, 'stay', ['x.sx']);
+
+console.log('hypocalcemia: sweep: every input combination reaches a known disposition');
+{
+    const KINDS = new Set(['wait', 'dc', 'stay', 'stop']);
+    const vals = ['6.5', '7', '7.5', '8', '8.4', '8.5', '9'];
+    let n = 0, bad = 0;
+    for (const setting of ['op', 'ip']) for (const pth of ['6', '10', '12', '15', '17', '20', '25']) for (const gfr of ['no', 'yes'])
+    for (const amPth of ['6', '10', '12']) for (const amCa of vals) for (const amSx of ['no', 'yes']) for (const ca11 of vals)
+    for (const sx11 of ['no', 'yes']) for (const ca17 of vals) for (const sx17 of ['no', 'yes']) {
+        n++;
+        let R;
+        try { R = evaluate({ excluded: 'no', dos: 'none', setting, pth, gfr, cr: 'same', amPth, amCa, amSx, ca11, sx11, ca17, sx17, lab: 'local' }); } catch (e) { R = null; }
+        if (!R || !R.dispo || !KINDS.has(R.dispo.kind) || R.dispo.kind === 'wait') bad++;
+    }
+    check(bad === 0, `all ${n} complete input combinations reach dc, stay or stop`, `${bad} did not`);
+}
 
 /* Telemetry is added once, however many IV steps. */
 const many = run({ ...i4, ca11: '6.8', sx11: 'yes', dos: 'sx', cramp: 'yes' });
