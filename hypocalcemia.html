@@ -123,6 +123,13 @@
         .hc-src-text { position: relative; margin: 0; padding: 0.45rem 0 0.45rem 0.8rem; border-left: 2px solid transparent; line-height: 1.55; }
         .hc-src-n { display: inline-block; min-width: 2rem; font: 500 0.8rem/1 var(--font-mono); color: var(--ink-faint); }
         .hc-src-item.is-cited > .hc-src-text { border-left-color: var(--signal-2); }
+        .hc-src-added {
+            display: inline-block; margin-right: 0.5rem; padding: 0.1rem 0.35rem;
+            font: 500 0.66rem/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase;
+            color: var(--ink); border: 1px dashed var(--ink-faint); border-radius: var(--radius);
+        }
+        .hc-src-item.is-added > .hc-src-text { color: var(--ink-muted); }
+        .hc-quote.is-added { border-left-style: dashed; }
         .hc-src-item.is-hit > .hc-src-text { animation: hc-hit 2.4s ease-out; }
         @keyframes hc-hit { from { background: var(--wash); } to { background: transparent; } }
 
@@ -181,13 +188,13 @@
                     <span id="hc-status" class="hc-status" role="status"></span>
                 </div>
                 <div id="hc-plan-body"></div>
-                <p class="hc-note">Corrected calcium = Ca + 0.8 &times; (4.0 &minus; albumin), the Payne formula. The protocol uses corrected calcium but names no formula. Tablet counts are General Rule 2: one TUMS-EX is 300 mg elemental calcium.</p>
+                <p class="hc-note">Corrected calcium = Ca + 0.8 &times; (4.0 &minus; albumin), the Payne formula (owner rule). Tablet counts are General Rule 2: one TUMS-EX is 300 mg elemental calcium.</p>
             </aside>
         </div>
 
         <section class="hc-source" id="hc-source" aria-labelledby="hc-source-h">
             <h2 id="hc-source-h">Protocol</h2>
-            <p class="hc-cite">Verbatim, with the document&rsquo;s own numbering and spelling. Lines the current plan cites are ruled in blue.</p>
+            <p class="hc-cite">Verbatim, with the document&rsquo;s own numbering and spelling. Lines marked <span class="hc-src-added">Owner rule</span> are not in the document: they settle what it leaves open, each in the section it belongs to. Lines the current plan cites are ruled in blue.</p>
             <div id="hc-source-body"></div>
         </section>
     </main>
@@ -200,8 +207,8 @@
         <span class="push">Nothing you enter is stored or sent.</span>
     </footer>
 
-    <script src="js/hypocalcemia-protocol.js?v=54f3cf63"></script>
-    <script src="js/hypocalcemia.js?v=b67363dc"></script>
+    <script src="js/hypocalcemia-protocol.js?v=d5dd8f9f"></script>
+    <script src="js/hypocalcemia.js?v=47e16f48"></script>
     <script src="js/site.js?v=b05ada7d"></script>
 </body>
 </html>

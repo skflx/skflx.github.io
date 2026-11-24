@@ -132,15 +132,14 @@ vendored (`js/vendor/README.md`). Reads the PDF in memory; writes nothing to sto
 protocol, verbatim in `js/hypocalcemia-protocol.js`, driven by a DOM-free
 `evaluate()` in `js/hypocalcemia.js`: questions appear as the protocol needs
 them, the plan groups steps by time and quotes each cited line, and the full
-text sits below with cited lines ruled. A value at a cutoff counts as exceeding
-it (owner: PTH 10 as above 10, calcium 8.5 as above 8.5), except where the
-text writes the equality: "< or = 8.5" (PTH 10–15 item 2) and "PTH 15 – 20"
-(20 stays in it). Shown as "not specified": AM PTH < 10
-with calcium < 8.5 (10–15 tier); what follows the 11 AM calcium after a 5 AM calcium of 8 or above
-(< 10 tier); 11 AM
-equal to 5 AM; item 4 vs 4b (still symptomatic at 7–8; below 7 and
-asymptomatic); items 6a vs 6b. Corrected calcium is Payne; PTH in pg/mL (both
-owner). No storage.
+text sits below with cited lines ruled. The owner's rules for what the text
+leaves open are marked "Owner rule" in their sections (`added: true`, ids
+`x.*`): cutoffs count as exceeding unless the text writes the equality; Payne;
+PTH in pg/mL; PTH < 10 always checks the 11 AM calcium for its trend (5 AM ≥ 8
+follows item 5); an equal value counts as stable when asymptomatic; symptoms
+are asked at every check and escalated by clinical judgement. Still "not
+specified": AM PTH < 10 with calcium < 8.5 (10–15 tier); below 7 and
+asymptomatic at 11 AM after item 4; items 6a vs 6b. No storage.
 
 **Next (owner):** vet the step wording against the quoted lines.
 

@@ -27,6 +27,9 @@ function check(cond, name, detail) {
 
 /* Every source id, and the walk that collects them. */
 const IDS = new Set();
+/* Owner rules are marked, ids x.*; every other item is the document's text. */
+(function walk(items) { for (const it of items) { check(!!it.added === it.id.startsWith('x.'), `owner-rule marking matches id: ${it.id}`); if (it.kids) walk(it.kids); } })(
+    SRC.sections.flatMap((s) => s.items));
 (function walk(items) { for (const it of items) { check(!IDS.has(it.id), `source id unique: ${it.id}`); IDS.add(it.id); if (it.kids) walk(it.kids); } })(
     SRC.sections.flatMap((s) => s.items));
 
@@ -116,10 +119,18 @@ expect('standing orders', v, 'wait', ['v.1', 'v.2', 'v.3', 'v.att', 'g.2'], noIv
 expect('evening cramping', { ...v, dos: 'sx', cramp: 'yes' }, 'wait', ['v.dos'], hasIv);
 expect('evening sx, dose not given', { ...v, dos: 'sx', cramp: 'no', dose: 'not' }, 'wait', ['v.dos2'], noIv);
 expect('evening sx, dose given', { ...v, dos: 'sx', cramp: 'no', dose: 'given' }, 'wait', ['v.dos2'], noIv);
-expect('5 AM 8.4: still asks the 11 AM calcium', { ...v, amCa: '8.4' }, 'wait', ['v.2'], noIv);
-check(run({ ...v, amCa: '8.4' }).asks.includes('ca11'), '5 AM 8.4 asks for the 11 AM calcium');
-expect('5 AM 8.4, 11 AM entered: no item', { ...v, amCa: '8.4', ca11: '8.6' }, 'gap', ['v.crit']);
-expect('5 AM exactly 8 counts as above 8', { ...v, amCa: '8' }, 'wait', ['v.2']);
+/* 5 AM 8 or above (owner rule x.ge8): the 11 AM trend, as item 5 */
+const g8 = { ...v, amCa: '8.4' };
+expect('≥8: asks 11 AM calcium and symptoms', g8, 'wait', ['x.ge8'], noIv);
+check(['ca11', 'sx11'].every((k) => run(g8).asks.includes(k)), '≥8 asks the 11 AM calcium and symptoms');
+expect('≥8: 11 AM higher', { ...g8, ca11: '8.6', sx11: 'no' }, 'dc', ['v.5a', 'x.ge8']);
+expect('≥8: 11 AM equal, asymptomatic', { ...g8, ca11: '8.4', sx11: 'no' }, 'dc', ['v.5a', 'x.eq']);
+expect('≥8: 11 AM symptomatic', { ...g8, ca11: '8.6', sx11: 'yes' }, 'stay', ['x.sx'], noIv);
+expect('≥8: 11 AM lower → 5 PM', { ...g8, ca11: '8.1', sx11: 'no' }, 'wait', ['v.5b', 'x.ge8']);
+expect('≥8: 5 PM stable', { ...g8, ca11: '8.1', sx11: 'no', ca17: '8.4', sx17: 'no' }, 'dc', ['v.5b.i']);
+expect('≥8: 5 PM lower, asymptomatic', { ...g8, ca11: '8.1', sx11: 'no', ca17: '8.0', sx17: 'no' }, 'stay', ['v.5b.ii'], noIv);
+expect('≥8: 5 PM lower, symptomatic', { ...g8, ca11: '8.1', sx11: 'no', ca17: '8.0', sx17: 'yes' }, 'stay', ['v.5b.iii'], hasIv);
+expect('5 AM exactly 8 counts as above 8', { ...v, amCa: '8' }, 'wait', ['x.ge8']);
 expect('5 AM exactly 7 is in 7–8', { ...v, amCa: '7', amSx: 'no' }, 'wait', ['v.5']);
 expect('5 AM 7.5 needs symptoms', { ...v, amCa: '7.5' }, 'wait');
 
@@ -130,20 +141,23 @@ expect('4a: 11 AM 8.3', { ...i4, ca11: '8.3', sx11: 'no' }, 'stay', ['v.4a', 'v.
 expect('4a: 11 AM exactly 8', { ...i4, ca11: '8', sx11: 'no' }, 'stay', ['v.4a']);
 expect('4b: 11 AM 7.3 lower, asymptomatic', { ...i4, ca11: '7.3', sx11: 'no' }, 'stay', ['v.4b', 'v.4c']);
 expect('4: 11 AM 7.6 not lower, asymptomatic', { ...i4, ca11: '7.6', sx11: 'no' }, 'stay', ['v.4b']);
-expect('4 vs 4b: 11 AM 7.6 still symptomatic', { ...i4, ca11: '7.6', sx11: 'yes' }, 'gap', ['v.4', 'v.4b']);
+expect('4: 11 AM 7.6 still symptomatic → escalate (owner)', { ...i4, ca11: '7.6', sx11: 'yes' }, 'stay', ['x.sx', 'v.4', 'v.4b']);
+expect('4a: 11 AM 8.3 but symptomatic → escalate', { ...i4, ca11: '8.3', sx11: 'yes' }, 'stay', ['v.4a', 'x.sx']);
 expect('4b: 11 AM 6.8 symptomatic', { ...i4, ca11: '6.8', sx11: 'yes' }, 'stay', ['v.4b']);
 expect('4b: 11 AM 6.8 asymptomatic', { ...i4, ca11: '6.8', sx11: 'no' }, 'gap', ['v.4b']);
 
 /* item 5: 7–8 asymptomatic */
 const i5 = { ...v, amCa: '7.5', amSx: 'no' };
 expect('5: extra oral', i5, 'wait', ['v.5'], noIv);
-expect('5a: 11 AM higher', { ...i5, ca11: '7.9', lab: 'ext' }, 'dc', ['v.5a', 'g.3.2', 'g.3.3']);
-expect('5: 11 AM equal', { ...i5, ca11: '7.5' }, 'gap');
-expect('5b: 11 AM lower', { ...i5, ca11: '7.2' }, 'wait', ['v.5b']);
-expect('5b.i: 5 PM stable', { ...i5, ca11: '7.2', ca17: '7.5' }, 'dc', ['v.5b.i']);
-expect('5b.ii: 5 PM lower, asymptomatic', { ...i5, ca11: '7.2', ca17: '7.1', sx17: 'no' }, 'stay', ['v.5b.ii', 'v.crit'], noIv);
-expect('5b.iii: 5 PM lower, symptomatic', { ...i5, ca11: '7.2', ca17: '7.1', sx17: 'yes' }, 'stay', ['v.5b.iii', 'v.crit'], hasIv);
-expect('5a with Cr worse holds', { ...i5, gfr: 'yes', cr: 'worse', ca11: '7.9' }, 'stay', ['ip.renal']);
+expect('5a: 11 AM higher', { ...i5, ca11: '7.9', sx11: 'no', lab: 'ext' }, 'dc', ['v.5a', 'g.3.2', 'g.3.3']);
+expect('5: 11 AM equal, asymptomatic → 5a (owner)', { ...i5, ca11: '7.5', sx11: 'no' }, 'dc', ['v.5a', 'x.eq']);
+expect('5: 11 AM symptomatic → escalate', { ...i5, ca11: '7.9', sx11: 'yes' }, 'stay', ['x.sx']);
+expect('5: asks 11 AM symptoms', { ...i5, ca11: '7.9' }, 'wait');
+expect('5b: 11 AM lower', { ...i5, ca11: '7.2', sx11: 'no' }, 'wait', ['v.5b']);
+expect('5b.i: 5 PM stable', { ...i5, ca11: '7.2', sx11: 'no', ca17: '7.5', sx17: 'no' }, 'dc', ['v.5b.i']);
+expect('5b.ii: 5 PM lower, asymptomatic', { ...i5, ca11: '7.2', sx11: 'no', ca17: '7.1', sx17: 'no' }, 'stay', ['v.5b.ii', 'v.crit'], noIv);
+expect('5b.iii: 5 PM lower, symptomatic', { ...i5, ca11: '7.2', sx11: 'no', ca17: '7.1', sx17: 'yes' }, 'stay', ['v.5b.iii', 'v.crit'], hasIv);
+expect('5a with Cr worse holds', { ...i5, gfr: 'yes', cr: 'worse', ca11: '7.9', sx11: 'no' }, 'stay', ['ip.renal']);
 
 /* item 6: < 7 */
 const i6 = { ...v, amCa: '6.6' };
@@ -151,7 +165,8 @@ expect('6: IV regardless', i6, 'wait', ['v.6'], hasIv);
 expect('6b: symptomatic', { ...i6, ca11: '7.0', sx11: 'yes' }, 'stay', ['v.6b', 'v.crit']);
 expect('6a vs 6b: lower, asymptomatic', { ...i6, ca11: '6.4', sx11: 'no' }, 'gap', ['v.6a', 'v.6b']);
 expect('6c: higher, asymptomatic', { ...i6, ca11: '7.0', sx11: 'no' }, 'stay', ['v.6c', 'v.crit']);
-expect('6: equal', { ...i6, ca11: '6.6', sx11: 'no' }, 'gap');
+expect('6: equal, asymptomatic → 6c (owner)', { ...i6, ca11: '6.6', sx11: 'no' }, 'stay', ['v.6c', 'x.eq']);
+expect('5b.i: 5 PM stable but symptomatic → escalate', { ...i5, ca11: '7.2', sx11: 'no', ca17: '7.5', sx17: 'yes' }, 'stay', ['x.sx']);
 
 /* Telemetry is added once, however many IV steps. */
 const many = run({ ...i4, ca11: '6.8', sx11: 'yes', dos: 'sx', cramp: 'yes' });

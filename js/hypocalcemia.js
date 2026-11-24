@@ -143,6 +143,52 @@
 
         function gap(when, text, src) { step(when, 'gap', text, src); }
 
+        /* PTH < 10 after a 5:00 AM calcium a of 7 or above: item 5's 11:00 AM
+           and 5:00 PM trend, also used for 5:00 AM ≥ 8 (owner rule x.ge8).
+           Symptoms are asked at every check (x.sx); an equal value counts
+           as stable when asymptomatic (x.eq). */
+        function trend11(a, own) {
+            var hint = { hint: 'Compared with 5:00 AM: ' + a };
+            ask('ca11', hint); ask('sx11');
+            var e = cc('ca11');
+            if (e === null) return waitCa('11:00 AM');
+            if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
+            if (s.sx11 === 'yes') {
+                step('h11', 'stay', 'Symptomatic: treat in an escalating fashion by clinical judgement, and update the attending.', ['x.sx']);
+                return done('stay', 'Symptomatic at 11:00 AM: escalate by clinical judgement');
+            }
+            if (e >= a) {
+                if (blocked()) return R;
+                step('dc', 'dc', (e === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': may discharge home on calcium 900 mg elemental every 8 hours and calcitriol 0.5 mcg BID.', ['v.5a'].concat(own, e === a ? ['x.eq'] : []));
+                outLab(['v.5a']);
+                return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
+            }
+            step('h11', 'do', 'Lower than 5:00 AM: give an extra dose of calcium once. Check calcium at 5:00 PM.', ['v.5b'].concat(own));
+            ask('ca17', hint); ask('sx17');
+            var f = cc('ca17');
+            if (f === null) return waitCa('5:00 PM');
+            if (!s.sx17) return done('wait', 'Symptomatic at 5:00 PM?');
+            if (f >= a) {
+                if (s.sx17 === 'yes') {
+                    step('h17', 'stay', 'Stable or improved but symptomatic: treat in an escalating fashion by clinical judgement, and update the attending.', ['x.sx']);
+                    return done('stay', 'Symptomatic at 5:00 PM: escalate by clinical judgement');
+                }
+                if (blocked()) return R;
+                step('dc', 'dc', 'Stable or improved from the morning: may discharge home on calcium 900 mg elemental every 8 hours and calcitriol 0.5 mcg BID.', ['v.5b.i'].concat(own));
+                outLab(['v.5b.i']);
+                return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
+            }
+            if (s.sx17 === 'yes') {
+                iv('h17', 'Lower and symptomatic: give 1 g IV calcium.', ['v.5b.iii'].concat(own));
+                step('h17', 'do', 'One extra TUMS; increase calcitriol to 1 mcg BID. Calcium every 6 hours until the next morning.', ['v.5b.iii', 'g.2']);
+                critVlow();
+                return done('stay', 'Stay overnight: IV calcium, calcitriol 1 mcg BID');
+            }
+            step('h17', 'do', 'Lower and asymptomatic: one extra TUMS; increase calcitriol to 0.75 mcg BID. Calcium every 6 hours until the next morning.', ['v.5b.ii', 'g.2'].concat(own));
+            critVlow();
+            return done('stay', 'Stay overnight: calcitriol 0.75 mcg BID, calcium q6h');
+        }
+
         function renalCrit() {
             if (gfr) step('pod2', 'do', 'Renal insufficiency: creatinine must also be the same as or better than preop. If worse, another day of IV hydration and a repeat BMP.', ['ip.renal']);
         }
@@ -293,17 +339,11 @@
         if (a === null) return waitCa('5:00 AM');
 
         if (a >= 8) {
-            /* No item 4–6 covers this; the 11:00 AM calcium of item 2 still runs (owner). */
-            step('am', 'note', '8 or above (a value at 8 counts as above): items 4–6 give no extra dose. Continue the standing orders and check the 11:00 AM calcium.', ['v.2']);
-            ask('ca11', { hint: 'Compared with 5:00 AM: ' + a });
-            var g11 = cc('ca11');
-            if (g11 === null) return waitCa('11:00 AM');
-            gap('h11', 'The protocol has no item for what follows a 5:00 AM calcium of 8 or above. Calcium every 6 hours continues (item 2); decide the next step with the attending.', ['v.2', 'v.4', 'v.5', 'v.6']);
-            step('pod2', 'note', 'For reference, the PTH < 10 discharge criteria: asymptomatic, no clinical signs of hypocalcemia (e.g. EKG change), corrected calcium above 7.8 mg/dL and trending up; discharge on the in-hospital doses unless the attending says otherwise.', ['v.crit']);
-            return done('gap', 'Not specified after 11:00 AM: 5 AM calcium 8 or above');
+            step('am', 'note', '8 or above (a value at 8 counts as above): no extra dose. Continue the standing orders and check the 11:00 AM calcium for its trend.', ['x.ge8', 'x.cut']);
+            return trend11(a, ['x.ge8']);
         }
 
-        var hint11 = { hint: 'Compared with 5:00 AM: ' + a };
+        var hint11 = { hint: 'Compared with 5:00 AM: ' + a };  /* items 4 and 6; item 5 uses trend11 */
         if (a < 7) {
             iv('am', 'Below 7, regardless of symptoms: give 1 g IV calcium gluconate.', ['v.6']);
             step('am', 'do', 'Increase calcitriol to 0.75 mcg BID and calcium to 900 mg elemental every 8 hours.', ['v.6']);
@@ -323,11 +363,7 @@
                 critVlow();
                 return done('gap', 'Conflict: items 6a and 6b');
             }
-            if (b === a) {
-                gap('h11', '11:00 AM calcium equal to 5:00 AM: the protocol gives "lower" and "higher" only. Not specified; decide with the attending.', ['v.6a', 'v.6b', 'v.6c']);
-                return done('gap', 'Not specified: 11:00 AM equal to 5:00 AM');
-            }
-            step('h11', 'do', 'Higher than 5:00 AM: keep the same oral regimen. Calcium every 6 hours until the next morning; add magnesium to the AM labs.', ['v.6c']);
+            step('h11', 'do', (b === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': keep the same oral regimen. Calcium every 6 hours until the next morning; add magnesium to the AM labs.', b === a ? ['v.6c', 'x.eq'] : ['v.6c']);
             critVlow();
             return done('stay', 'Stay overnight: same oral regimen, calcium q6h');
         }
@@ -346,10 +382,10 @@
             var unresolved = false;
             if (d >= 8) {
                 step('h11', 'do', '8 or above: continue labs every 6 hours.', ['v.4a']);
+                if (s.sx11 === 'yes') step('h11', 'stay', 'Still symptomatic: treat in an escalating fashion by clinical judgement, and update the attending.', ['x.sx']);
             } else if (d >= 7) {
                 if (s.sx11 === 'yes') {
-                    unresolved = true;
-                    gap('h11', 'Still symptomatic at 7–8: item 4 says give another gram of IV calcium if symptoms do not subside; item 4b says IV calcium only if symptomatic and below 7. Not resolved by the protocol; decide with the attending.', ['v.4', 'v.4b']);
+                    step('h11', 'stay', 'Still symptomatic at 7–8: treat in an escalating fashion by clinical judgement. Item 4 allows another gram of IV calcium if symptoms do not subside; item 4b limits IV calcium to below 7.', ['x.sx', 'v.4', 'v.4b']);
                 } else if (d < a) {
                     step('h11', 'do', 'Asymptomatic and lower than 5:00 AM: give an extra TUMS tablet.', ['v.4b', 'g.2']);
                 } else {
@@ -368,40 +404,7 @@
         }
 
         step('am', 'do', 'Asymptomatic: give an extra oral calcium 300 mg elemental (TUMS-EX, 1 tablet). Check calcium at 11:00 AM.', ['v.5', 'g.2']);
-        ask('ca11', hint11);
-        var e = cc('ca11');
-        if (e === null) return waitCa('11:00 AM');
-        if (e > a) {
-            if (blocked()) return R;
-            step('dc', 'dc', 'Higher than 5:00 AM: may discharge home on calcium 900 mg elemental every 8 hours and calcitriol 0.5 mcg BID.', ['v.5a']);
-            outLab(['v.5a']);
-            return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
-        }
-        if (e === a) {
-            gap('h11', '11:00 AM calcium equal to 5:00 AM: the protocol gives "higher" and "lower" only. Not specified; decide with the attending.', ['v.5a', 'v.5b']);
-            return done('gap', 'Not specified: 11:00 AM equal to 5:00 AM');
-        }
-        step('h11', 'do', 'Lower than 5:00 AM: give an extra dose of calcium once. Check calcium at 5:00 PM.', ['v.5b']);
-        ask('ca17', { hint: 'Compared with 5:00 AM: ' + a });
-        var f = cc('ca17');
-        if (f === null) return waitCa('5:00 PM');
-        if (f >= a) {
-            if (blocked()) return R;
-            step('dc', 'dc', 'Stable or improved from the morning: may discharge home on calcium 900 mg elemental every 8 hours and calcitriol 0.5 mcg BID.', ['v.5b.i']);
-            outLab(['v.5b.i']);
-            return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
-        }
-        ask('sx17');
-        if (!s.sx17) return done('wait', 'Symptomatic at 5:00 PM?');
-        if (s.sx17 === 'yes') {
-            iv('h17', 'Lower and symptomatic: give 1 g IV calcium.', ['v.5b.iii']);
-            step('h17', 'do', 'One extra TUMS; increase calcitriol to 1 mcg BID. Calcium every 6 hours until the next morning.', ['v.5b.iii', 'g.2']);
-            critVlow();
-            return done('stay', 'Stay overnight: IV calcium, calcitriol 1 mcg BID');
-        }
-        step('h17', 'do', 'Lower and asymptomatic: one extra TUMS; increase calcitriol to 0.75 mcg BID. Calcium every 6 hours until the next morning.', ['v.5b.ii', 'g.2']);
-        critVlow();
-        return done('stay', 'Stay overnight: calcitriol 0.75 mcg BID, calcium q6h');
+        return trend11(a, []);
     }
 
     var api = { evaluate: evaluate, corrected: corrected, tierOf: tierOf, parseNum: parseNum, WHEN: WHEN, RANGE: RANGE };
@@ -534,10 +537,11 @@
     function buildItems(items, depth) {
         var ul = el('ul', 'hc-src-list' + (depth ? ' hc-src-sub' : ''));
         items.forEach(function (it) {
-            var li = el('li', 'hc-src-item');
+            var li = el('li', 'hc-src-item' + (it.added ? ' is-added' : ''));
             li.id = 'src-' + it.id;
             li.tabIndex = -1;
             var p = el('p', 'hc-src-text');
+            if (it.added) p.appendChild(el('span', 'hc-src-added', 'Owner rule'));
             if (it.n) p.appendChild(el('span', 'hc-src-n', it.n));
             p.appendChild(doc.createTextNode(it.text));
             li.appendChild(p);
@@ -648,8 +652,11 @@
                 cited[id] = true;
                 if (showQuotes && !quoted[id]) {
                     quoted[id] = true;
-                    var bq = el('blockquote', 'hc-quote');
-                    bq.appendChild(el('p', null, (it.n ? it.n + ' ' : '') + it.text));
+                    var bq = el('blockquote', 'hc-quote' + (it.added ? ' is-added' : ''));
+                    var qp = el('p');
+                    if (it.added) qp.appendChild(el('span', 'hc-src-added', 'Owner rule'));
+                    qp.appendChild(doc.createTextNode((it.n ? it.n + ' ' : '') + it.text));
+                    bq.appendChild(qp);
                     li.appendChild(bq);
                 }
                 var a = el('a', 'hc-ref', it.ref);

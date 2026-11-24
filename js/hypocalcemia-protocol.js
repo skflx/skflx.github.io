@@ -12,6 +12,11 @@
    Shape: sections[] of { id, title, items[] }; an item is
    { id, n (the document's list label, or ''), text, kids[] }.
    `ref` is the short citation the plan prints; it is not source text.
+
+   Items with `added: true` are NOT in the document: they are the owner's
+   rules for what the protocol leaves open, placed in the section they
+   belong to and shown on the page as "Owner rule". Every other item is
+   the document's text.
    ============================================================= */
 (function () {
     'use strict';
@@ -92,6 +97,9 @@
                         { id: 'v.6b', n: 'b.', ref: 'PTH < 10 · 6b', text: 'If 11 AM corrected calcium is lower than 5 AM calcium, or patient is symptomatic, administer 1 gm IV calcium. Repeat same step if still symptomatic. Continue calcium checks every 6 hours and add magnesium level to AM labs.' },
                         { id: 'v.6c', n: 'c.', ref: 'PTH < 10 · 6c', text: 'IF 11 AM corrected calcium is higher than 5 AM calcium, keep on same oral regiment and check calcium q 6 until the next morning. Add magnesium level to AM labs' },
                     ] },
+                    { id: 'x.ge8', added: true, n: '', ref: 'Owner rule · PTH < 10, 5 AM ≥ 8', text: 'If 1st postop day AM corrected calcium is 8 mg/dL or above, check the 11 AM calcium and follow its trend as in item 5: if the same or higher and asymptomatic, may discharge as in 5a; if lower, give an extra dose of calcium once and check a 5 pm calcium, then follow 5b.i–iii.' },
+                    { id: 'x.eq', added: true, n: '', ref: 'Owner rule · equal values', text: 'An 11 AM calcium equal to the 5 AM calcium counts as stable (with "higher") when the patient has no symptoms.' },
+                    { id: 'x.sx', added: true, n: '', ref: 'Owner rule · symptoms', text: 'Evaluate for symptoms of hypocalcemia at every calcium check. If symptoms are present, treat in an escalating fashion using clinical judgement.' },
                     { id: 'v.crit', n: '', ref: 'PTH < 10 · discharge criteria', text: 'Criteria for discharge the following AM is, patient must be asymptomatic, not exhibit clinical signs of hypocalcemia (i.e, EKG change), and corrected calcium by the next morning must be > 7.8 mg/dL and trending up. They should be discharged with whatever calcium and calcitriol dose they are taking in hospital, unless specified otherwise by attending surgeon.' },
                     { id: 'v.att', n: '', ref: 'PTH < 10 · attending', text: 'Attending must be updated in the afternoon with the patient’s status.' },
                 ] },
@@ -105,6 +113,9 @@
                     { id: 'g.3.2', n: '2.', ref: 'General Rules · 3.2', text: 'If they do not live locally, give them an external outpatient order for a serum calcium level. Discharge instructions should include specifically instruction for patient to go for blood draw in AM and to call their surgeon’s office and inform us of where the lab was done' },
                     { id: 'g.3.3', n: '3.', ref: 'General Rules · 3.3', text: 'If they are going to external lab, this needs to be signed out to Thyroid Parathyroid Center Nurse or MAs in Area 4 either via EPIC message (Thyroid Triage Pool) or Outlook secure message to follow up on the results the next day.' },
                 ] },
+                { id: 'x.cut', added: true, n: '', ref: 'Owner rule · cutoffs', text: 'A value exactly at a cutoff counts as exceeding it (PTH 10 as above 10; calcium 8.5 as above 8.5), except where the protocol writes the equality: "< or = 8.5" (PTH 10 – 15, item 2) and "PTH 15 – 20", which includes 20.' },
+                { id: 'x.payne', added: true, n: '', ref: 'Owner rule · corrected calcium', text: 'Corrected calcium = measured calcium + 0.8 × (4.0 − albumin in g/dL) (Payne).' },
+                { id: 'x.units', added: true, n: '', ref: 'Owner rule · units', text: 'PTH is in pg/mL.' },
             ] },
         ],
     };
