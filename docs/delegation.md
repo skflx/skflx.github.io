@@ -129,3 +129,19 @@ A WP runs only the suites whose inputs it changed; the full suite runs once befo
 ## 8. Owner-review items
 
 Every work package or review item that needs human verification adds or updates its entry in `js/review-items.js` (the list `review.html` renders), with a deep link and one "look" sentence, as part of its acceptance. `node tools/check-data.mjs` fails on a malformed entry or a dead link.
+
+## 9. Delegating to Gemini from a Claude session (headless)
+
+For a WP (or a review) the owner assigns to Gemini, a Claude session can run Gemini CLI itself instead of the
+owner opening a Gemini session. Claude stays the orchestrator (§4); Gemini is the executor (§3) or reviewer (§7).
+Playbook: `.claude/skills/gemini-delegate/SKILL.md`. Wrapper: `tools/gemini-run.mjs`.
+
+- **Brief:** the §2 WP format, kept in the scratchpad, never committed. `Touch:` is machine-checked, so it lists
+  backticked paths, globs, or directories ending in `/`.
+- **Work mode:** a throwaway worktree under `.claude/worktrees/`, Gemini on `--approval-mode yolo`, no commit.
+  The wrapper checks the changed files against `Touch:`, flags a moved `HEAD`, and writes a patch; Claude reviews it,
+  re-runs the Accept commands itself, applies it on its own branch and commits.
+- **Read mode:** `--approval-mode plan` in the checkout; the tree is compared before and after.
+- **Not delegated this way:** anything §1 rules out, and anything needing the owner's anatomy or `verified` call.
+- **Setup:** Gemini CLI on `PATH` (or `GEMINI_BIN`), Gemini's own auth, and network reach to Google's API. The
+  repo stores no key (`AGENTS.md`, no secrets).
