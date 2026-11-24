@@ -33,7 +33,7 @@ what this guide teaches. Then 2 `check` prompts per section (`lint-oksat-guide` 
 - **Items:** (a) Tian 2008 facial nerve variability (0° in 37% vs 30–90° in 63%).
 
 ## `apr-orz` · The transition zone
-- Card: VIII 9–14 mm, VII 2–3 mm (Radiopaedia) vs 3.6 vs 3.7 mm (Gupta 2023, histomorphometry at "maximum
+- Card (transition zone, Obersteiner-Redlich zone, ledger G4): VIII 9–14 mm, VII 2–3 mm (Radiopaedia) vs 3.6 vs 3.7 mm (Gupta 2023, histomorphometry at "maximum
   convexity"). Design: where along the nerve and how the junction is defined. Taught: Radiopaedia distances;
   origin-at-the-zone is a myth.
 - **Checks:** (1) "Is the transition zone the schwannoma's birthplace?" → no; that is a myth. (2) "Why did
