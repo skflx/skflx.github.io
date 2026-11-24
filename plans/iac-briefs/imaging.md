@@ -14,7 +14,7 @@
   [HCA3] → jugular bulb height under the canal [K2] → vestibular aqueduct (≤ the posterior canal's width,
   < 1.5 mm) [K9] → petrous apex pneumatization [K31]. → bony cochlear nerve canal (< 1.4 mm) [G6].
 - **Figure:** `hotspot` with raster frames, UW axial 29, 32, 36 and coronal 14, 16 (`images/oksat/iac-anatomy/ct/…`
-  from I1.3; regions from the pipeline), explore and find. Caption credits "UW CT temporal bone module,
+  from I1.3; each frame written with `regions: []`, then filled by `python -I tools/tbone-pipeline/slices.py --guide iac-anatomy` and checked with `--check`; never hand-place a region), explore and find. Caption credits "UW CT temporal bone module,
   University of Washington Department of Radiology".
 - **Checks:** (1) "Upper limit of a normal vestibular aqueduct on axial CT?" → no wider than the posterior
   canal, < 1.5 mm. (2) "Two CT measurements to make before implanting a deaf child?" → IAC calibre and the
@@ -44,6 +44,7 @@
   vestibular lower-back. Medially the vestibular nerves fuse (`nv-rotation`).
 - **Figure:** F2 frames 5–6 (`fundus-mri-*.svg`) as their own `hotspot` with find mode.
 - **Checks:** (1) "On oblique-sagittal MRI, which dot is the cochlear nerve?" → lower front (anteroinferior).
+  (2) "What happens to the two vestibular dots as you trace the canal medially?" → they fuse.
 - **Ref:** none. **Practice:** none. **Drill:** `im-4dot`.
 - **Items:** (a) orientation of the four dots. (b) which reconstruction plane (perpendicular to the canal).
   Do **not** write an item on relative nerve size (unsourced).
@@ -54,7 +55,9 @@
   precludes serviceable hearing even with a hearing-preservation technique [K31]. Retrosigmoid leaves tumour
   at the fundus in ~7% vs 0% translab [K31].
 - **Checks:** (1) "What does CSF at the fundus on T2 tell you?" → the tumour stops short of the fundus;
-  better odds of preserving hearing.
+  better odds of preserving hearing. (2) "What does tumour extending into the lateral fundus imply for
+  hearing preservation?" → it usually precludes serviceable hearing even with a hearing-preservation approach
+  (and retrosigmoid leaves residual tumour at the fundus in ~7% vs 0% for translab).
 - **Ref:** `Otology/The middle cranial fossa approach provides hearing preservation for intracanalicular schwannomas with lateral fundus extension`.
 - **Practice:** none. **Drill:** `im-fundal-cap`.
 - **Items:** (a) fundal cap meaning. (b) fundal extension precludes serviceable hearing.
@@ -103,6 +106,6 @@
 - **Checks:** (1) "Strongest sign of meningioma?" → hyperostosis. (2) "Where does normal facial nerve
   enhancement start?" → at the geniculate (genu) and distally. (3) "Epidermoid vs arachnoid cyst?" → DWI.
 - **Ref:** `Otology/Facial nerve schwannomas present with slow progressive paralysis or facial twitching along the Fallopian canal` · `Otology/Internal auditory canal lipomas demonstrate T1 hyperintensity with fat saturation signal loss and mandate conservative observation`.
-- **Practice:** `vestibular-schwannoma:q22`, `vestibular-schwannoma:q26`. **Drill:** `im-lesions`.
+- **Practice:** `vestibular-schwannoma:q26` (`:q22` dropped: it calls the dural tail the strongest meningioma sign; here it is non-specific). **Drill:** `im-lesions`.
 - **Items:** (a) ice cream cone. (b) hyperostosis. (c) DWI epidermoid. (d) normal FN enhancement from the
   genu. (e) Bell's mimicking a schwannoma → repeat MRI.

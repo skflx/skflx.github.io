@@ -13,6 +13,8 @@
   plus transmastoid approach, in a deaf ear translab alone [J9 fig 9.23].
 - **Figure:** F6 `layers` toggle.
 - **Checks:** (1) "Which corridor sees the lateral third of the canal with hearing kept?" → middle fossa.
+  (2) "How is complete intratemporal facial nerve exposure achieved in a hearing ear versus a deaf ear?" →
+  middle fossa plus transmastoid in a hearing ear; translabyrinthine alone in a deaf ear.
 - **Ref:** none. **Practice:** none. **Drill:** `ap-frame`.
 - **Items:** (a) which corridor sees what (match three).
 
@@ -65,7 +67,7 @@
   simplest and most reliable in a cadaver study [Maina 2007]. The arcuate eminence does not always sit over
   the superior canal [HCA3 p42].
 - **Figure:** F5 `layers` toggle.
-- **Call** `trap`, "Landmarks vary": all three angles have wide ranges [Sahana 2023; Maina 2007].
+- **Call** `trap`, "Source conflict": all three angles have wide ranges [Sahana 2023; Maina 2007].
 - **Checks:** (1) "Garcia-Ibañez method?" → bisect the arcuate eminence–GSPN angle. (2) "Why is the
   arcuate eminence unreliable alone?" → its relation to the superior canal is inconstant.
 - **Ref:** none. **Practice:** none. **Drill:** `ap-mcf-landmarks`.
@@ -95,7 +97,8 @@
   selective vestibular nerve section and singular neurectomy are seldom done today [J10 p402]; vestibular
   neurectomy is most reliable laterally, before fusion [owner, G3].
 - **Checks:** (1) "Where is selective vestibular neurectomy most reliable, and why?" → laterally, before the
-  nerves fuse.
+  nerves fuse. (2) "How does the transcochlear approach extend translabyrinthine exposure?" → by rerouting
+  the facial nerve posteriorly and drilling out the cochlea.
 - **Ref:** `Otology/The transcochlear approach expands the translabyrinthine corridor through posterior facial nerve rerouting and cochlear drill-out to access the prepontine space and ventral clivus` · `Otology/Auditory Brainstem Implantation ABI bypasses the cochlea and cochlear nerve to stimulate the cochlear nucleus in NF2`.
 - **Practice:** none. **Drill:** `ap-extend`. **Items:** (a) neurectomy laterally (one item).
 
@@ -106,7 +109,8 @@
   rather than invade VII and VIII, so hearing preservation may be chosen even for large ones [HCA6 p69].
   Everything else (observation, radiosurgery) belongs to `vestibular-schwannoma`.
 - **Checks:** (1) "Serviceable hearing, tumour filling the fundus: which corridor reaches the fundus?" →
-  middle fossa (retrosigmoid cannot see the lateral third).
+  middle fossa (retrosigmoid cannot see the lateral third). (2) "Why may a hearing-preserving corridor still
+  be chosen for a large CPA meningioma?" → meningiomas displace rather than invade VII and VIII.
 - **Ref:** `Otology/The translabyrinthine approach provides direct exposure of the internal auditory canal with complete hearing sacrifice` · `Otology/The middle cranial fossa approach provides hearing preservation for intracanalicular schwannomas with lateral fundus extension` · `Otology/The retrosigmoid suboccipital approach allows hearing preservation for small to medium vestibular schwannomas`.
 - **Practice:** none. **Drill:** `ap-choose`.
 - **Items:** (a) three short vignettes, one per corridor. (b) meningioma displacement → hearing approach possible.
