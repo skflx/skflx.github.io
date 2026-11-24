@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 /* Delegate one brief to Gemini CLI, headless (docs/delegation.md §9).
 
-   node tools/gemini-run.mjs <brief.md> [--mode work|read] [--model <id>] [--timeout <min>]
+   node tools/gemini-run.mjs <brief.md> [--mode work|read] [--model <id>] [--timeout <min>] [--no-sandbox]
 
    work (default): the WP-format brief (docs/delegation.md §2) runs in a throwaway git worktree under
      .claude/worktrees/, so nothing touches your checkout. Afterwards the diff is checked against the
-     brief's `Touch:` list, and a patch is written for the caller to review and apply.
+     brief's `Touch:` list, and a patch is written for the caller to review and apply. A worktree isolates
+     files, not commands, so work mode also: runs Gemini with --sandbox (macOS sandbox-exec, or docker/podman;
+     refuses to run if none is found, unless you pass --no-sandbox), makes every `git push` fail (child-only
+     GIT_CONFIG_* pushInsteadOf; your repo config is untouched), and hides gh credentials (GH_TOKEN, GITHUB_TOKEN
+     removed, GH_CONFIG_DIR points at an empty dir), so gh reads and writes both fail as unauthenticated.
    read: read-only (--approval-mode plan) in this checkout, for review, research or drafting. The
      tree is compared before and after, so a write is reported.
 
@@ -14,6 +18,7 @@
    (GEMINI_API_KEY or a cached login). Nothing here commits, pushes or reads a credential. */
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '..');
@@ -21,10 +26,11 @@ const args = process.argv.slice(2);
 const flag = (n, d) => { const i = args.indexOf(n); return i < 0 ? d : args.splice(i, 2)[1]; };
 const mode = flag('--mode', 'work');
 const model = flag('--model', '');
+const noSandbox = args.includes('--no-sandbox') && !!args.splice(args.indexOf('--no-sandbox'), 1);
 const timeoutMin = Number(flag('--timeout', '20'));
 const briefPath = args[0];
 if (!briefPath || !['work', 'read'].includes(mode) || !(timeoutMin > 0)) {
-    console.error('usage: node tools/gemini-run.mjs <brief.md> [--mode work|read] [--model <id>] [--timeout <min>]');
+    console.error('usage: node tools/gemini-run.mjs <brief.md> [--mode work|read] [--model <id>] [--timeout <min>] [--no-sandbox]');
     process.exit(1);
 }
 const brief = fs.readFileSync(briefPath, 'utf8');
@@ -87,10 +93,26 @@ if (mode === 'work') {
 const base = git(cwd, 'rev-parse', 'HEAD').stdout.trim();
 const before = mode === 'read' ? status(cwd) : '';
 
+let env = process.env, sandbox = [];
+if (mode === 'work') {
+    const have = (c) => run('which', [c]).status === 0;
+    const gs = process.env.GEMINI_SANDBOX;
+    if (!noSandbox && !['true', 'docker', 'podman', 'sandbox-exec'].includes(gs) && !(process.platform === 'darwin' ? have('sandbox-exec') : have('docker') || have('podman'))) {
+        console.error('BLOCKED: no sandbox backend (sandbox-exec on macOS, docker or podman elsewhere). Install one, set GEMINI_SANDBOX, or pass --no-sandbox to run unsandboxed.');
+        process.exit(1);
+    }
+    if (!noSandbox) sandbox = ['--sandbox'];
+    const pushBlock = ['https://', 'http://', 'ssh://', 'git@'];
+    env = { ...process.env, GIT_TERMINAL_PROMPT: '0', GIT_CONFIG_COUNT: String(pushBlock.length) };
+    pushBlock.forEach((u, i) => { env[`GIT_CONFIG_KEY_${i}`] = 'url.no-push:.pushInsteadOf'; env[`GIT_CONFIG_VALUE_${i}`] = u; });
+    delete env.GH_TOKEN; delete env.GITHUB_TOKEN; delete env.GH_ENTERPRISE_TOKEN;
+    env.GH_CONFIG_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'gh-empty-'));
+}
+
 const bin = (process.env.GEMINI_BIN || 'gemini').split(/\s+/);
 const gArgs = [...bin.slice(1), '-p', 'Carry out the task given on stdin.', '--output-format', 'json', '--skip-trust',
-    '--approval-mode', mode === 'work' ? 'yolo' : 'plan', ...(model ? ['-m', model] : [])];
-const g = run(bin[0], gArgs, { cwd, input: prompt, timeout: timeoutMin * 60000, env: process.env });
+    '--approval-mode', mode === 'work' ? 'yolo' : 'plan', ...sandbox, ...(model ? ['-m', model] : [])];
+const g = run(bin[0], gArgs, { cwd, input: prompt, timeout: timeoutMin * 60000, env });
 
 let reply = g.stdout || '', err = '';
 try { const j = JSON.parse(g.stdout); reply = j.response ?? ''; err = j.error ? (j.error.message || JSON.stringify(j.error)) : ''; } catch { /* plain text */ }
