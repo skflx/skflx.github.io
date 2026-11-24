@@ -114,11 +114,18 @@
 
         /* ---- anatomy and nerves ---- */
         'AICA': 'anterior inferior cerebellar artery',
+        'BCNC': 'bony cochlear nerve canal',
+        'CPA': 'cerebellopontine angle',
+        'EAC': 'external auditory canal',
         'GSPN': 'greater (superficial) petrosal nerve',
+        'IAC': 'internal auditory canal',
         'IP-III': 'incomplete partition type III; X-linked incomplete partition',
+        'IVN': 'inferior vestibular nerve',
+        'MCF': 'middle cranial fossa',
         'OMC': 'ostiomeatal complex',
         'PGY': 'postgraduate year',
         'PNN': 'posterior nasal nerve',
+        'SVN': 'superior vestibular nerve',
 
         /* ---- cells ---- */
         'ADCC': 'antibody-dependent cell-mediated cytotoxicity',

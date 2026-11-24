@@ -74,7 +74,7 @@
 
     /* ---------- lazy corpora ---------- */
     /* manifest.js and cpt-data.js are fetched here, not in HTML: their ?v= stamps are rewritten by tools/stamp-assets.mjs */
-    var MANIFEST_V = '23092db1'; /* stamp:js/oksat/manifest.js */
+    var MANIFEST_V = '3ab38f81'; /* stamp:js/oksat/manifest.js */
     var CPT_V = '8d7eaff2'; /* stamp:js/cpt-data.js */
     var loadStarted = false;
     var wikiState = 'idle';   /* idle | loading | ready | failed */

@@ -157,6 +157,28 @@ window.__REVIEW_ITEMS = [
     links: [],
     note: 'Unblocks no content work. Open atlas.html directly: check-data forbids this list from naming atlas.html (BLOCKED for a link; owner to decide on REVIEW_LINKERS).' },
 
+  /* ---- IAC guide, issue #326 ---- */
+  { id: 'iac-wave2-start', group: 'IAC guide (#326)', issue: '#326',
+    title: 'IAC guide: Start here and tier targets',
+    look: 'Open the Start here chapter and verify the thesis, learning map, tier targets, and sources list.',
+    links: [{ label: 'Start here', href: 'oksat-learn.html?g=iac-anatomy&c=start' }] },
+  { id: 'iac-wave2-osteology', group: 'IAC guide (#326)', issue: '#326',
+    title: 'IAC guide Ch. 1: Osteology & six walls',
+    look: 'Verify the IAC axis schematic, six-wall unfolded box hotspot, neighbors block, Stanford Fig. 9, and CT dimension cutoffs.',
+    links: [{ label: 'Osteology', href: 'oksat-learn.html?g=iac-anatomy&c=osteology' }] },
+  { id: 'iac-wave2-fundus', group: 'IAC guide (#326)', issue: '#326',
+    title: 'IAC guide Ch. 2: Fundus & crests',
+    look: 'Verify the transverse crest and Bill’s bar hotspot, eight rotated fundus views, Stanford Fig. 5, BCNC cutoffs, and 0.68 mm meatal foramen.',
+    links: [{ label: 'Fundus', href: 'oksat-learn.html?g=iac-anatomy&c=fundus' }] },
+  { id: 'iac-wave2-neurovascular', group: 'IAC guide (#326)', issue: '#326',
+    title: 'IAC guide Ch. 3: Neurovascular contents',
+    look: 'Verify the 90° rotation sequence, transition-zone distances, Chavda/vessel layers, Stanford Figs. 3–4, and arachnoid dissection plane.',
+    links: [{ label: 'Neurovascular', href: 'oksat-learn.html?g=iac-anatomy&c=neurovascular' }] },
+  { id: 'iac-wave2-module', group: 'IAC guide (#326)', issue: '#326',
+    title: 'IAC companion module (60 items, draft)',
+    look: 'Verify q1–q60 across osteology, fundus, and neurovascular concepts, including recall and MCQ items.',
+    links: [{ label: 'IAC module', href: 'oksat-study.html?m=iac-anatomy' }] },
+
   /* ---- Not in the repo ---- */
   { id: 'ext-openear-zeta', group: 'Not in the repo', issue: null,
     title: 'OpenEar ZETA review',
@@ -168,6 +190,6 @@ window.__REVIEW_ITEMS = [
   { id: 'iac-guide-start', group: 'IAC guide (#326)', issue: '#335',
     title: 'IAC guide: Start here',
     look: 'Check the Start here chapter of the IAC guide: thesis bullets, learning map, tier targets, scope, source cards, and currency check.',
-    links: [{ label: 'Start here', href: 'oksat-learn.html' }],
-    note: 'Open oksat-learn.html?g=iac-anatomy&c=start directly (check-data rejects query strings in review-items hrefs).' }
+    links: [{ label: 'Start here', href: 'oksat-learn.html?g=iac-anatomy&c=start' }],
+    note: 'Open oksat-learn.html?g=iac-anatomy&c=start directly.' }
 ];

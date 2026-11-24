@@ -213,6 +213,17 @@ window.OKSAT_MANIFEST = [
     desc: 'Auricle to petrous apex: canal, drum, tympanic cavity, ossicles, spaces and ventilation, Eustachian tube, mastoid, normal HRCT, the systems gathered, and the evidence behind the numbers; one concept per guide section.',
     data: 'js/oksat/modules/ear-anatomy.js',
   },
+  {
+    slug: 'iac-anatomy',
+    title: 'IAC Anatomy',
+    kicker: 'Neurotology Module',
+    subspecialty: 'otology',
+    count: 60,
+    accent: '#2F6E6A',
+    draft: true,
+    desc: 'The internal auditory canal from the bone out: six walls, fundus and crests, rotating nerves, arterial loops and meningeal planes; one concept per guide section.',
+    data: 'js/oksat/modules/iac-anatomy.js',
+  },
 ];
 
 /* Interactive learning: first-pass study guides (docs/authoring-oksat-guide.md).
@@ -283,6 +294,21 @@ window.OKSAT_GUIDES = [
       { id: 'sound', k: 4, short: 'Fig 2: tones trigger whisking', min: 20, sections: 3, data: 'js/oksat/guides/jc-whisking-auditory-cortex/sound.js' },
       { id: 'neurons', k: 5, short: 'Figs 3–6: the neurons', min: 35, sections: 5, data: 'js/oksat/guides/jc-whisking-auditory-cortex/neurons.js' },
       { id: 'appraisal', k: 6, short: 'Conclusions & appraisal', min: 25, sections: 4, data: 'js/oksat/guides/jc-whisking-auditory-cortex/appraisal.js' },
+    ],
+  },
+  {
+    slug: 'iac-anatomy',
+    title: 'Internal Auditory Canal: Bony Box to Surgical Corridor',
+    kicker: 'Otology / Neurotology',
+    subspecialty: 'otology',
+    accent: '#2F6E6A',
+    draft: true,
+    desc: 'The IAC from first principles: the bony box and its six walls, the fundus and its crests, the rotating nerves and end arteries, how to read it on CT and MRI, and how it looks from each surgical corridor.',
+    chapters: [
+      { id: 'start', short: 'Start here', data: 'js/oksat/guides/iac-anatomy/start.js' },
+      { id: 'osteology', k: 1, short: 'Osteology & six walls', min: 35, sections: 6, data: 'js/oksat/guides/iac-anatomy/osteology.js' },
+      { id: 'fundus', k: 2, short: 'Fundus & crests', min: 35, sections: 6, data: 'js/oksat/guides/iac-anatomy/fundus.js' },
+      { id: 'neurovascular', k: 3, short: 'Neurovascular contents', min: 45, sections: 8, data: 'js/oksat/guides/iac-anatomy/neurovascular.js' },
     ],
   },
   {
