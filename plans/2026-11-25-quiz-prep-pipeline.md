@@ -77,16 +77,13 @@ From the IAC review wave:
 
 ## 4. Drop for quiz topics
 
-- Per-topic plan specs, ledgers, handoff files and chapter briefs. The thread is the plan; the PR body
-  carries the source map and the hand-off.
-- GitHub parent issue and WP sub-issues per quiz.
-- Gemini delegation and wave splitting. One session builds the unit.
-- Bespoke SVG figure specs. Figures come from the sources (unlabelled in stems, labelled in "Read more"),
-  the existing anatomy blocks, or links into `OLSB.html`.
+- The per-topic spec, ledger, handoff and per-chapter briefs as separate files: they collapse into one
+  quiz brief (§5.1, pending round 2).
+- GitHub sub-issues per WP.
 - The appraisal chapter, unless the faculty assigned papers.
 
-The full apparatus stays available for a ground-up anatomy guide the owner asks for outside the quiz
-calendar.
+Kept (owner, round 1): **Claude and Gemini in tandem** (division of labour in §5.1, pending round 2), and
+**figures**: textbook figures first; a bespoke SVG only for a special case no source figure shows.
 
 ## 5. The pipeline
 
@@ -117,9 +114,11 @@ node tools/test-oksat-engine.mjs
 node tools/smoke-pages.mjs
 ```
 
-## 7. Open decisions (grill round 1)
+## 7. Decisions
 
-Asked in the project thread; answers recorded here before §8 is done.
+Round 1 (owner, 2026-11-25): yes to 1 and 3 to 8. On 2: yes, and a topic that is naturally bigger may
+expand after asking. Two amendments: Gemini waves stay (division of labour, round 2) and bespoke figures stay
+for special cases (§4).
 
 1. Unit: guide + one companion module per quiz.
 2. Size: 3 to 5 chapters, module 40 to 70 items.
