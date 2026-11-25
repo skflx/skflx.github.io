@@ -287,7 +287,7 @@
         /* IAC guide: units, modalities, author initials */
         '3D', 'EMG', 'RK',
         /* cholesteatoma guide: proliferation marker & general clinical terms */
-        'GA', 'ICP', 'Ki-67', 'LP',
+        'EAONO', 'GA', 'ICP', 'JOS', 'Ki-67', 'LP', 'OKSAT',
     ]);
     /* Roman numerals (Draf IIa, type III), interleukins and their chains by number, figure panels (1A, S4). */
     const PLAIN_RE = /^(?:(?:I{1,3}|IV|VI{0,3}|IX|XI{0,3})[ab]?|IL-\d+[A-F]?|[DE]4|S?\d[A-J]?)$/;

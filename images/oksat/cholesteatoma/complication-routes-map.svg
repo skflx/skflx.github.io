@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" width="960" height="640" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Intratemporal and intracranial cholesteatoma complication routes (schematic)</title>
+  <desc>Schematic map of intratemporal and intracranial complication pathways spreading from the middle ear and mastoid antrum: superiorly through the tegmen to meningitis, subdural empyema, and brain abscess; medially to lateral semicircular canal fistula and facial nerve; posteriorly to sigmoid sinus thrombophlebitis and otitic hydrocephalus; and inferiorly/anteromedially to Bezold abscess, pediatric postauricular subperiosteal abscess, and petrous apicitis.</desc>
+  <defs>
+    <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#B9382C"/>
+    </marker>
+    <marker id="arr-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#2F6E6A"/>
+    </marker>
+    <marker id="arr-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#A8863A"/>
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#2A5B84"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="640" fill="#ffffff"/>
+
+  <!-- Central hub -->
+  <rect x="340" y="250" width="280" height="110" rx="8" fill="#efe6d2" stroke="#8a7b5f" stroke-width="2"/>
+  <text x="480" y="276" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d1d1b">Middle ear &amp; mastoid antrum</text>
+  <text x="480" y="300" text-anchor="middle" font-size="12" fill="#1d1d1b">COM / cholesteatoma (9:1 vs AOM) (K15)</text>
+  <text x="480" y="324" text-anchor="middle" font-size="12" fill="#1d1d1b">Complication mortality</text>
+  <text x="480" y="340" text-anchor="middle" font-size="12" fill="#1d1d1b">(postantibiotic era): 7-25% (K15)</text>
+
+  <!-- Route 1: Superior -->
+  <line x1="480" y1="250" x2="480" y2="172" stroke="#B9382C" stroke-width="1.8" marker-end="url(#arr-red)"/>
+  <text x="490" y="216" text-anchor="start" font-size="12" font-weight="bold" fill="#B9382C">Superior: tegmen (J7)</text>
+  <rect x="200" y="20" width="560" height="150" rx="8" fill="#fdf1ef" stroke="#B9382C" stroke-width="1.5"/>
+  <text x="214" y="40" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Tegmen dural exposure: control bleeding with gelatin sponge-adrenalin pledgets</text>
+  <text x="223" y="55" text-anchor="start" font-size="11" fill="#1d1d1b">(avoid cautery -&gt; CSF leak); repair extensive defects to prevent encephalocele (J7)</text>
+  <text x="214" y="76" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Meningitis: most common intracranial complication; CT/MRI before LP (K15)</text>
+  <text x="214" y="97" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Subdural empyema: 5-30% mortality; diagnosis on MRI; no LP until raised ICP excluded (K16)</text>
+  <text x="214" y="118" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Parenchymal brain abscess (temporal lobe via tegmen; cerebellum via posterior fossa plate):</text>
+  <text x="223" y="133" text-anchor="start" font-size="11" fill="#1d1d1b">10% mortality -&gt; 80% with intraventricular rupture (K16)</text>
+
+  <!-- Route 2: Medial-upper left (otic capsule) -->
+  <line x1="340" y1="280" x2="302" y2="255" stroke="#2F6E6A" stroke-width="1.8" marker-end="url(#arr-teal)"/>
+  <text x="160" y="182" text-anchor="middle" font-size="12" font-weight="bold" fill="#2F6E6A">Medial: otic capsule</text>
+  <rect x="20" y="190" width="280" height="120" rx="8" fill="#eef4f3" stroke="#2F6E6A" stroke-width="1.5"/>
+  <text x="32" y="210" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Labyrinthine fistula (7-10% of</text>
+  <text x="41" y="225" text-anchor="start" font-size="11" fill="#1d1d1b">cholesteatomas; 90% lateral canal) (K15, K16)</text>
+  <text x="32" y="246" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Dense poorly pneumatized bone directs</text>
+  <text x="41" y="261" text-anchor="start" font-size="11" fill="#1d1d1b">force medially; CT only 57-60% accurate</text>
+  <text x="41" y="276" text-anchor="start" font-size="11" fill="#1d1d1b">(J8, K15)</text>
+  <text x="32" y="297" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Avoid ototoxic drops if lumen entered (J8)</text>
+
+  <!-- Route 3: Medial-lower left (fallopian canal) -->
+  <line x1="340" y1="335" x2="302" y2="386" stroke="#A8863A" stroke-width="1.8" marker-end="url(#arr-gold)"/>
+  <text x="160" y="332" text-anchor="middle" font-size="12" font-weight="bold" fill="#8C6D24">Medial: fallopian canal</text>
+  <rect x="20" y="340" width="280" height="122" rx="8" fill="#fdf8ee" stroke="#A8863A" stroke-width="1.5"/>
+  <text x="32" y="358" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Facial nerve (tympanic segment dehiscent</text>
+  <text x="41" y="372" text-anchor="start" font-size="11" fill="#1d1d1b">25-55%; often bare with canal fistula) (C2, J8)</text>
+  <text x="32" y="390" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Erosion: posterior attic superior to stapes;</text>
+  <text x="41" y="404" text-anchor="start" font-size="11" fill="#1d1d1b">anterior attic near geniculate; HB I-II in</text>
+  <text x="41" y="418" text-anchor="start" font-size="11" fill="#1d1d1b">52-83% after decompression (J8, K16)</text>
+  <text x="32" y="436" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Iatrogenic swipe: 2nd genu (cutting burr) (J7)</text>
+
+  <!-- Route 4: Posterior right (sigmoid plate) -->
+  <line x1="620" y1="305" x2="658" y2="305" stroke="#B9382C" stroke-width="1.8" marker-end="url(#arr-red)"/>
+  <text x="800" y="202" text-anchor="middle" font-size="12" font-weight="bold" fill="#B9382C">Posterior: sigmoid plate</text>
+  <rect x="660" y="210" width="280" height="220" rx="8" fill="#fdf1ef" stroke="#B9382C" stroke-width="1.5"/>
+  <text x="672" y="232" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Lateral / sigmoid sinus thrombophlebitis:</text>
+  <text x="681" y="247" text-anchor="start" font-size="11" fill="#1d1d1b">picket-fence fever, Griesinger sign</text>
+  <text x="681" y="262" text-anchor="start" font-size="11" fill="#1d1d1b">(emissary vein), empty delta sign on</text>
+  <text x="681" y="277" text-anchor="start" font-size="11" fill="#1d1d1b">contrast CT (K15)</text>
+  <text x="672" y="300" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Pediatric LST: prothrombotic disorders in</text>
+  <text x="681" y="315" text-anchor="start" font-size="11" fill="#1d1d1b">5 of 7 children (post-AOM series) (K15)</text>
+  <text x="672" y="338" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Otitic hydrocephalus: elevated ICP,</text>
+  <text x="681" y="353" text-anchor="start" font-size="11" fill="#1d1d1b">papilledema; worsening vision -&gt;</text>
+  <text x="681" y="368" text-anchor="start" font-size="11" fill="#1d1d1b">optic nerve decompression (K16)</text>
+
+  <!-- Route 5a: Bottom-left (Inferior / lateral cortex) -->
+  <line x1="415" y1="360" x2="265" y2="503" stroke="#2A5B84" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+  <text x="340" y="440" text-anchor="start" font-size="12" font-weight="bold" fill="#2A5B84" stroke="#ffffff" stroke-width="4" paint-order="stroke">Inferior / lateral cortex</text>
+  <rect x="60" y="505" width="410" height="115" rx="8" fill="#eef3f8" stroke="#2A5B84" stroke-width="1.5"/>
+  <text x="74" y="527" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Mastoid tip medial cortex -&gt; Bezold abscess (medial to SCM in</text>
+  <text x="83" y="542" text-anchor="start" font-size="11" fill="#1d1d1b">neck; adult tip tenderness) (K15)</text>
+  <text x="74" y="564" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Newborn open cribriform channels -&gt; postauricular subperiosteal</text>
+  <text x="83" y="579" text-anchor="start" font-size="11" fill="#1d1d1b">abscess (peds fossa mastoidea tenderness; CI almost always</text>
+  <text x="83" y="594" text-anchor="start" font-size="11" fill="#1d1d1b">saved with I&amp;D + tube + IV abx) (K15, P16)</text>
+
+  <!-- Route 5b: Bottom-right (Medial petrous air tracts) -->
+  <line x1="545" y1="360" x2="700" y2="503" stroke="#2F6E6A" stroke-width="1.8" marker-end="url(#arr-teal)"/>
+  <text x="650" y="470" text-anchor="end" font-size="12" font-weight="bold" fill="#2F6E6A" stroke="#ffffff" stroke-width="4" paint-order="stroke">Medial petrous air tracts</text>
+  <rect x="495" y="505" width="410" height="115" rx="8" fill="#f3f7f6" stroke="#2F6E6A" stroke-width="1.5"/>
+  <text x="509" y="530" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Petrous apicitis -&gt; Gradenigo syndrome: CN VI diplopia,</text>
+  <text x="518" y="546" text-anchor="start" font-size="11" fill="#1d1d1b">retrobulbar pain, persistent otorrhea (K15)</text>
+  <text x="509" y="574" text-anchor="start" font-size="11" fill="#1d1d1b">&#8226; Petrous apex pneumatization: anterior 10% vs posterior 30% (C2)</text>
+
+  <text x="480" y="634" text-anchor="middle" font-size="11.5" fill="#555049">Schematic map of complication routes; box positions are not anatomical.</text>
+</svg>

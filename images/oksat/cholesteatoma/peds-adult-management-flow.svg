@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 690" width="960" height="690" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1d1d1b">
+  <title>Pediatric vs adult cholesteatoma management flowchart (schematic)</title>
+  <desc>Schematic flowchart comparing pediatric and adult cholesteatoma management from clinical diagnosis and CT/MRI indications through CWU versus CWD selection, pediatric obliteration and non-mandatory CWD rules, second-look timing, non-EPI DWI surveillance, and 10-year otoscopic follow-up.</desc>
+  <defs>
+    <marker id="arrow-neutral" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#555049"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#B9382C"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#2A5B84"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#2F6E6A"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="690" fill="#ffffff"/>
+
+  <!-- Row 1: Presentation -->
+  <rect x="210" y="20" width="540" height="90" rx="8" fill="#f7f5f0" stroke="#8a7b5f" stroke-width="1.5"/>
+  <text x="480" y="38" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#1d1d1b">Clinical diagnosis on physical exam (E52, K16)</text>
+  <text x="480" y="54" text-anchor="middle" font-size="11.5" fill="#1d1d1b">Fetid otorrhea + hearing loss (mass may mask ABG) | Intact TM white mass</text>
+  <text x="480" y="69" text-anchor="middle" font-size="11.5" fill="#1d1d1b">if congenital (E46, K16, E56)</text>
+  <text x="480" y="86" text-anchor="middle" font-size="11" fill="#555049">Acquired origin: adults mostly pars flaccida; children 2x more often pars tensa</text>
+  <text x="480" y="101" text-anchor="middle" font-size="11" fill="#555049">(early incus/stapes erosion) (J8, P16)</text>
+
+  <!-- Arrow Row 1 -> Row 2 -->
+  <line x1="480" y1="110" x2="480" y2="138" stroke="#555049" stroke-width="1.5" marker-end="url(#arrow-neutral)"/>
+
+  <!-- Row 2: Imaging decision -->
+  <rect x="210" y="140" width="540" height="72" rx="8" fill="#eef4f3" stroke="#2F6E6A" stroke-width="1.5"/>
+  <text x="480" y="159" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#2F6E6A">Imaging (not routine for diagnosis) (E52, K16)</text>
+  <text x="480" y="178" text-anchor="middle" font-size="11.5" fill="#1d1d1b">Noncontrast axial/coronal HRCT: surgical planning or red flags</text>
+  <text x="480" y="195" text-anchor="middle" font-size="11.5" fill="#1d1d1b">(headache, vertigo, CN VII palsy, severe/sudden SNHL) (E52, K16, C2)</text>
+
+  <!-- Arrow Row 2 -> Side callout -->
+  <line x1="750" y1="176" x2="768" y2="176" stroke="#B9382C" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+
+  <!-- Side callout: Suspected intracranial complication -->
+  <rect x="770" y="140" width="175" height="72" rx="8" fill="#fdf1ef" stroke="#B9382C" stroke-width="1.5"/>
+  <text x="857.5" y="160" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#B9382C">Suspected intracranial</text>
+  <text x="857.5" y="176" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#B9382C">complication -&gt;</text>
+  <text x="857.5" y="193" text-anchor="middle" font-size="11.5" fill="#1d1d1b">Contrast CT + MRI (E52)</text>
+
+  <!-- Orthogonal fork arrows Row 2 -> Row 3 -->
+  <path d="M 480 212 L 480 230 L 242.5 230 L 242.5 246" fill="none" stroke="#2A5B84" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <path d="M 480 212 L 480 230 L 717.5 230 L 717.5 246" fill="none" stroke="#2F6E6A" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- Row 3 Left: Pediatric branch -->
+  <rect x="20" y="248" width="445" height="236" rx="8" fill="#eef3f8" stroke="#2A5B84" stroke-width="1.5"/>
+  <text x="36" y="272" text-anchor="start" font-size="14" font-weight="bold" fill="#2A5B84">Pediatric branch (P16)</text>
+
+  <rect x="36" y="288" width="413" height="82" rx="8" fill="#ffffff" stroke="#2A5B84" stroke-width="1.2"/>
+  <text x="48" y="308" text-anchor="start" font-size="12" font-weight="bold" fill="#1d1d1b">CWU favored (CWD only ~10%): open cavities poorly</text>
+  <text x="48" y="325" text-anchor="start" font-size="11.5" fill="#1d1d1b">tolerated (GA debridement); cortical bone regrowth narrows</text>
+  <text x="48" y="342" text-anchor="start" font-size="11.5" fill="#1d1d1b">meatoplasty; underdeveloped mastoid is the norm (P16)</text>
+
+  <rect x="36" y="380" width="200" height="60" rx="8" fill="#ffffff" stroke="#2A5B84" stroke-width="1.2"/>
+  <text x="46" y="397" text-anchor="start" font-size="11.5" font-weight="bold" fill="#1d1d1b">CWD NOT mandatory for</text>
+  <text x="46" y="413" text-anchor="start" font-size="11.5" fill="#1d1d1b">only-hearing ear, fistula,</text>
+  <text x="46" y="429" text-anchor="start" font-size="11.5" fill="#1d1d1b">or bilateral disease (P16)</text>
+
+  <rect x="246" y="380" width="203" height="60" rx="8" fill="#ffffff" stroke="#2A5B84" stroke-width="1.2"/>
+  <text x="256" y="397" text-anchor="start" font-size="11" font-weight="bold" fill="#1d1d1b">Initial CWD (~10%): constricted</text>
+  <text x="256" y="413" text-anchor="start" font-size="11" fill="#1d1d1b">mastoid, poor follow-up, or</text>
+  <text x="256" y="429" text-anchor="start" font-size="11" fill="#1d1d1b">no 2nd stage (P16)</text>
+
+  <rect x="36" y="448" width="413" height="24" rx="6" fill="#ffffff" stroke="#2A5B84" stroke-width="1"/>
+  <text x="242.5" y="464" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d1d1b">Obliteration (CWU or CWD): 5-yr revision 15-20% -&gt; 2-3% (P16)</text>
+
+  <!-- Row 3 Right: Adult branch -->
+  <rect x="495" y="248" width="445" height="236" rx="8" fill="#f3f7f6" stroke="#2F6E6A" stroke-width="1.5"/>
+  <text x="511" y="272" text-anchor="start" font-size="14" font-weight="bold" fill="#2F6E6A">Adult branch (K16, J8, E47, E54, E55)</text>
+
+  <rect x="511" y="288" width="202" height="86" rx="8" fill="#ffffff" stroke="#2F6E6A" stroke-width="1.2"/>
+  <text x="521" y="306" text-anchor="start" font-size="11" font-weight="bold" fill="#1d1d1b">CWU: up to 20% recidivism;</text>
+  <text x="521" y="321" text-anchor="start" font-size="11" fill="#1d1d1b">preserves canal wall; convert</text>
+  <text x="521" y="336" text-anchor="start" font-size="11" fill="#1d1d1b">to CWD if recurrent or wall</text>
+  <text x="521" y="351" text-anchor="start" font-size="11" fill="#1d1d1b">absorbed at 2nd look (K16, E53)</text>
+
+  <rect x="723" y="288" width="201" height="86" rx="8" fill="#ffffff" stroke="#2F6E6A" stroke-width="1.2"/>
+  <text x="732" y="304" text-anchor="start" font-size="11" font-weight="bold" fill="#1d1d1b">Primary CWD (lower recidivism):</text>
+  <text x="732" y="318" text-anchor="start" font-size="11" fill="#1d1d1b">only-hearing ear, large fistula,</text>
+  <text x="732" y="332" text-anchor="start" font-size="11" fill="#1d1d1b">bilateral disease, severe</text>
+  <text x="732" y="346" text-anchor="start" font-size="11" fill="#1d1d1b">hypopneumatization, canal wall</text>
+  <text x="732" y="360" text-anchor="start" font-size="11" fill="#1d1d1b">erosion (K16, J8, E54)</text>
+
+  <rect x="511" y="384" width="413" height="88" rx="8" fill="#ffffff" stroke="#2F6E6A" stroke-width="1.2"/>
+  <text x="523" y="407" text-anchor="start" font-size="11.5" font-weight="bold" fill="#1d1d1b">Targeted options: Atticotomy</text>
+  <text x="523" y="424" text-anchor="start" font-size="11.5" fill="#1d1d1b">(Prussak only) | Modified Bondy (lateral attic, intact</text>
+  <text x="523" y="441" text-anchor="start" font-size="11.5" fill="#1d1d1b">ossicles/TM, good hearing) (K16, J8, E55)</text>
+
+  <!-- Arrows Row 3 -> Row 4 (from Pediatric CWU & Adult CWU) -->
+  <line x1="242.5" y1="484" x2="242.5" y2="518" stroke="#2A5B84" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="612" y1="484" x2="612" y2="518" stroke="#2F6E6A" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- Row 4: Post-CWU surveillance & long-term follow-up -->
+  <rect x="80" y="520" width="800" height="140" rx="8" fill="#f7f5f0" stroke="#8a7b5f" stroke-width="1.5"/>
+
+  <rect x="96" y="536" width="372" height="72" rx="8" fill="#ffffff" stroke="#8a7b5f" stroke-width="1.2"/>
+  <text x="110" y="555" text-anchor="start" font-size="11.5" font-weight="bold" fill="#1d1d1b">Planned second look (range, earlier in children):</text>
+  <text x="110" y="572" text-anchor="start" font-size="11.5" fill="#1d1d1b">~6 mo children vs 6-18 mo adults; check</text>
+  <text x="110" y="589" text-anchor="start" font-size="11.5" fill="#1d1d1b">residual pearls + ossiculoplasty (K17, E53)</text>
+
+  <rect x="492" y="536" width="372" height="72" rx="8" fill="#ffffff" stroke="#8a7b5f" stroke-width="1.2"/>
+  <text x="506" y="555" text-anchor="start" font-size="11.5" font-weight="bold" fill="#1d1d1b">Non-EPI DWI (HASTE) MRI surveillance:</text>
+  <text x="506" y="572" text-anchor="start" font-size="11.5" fill="#1d1d1b">bright restricted diffusion; reduces need</text>
+  <text x="506" y="589" text-anchor="start" font-size="11.5" fill="#1d1d1b">for second-stage CWU (K16, P16)</text>
+
+  <rect x="96" y="618" width="768" height="30" rx="6" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1"/>
+  <text x="480" y="637" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d1d1b">All CWU ears: regular otoscopic follow-up &gt;= 10 years for retraction pockets or recurrent disease (E53)</text>
+
+  <text x="480" y="680" text-anchor="middle" font-size="12" fill="#555049">Schematic flowchart of pediatric and adult cholesteatoma management; not to scale.</text>
+</svg>

@@ -32,3 +32,7 @@ All textbook figures below are copied unmodified from user-approved textbook cor
 | `tegmen-dural-exposure.png` | Jackler, *Ear Surgery Illustrated* (Thieme, 2019) | Fig. 7.43 | User-approved textbook corpus; copied unmodified; credit required |
 | `ct-empty-delta-sign.jpg` | Kirtane, de Souza & Sanna, *Otology and Neurotology* (Thieme, 2013) | Fig. 15.5 | User-approved textbook corpus; copied unmodified; credit required |
 | `mri-cerebellar-abscess.jpg` | Kirtane, de Souza & Sanna, *Otology and Neurotology* (Thieme, 2013) | Fig. 15.7 | User-approved textbook corpus; copied unmodified; credit required |
+| `potsic-staging.svg` | Original OKSAT schematic | — | Original schematic created for this guide |
+| `stam-sites.svg` | Original OKSAT schematic | — | Original schematic created for this guide (EAONO/JOS 2017; added — verify) |
+| `peds-adult-management-flow.svg` | Original OKSAT schematic | — | Original schematic created for this guide |
+| `complication-routes-map.svg` | Original OKSAT schematic | — | Original schematic created for this guide |

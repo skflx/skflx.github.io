@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 350" width="880" height="350" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#1d1d1b">
+  <title>Potsic staging of congenital cholesteatoma (schematic)</title>
+  <desc>Four-panel schematic of Potsic staging for congenital cholesteatoma in a right tympanic membrane viewed otoscopically (anterior to the right, posterior to the left): Stage I single anterosuperior quadrant without ossicular or mastoid involvement; Stage II multiple quadrants without ossicular or mastoid involvement; Stage III ossicular involvement touching the malleus and incus without mastoid involvement; and Stage IV mastoid involvement.</desc>
+  <defs>
+    <marker id="arr-mastoid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#B9382C"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="350" fill="#ffffff"/>
+
+  <text x="440" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d1d1b">Potsic staging of congenital cholesteatoma (right TM, otoscopic view)</text>
+  <text x="440" y="48" text-anchor="middle" font-size="12.5" fill="#555049">Posterior is to the left; anterior is to the right. Schematic, not to scale.</text>
+
+  <!-- Panel 1: Stage I -->
+  <rect x="26" y="66" width="195" height="236" rx="8" fill="#f8f4ec" stroke="#8a7b5f" stroke-width="1.2"/>
+  <text x="123.5" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d1d1b">Stage I</text>
+  <circle cx="123.5" cy="178" r="60" fill="#dfd8cb" stroke="#8a7b5f" stroke-width="1.8"/>
+  <circle cx="123.5" cy="178" r="55" fill="none" stroke="#c7bfb1" stroke-width="1"/>
+  <!-- Quadrant dividers -->
+  <line x1="137.5" y1="120" x2="109.5" y2="236" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="65.5" y1="164" x2="181.5" y2="192" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- Incus long process (faint) -->
+  <path d="M 107.5 136 L 109.5 162" fill="none" stroke="#8d7a6c" stroke-width="2.5" stroke-dasharray="3 2" opacity="0.55"/>
+  <!-- Malleus handle -->
+  <path d="M 132.5 130 L 136.5 131 L 125.5 178 Q 123.5 182 121.5 178 Z" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.3"/>
+  <circle cx="123.5" cy="178" r="3.5" fill="#fbf7ee" stroke="#8a7b5f" stroke-width="1.2"/>
+  <!-- White cholesteatoma mass: AS quadrant only -->
+  <ellipse cx="151.5" cy="153" rx="14" ry="12" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+  <text x="123.5" y="258" text-anchor="middle" font-size="11.5" fill="#1d1d1b">Single quadrant</text>
+  <text x="123.5" y="272" text-anchor="middle" font-size="11.5" fill="#1d1d1b">(AS shown, most common)</text>
+  <text x="123.5" y="288" text-anchor="middle" font-size="11.5" fill="#555049">No ossicle or mastoid</text>
+
+  <!-- Panel 2: Stage II -->
+  <rect x="237" y="66" width="195" height="236" rx="8" fill="#f8f4ec" stroke="#8a7b5f" stroke-width="1.2"/>
+  <text x="334.5" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d1d1b">Stage II</text>
+  <circle cx="334.5" cy="178" r="60" fill="#dfd8cb" stroke="#8a7b5f" stroke-width="1.8"/>
+  <circle cx="334.5" cy="178" r="55" fill="none" stroke="#c7bfb1" stroke-width="1"/>
+  <!-- Quadrant dividers -->
+  <line x1="348.5" y1="120" x2="320.5" y2="236" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="276.5" y1="164" x2="392.5" y2="192" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- Incus long process (faint) -->
+  <path d="M 318.5 136 L 320.5 162" fill="none" stroke="#8d7a6c" stroke-width="2.5" stroke-dasharray="3 2" opacity="0.55"/>
+  <!-- Malleus handle -->
+  <path d="M 343.5 130 L 347.5 131 L 336.5 178 Q 334.5 182 332.5 178 Z" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.3"/>
+  <circle cx="334.5" cy="178" r="3.5" fill="#fbf7ee" stroke="#8a7b5f" stroke-width="1.2"/>
+  <!-- White cholesteatoma mass: multiple quadrants (AS + AI), clear of ossicles -->
+  <path d="M 353 142 C 371 141 381 155 379 175 C 378 194 367 212 350 212 C 340 212 339 196 343 182 C 345 170 343 144 353 142 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+  <text x="334.5" y="264" text-anchor="middle" font-size="11.5" fill="#1d1d1b">Multiple quadrants</text>
+  <text x="334.5" y="281" text-anchor="middle" font-size="11.5" fill="#555049">No ossicle or mastoid</text>
+
+  <!-- Panel 3: Stage III -->
+  <rect x="448" y="66" width="195" height="236" rx="8" fill="#f8f4ec" stroke="#8a7b5f" stroke-width="1.2"/>
+  <text x="545.5" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d1d1b">Stage III</text>
+  <circle cx="545.5" cy="178" r="60" fill="#dfd8cb" stroke="#8a7b5f" stroke-width="1.8"/>
+  <circle cx="545.5" cy="178" r="55" fill="none" stroke="#c7bfb1" stroke-width="1"/>
+  <!-- Quadrant dividers -->
+  <line x1="559.5" y1="120" x2="531.5" y2="236" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="487.5" y1="164" x2="603.5" y2="192" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- White cholesteatoma mass touching malleus/incus -->
+  <path d="M 516 142 C 530 132 554 134 558 152 C 561 168 548 180 532 178 C 516 176 507 156 516 142 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+  <!-- Incus long process (involved) -->
+  <path d="M 527.5 138 L 530.5 164" fill="none" stroke="#8d7a6c" stroke-width="2.8" stroke-dasharray="3 2"/>
+  <!-- Malleus handle (involved) -->
+  <path d="M 554.5 130 L 558.5 131 L 547.5 178 Q 545.5 182 543.5 178 Z" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.3"/>
+  <circle cx="545.5" cy="178" r="3.5" fill="#fbf7ee" stroke="#8a7b5f" stroke-width="1.2"/>
+  <text x="545.5" y="258" text-anchor="middle" font-size="11.5" fill="#1d1d1b">Ossicles involved</text>
+  <text x="545.5" y="272" text-anchor="middle" font-size="11.5" fill="#1d1d1b">(erosion or removal)</text>
+  <text x="545.5" y="288" text-anchor="middle" font-size="11.5" fill="#555049">No mastoid</text>
+
+  <!-- Panel 4: Stage IV -->
+  <rect x="659" y="66" width="195" height="236" rx="8" fill="#f8f4ec" stroke="#8a7b5f" stroke-width="1.2"/>
+  <text x="756.5" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d1d1b">Stage IV</text>
+  <!-- Small mastoid box at top-posterior (top-left) -->
+  <rect x="669" y="98" width="56" height="24" rx="4" fill="#fdf1ef" stroke="#B9382C" stroke-width="1.3"/>
+  <text x="697" y="114" text-anchor="middle" font-size="11" font-weight="bold" fill="#B9382C">Mastoid</text>
+  <circle cx="756.5" cy="178" r="60" fill="#dfd8cb" stroke="#8a7b5f" stroke-width="1.8"/>
+  <circle cx="756.5" cy="178" r="55" fill="none" stroke="#c7bfb1" stroke-width="1"/>
+  <!-- Quadrant dividers -->
+  <line x1="770.5" y1="120" x2="742.5" y2="236" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="698.5" y1="164" x2="814.5" y2="192" stroke="#8a7b5f" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- White cholesteatoma mass extending top-posterior -->
+  <path d="M 716 138 C 734 128 762 132 768 152 C 772 168 756 180 738 178 C 720 176 706 156 716 138 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+  <!-- Incus & Malleus -->
+  <path d="M 738.5 138 L 741.5 164" fill="none" stroke="#8d7a6c" stroke-width="2.6" stroke-dasharray="3 2"/>
+  <path d="M 765.5 130 L 769.5 131 L 758.5 178 Q 756.5 182 754.5 178 Z" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.3"/>
+  <circle cx="756.5" cy="178" r="3.5" fill="#fbf7ee" stroke="#8a7b5f" stroke-width="1.2"/>
+  <!-- Arrow off top-posterior toward Mastoid box -->
+  <line x1="726" y1="140" x2="703" y2="124" stroke="#B9382C" stroke-width="2" marker-end="url(#arr-mastoid)"/>
+  <text x="756.5" y="264" text-anchor="middle" font-size="11.5" fill="#1d1d1b">Mastoid involvement</text>
+  <text x="756.5" y="281" text-anchor="middle" font-size="11.5" fill="#555049">(with or without ossicles)</text>
+
+  <!-- Footer -->
+  <text x="440" y="330" text-anchor="middle" font-size="12.5" fill="#555049">Early stage recurs 0–13%; advanced up to two-thirds (K16).</text>
+</svg>

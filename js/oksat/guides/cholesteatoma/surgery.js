@@ -102,6 +102,12 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'images/oksat/cholesteatoma/peds-adult-management-flow.svg',
+                    alt: 'Schematic flowchart comparing pediatric and adult cholesteatoma management from clinical diagnosis and CT/MRI indications through CWU versus CWD selection, pediatric obliteration and non-mandatory CWD rules, second-look timing, non-EPI DWI surveillance, and 10-year otoscopic follow-up.',
+                    cap: 'Pediatric vs adult cholesteatoma management flowchart comparing CWU, CWD, obliteration, second-look, and non-EPI DWI surveillance. Schematic (OKSAT)',
+                },
+                {
                     t: 'call',
                     k: 'trap',
                     label: 'Source conflict',

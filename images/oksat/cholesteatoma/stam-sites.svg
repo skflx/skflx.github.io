@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 475" width="760" height="475" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#1d1d1b">
+  <title>EAONO/JOS STAM staging site map of the middle ear cleft (schematic)</title>
+  <desc>Simplified lateral schematic of a right middle ear cleft showing the five EAONO/JOS STAM regions: A (attic), T (tympanic cavity), M (mastoid), and the two difficult-access sites S1 (supratubal recess, anterior) and S2 (sinus tympani, posterior).</desc>
+
+  <rect width="760" height="475" fill="#ffffff"/>
+
+  <text x="380" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d1d1b">EAONO/JOS STAM staging site map</text>
+  <text x="380" y="50" text-anchor="middle" font-size="12.5" fill="#555049">Right ear, lateral schematic of the middle ear cleft (posterior left, anterior right)</text>
+
+  <!-- Orientation labels -->
+  <text x="58" y="232" text-anchor="end" font-size="12" fill="#555049">Posterior</text>
+  <text x="702" y="232" text-anchor="start" font-size="12" fill="#555049">Anterior</text>
+  <text x="380" y="74" text-anchor="middle" font-size="12" fill="#555049">Superior</text>
+  <text x="380" y="394" text-anchor="middle" font-size="12" fill="#555049">Inferior</text>
+
+  <!-- M: Mastoid (posterior) -->
+  <path d="M 100 94 L 260 94 L 260 154 L 245 186 L 245 344 Q 245 362 225 362 L 115 362 Q 82 362 82 325 L 82 125 Q 82 94 100 94 Z" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.6"/>
+  <!-- Subtle mastoid air cell circles -->
+  <circle cx="122" cy="136" r="14" fill="#f8f4ec" stroke="#c7bfb1" stroke-width="1"/>
+  <circle cx="164" cy="128" r="16" fill="#f8f4ec" stroke="#c7bfb1" stroke-width="1"/>
+  <circle cx="118" cy="180" r="15" fill="#f8f4ec" stroke="#c7bfb1" stroke-width="1"/>
+  <circle cx="132" cy="296" r="14" fill="#f8f4ec" stroke="#c7bfb1" stroke-width="1"/>
+  <circle cx="182" cy="316" r="16" fill="#f8f4ec" stroke="#c7bfb1" stroke-width="1"/>
+
+  <!-- A: Attic (epitympanum) -->
+  <path d="M 260 94 L 515 94 Q 535 94 535 114 L 535 178 L 260 178 Z" fill="#eef4f3" stroke="#2F6E6A" stroke-width="1.6"/>
+
+  <!-- T: Tympanic cavity (mesotympanum / hypotympanum) + Eustachian tube -->
+  <path d="M 260 178 L 535 178 L 535 268 L 642 308 L 634 336 L 525 316 L 515 362 Q 515 374 495 374 L 295 374 Q 260 374 260 342 Z" fill="#f8f4ec" stroke="#8a7b5f" stroke-width="1.6"/>
+  <text x="582" y="348" text-anchor="middle" font-size="11.5" fill="#555049">Eustachian tube</text>
+
+  <!-- S1: Supratubal recess (anterior difficult access site) -->
+  <path d="M 535 128 L 598 128 Q 618 128 618 148 L 618 228 Q 618 248 598 248 L 535 248 Z" fill="#fdf1ef" stroke="#B9382C" stroke-width="1.8"/>
+
+  <!-- S2: Sinus tympani (posterior difficult access site) -->
+  <path d="M 282 204 L 358 204 Q 368 204 368 216 L 368 294 Q 368 306 358 306 L 282 306 Q 266 306 266 290 L 266 220 Q 266 204 282 204 Z" fill="#fdf1ef" stroke="#B9382C" stroke-width="1.8"/>
+
+  <!-- Region labels -->
+  <text x="164" y="226" text-anchor="middle" font-size="20" font-weight="bold" fill="#1d1d1b">M</text>
+  <text x="164" y="246" text-anchor="middle" font-size="13" fill="#555049">Mastoid</text>
+
+  <text x="398" y="132" text-anchor="middle" font-size="20" font-weight="bold" fill="#2F6E6A">A</text>
+  <text x="398" y="152" text-anchor="middle" font-size="13" fill="#1d1d1b">Attic</text>
+
+  <text x="446" y="266" text-anchor="middle" font-size="20" font-weight="bold" fill="#1d1d1b">T</text>
+  <text x="446" y="286" text-anchor="middle" font-size="13" fill="#555049">Tympanic cavity</text>
+
+  <text x="576.5" y="170" text-anchor="middle" font-size="18" font-weight="bold" fill="#B9382C">S1</text>
+  <text x="576.5" y="190" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Supratubal</text>
+  <text x="576.5" y="204" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">recess</text>
+  <text x="576.5" y="222" text-anchor="middle" font-size="10.5" fill="#B9382C">Difficult access</text>
+  <text x="576.5" y="235" text-anchor="middle" font-size="10.5" fill="#B9382C">(anterior)</text>
+
+  <text x="317" y="236" text-anchor="middle" font-size="18" font-weight="bold" fill="#B9382C">S2</text>
+  <text x="317" y="256" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d1d1b">Sinus tympani</text>
+  <text x="317" y="274" text-anchor="middle" font-size="10.5" fill="#B9382C">Difficult access</text>
+  <text x="317" y="287" text-anchor="middle" font-size="10.5" fill="#B9382C">(posterior)</text>
+
+  <!-- Footer -->
+  <text x="380" y="428" text-anchor="middle" font-size="11" fill="#1d1d1b">Stage I: 1 site | II: &gt;=2 sites | III: extracranial complication (e.g., facial palsy, labyrinthine fistula) | IV: intracranial complication</text>
+  <text x="380" y="452" text-anchor="middle" font-size="12.5" fill="#555049">Added — verify: EAONO/JOS 2017 classification; not in the guide's sources.</text>
+</svg>

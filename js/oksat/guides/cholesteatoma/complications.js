@@ -45,6 +45,12 @@ window.__OKSAT_CHAPTER = {
                 },
                 {
                     t: 'figure',
+                    src: 'images/oksat/cholesteatoma/complication-routes-map.svg',
+                    alt: 'Schematic map of intratemporal and intracranial complication pathways spreading from the middle ear and mastoid antrum: superiorly through the tegmen, medially to the otic capsule and fallopian canal, posteriorly to the sigmoid plate, and inferiorly/anteromedially to the mastoid cortex and petrous apex.',
+                    cap: 'Intratemporal and intracranial cholesteatoma complication routes from the middle ear and mastoid antrum. Schematic (OKSAT)',
+                },
+                {
+                    t: 'figure',
                     src: 'images/oksat/cholesteatoma/mastoiditis-postauricular-abscess.jpg',
                     alt: 'Clinical photograph of postauricular coalescent mastoiditis and subperiosteal abscess displacing the left pinna laterally and inferiorly.',
                     cap: 'Postauricular coalescent mastoiditis and subperiosteal abscess displacing the left pinna laterally and inferiorly. Kirtane, de Souza & Sanna, Otology and Neurotology (Thieme, 2013), Fig. 15.1.',
