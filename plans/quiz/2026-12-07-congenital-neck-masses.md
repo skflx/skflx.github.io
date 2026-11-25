@@ -37,6 +37,10 @@ Conflicts: none yet.
 
 ## 3. Steps and Touch
 
+Executor: `gemini-4-hydrogen-medium`, sent by the orchestrator through `/agy` (`--mode auto`) per
+`.claude/skills/quiz-prep/SKILL.md` "Sending executor work"; the orchestrator owns git. Owner's call,
+2026-11-25.
+
 - **A:** `js/oksat/guides/congenital-neck-masses/start.js`, chapters 1 and 2;
   `js/oksat/modules/congenital-neck-masses.js` (items for those chapters); `js/oksat/manifest.js`;
   `js/oksat/terms.js`; `images/oksat/congenital-neck-masses/`; `*.html` stamps.
