@@ -671,11 +671,11 @@ All textbook figures below are copied **unmodified** from `study-guide-test/` to
 | 4.4 | B | `kirtane_oto_figures/ch15/fig-15-05-axial-ct-contrast-delta-sign-sigmoid.jpg` | `ct-empty-delta-sign.jpg` | Kirtane, de Souza & Sanna, *Otology and Neurotology* (Thieme, 2013), Fig. 15.5 | Contrast-enhanced axial CT demonstrating the empty delta sign of left sigmoid/lateral sinus thrombosis with surrounding dural enhancement. |
 | 4.5 | B | `kirtane_oto_figures/ch15/fig-15-07-axial-mri-contrast-otogenic-abscess-enhancing.jpg` | `mri-cerebellar-abscess.jpg` | Kirtane, de Souza & Sanna, *Otology and Neurotology* (Thieme, 2013), Fig. 15.7 | Contrast-enhanced axial brain MRI showing a ring-enhancing otogenic abscess in the left cerebellum. |
 
-### Bespoke SVG geometry specs — **PENDING OWNER OK**
+### Bespoke SVG geometry specs — **Owner approved 2026-11-25, Opus-reviewed**
 
-*(Executor note: Do NOT create or reference either SVG below until the owner explicitly approves them in Issue #385. Once approved, draw as static white-background SVGs using `Helvetica, Arial, sans-serif`, `#1d1d1b` ink, `#2F6E6A` primary otology teal, `#B9382C` signal red for red flags/conflicts, `#2A5B84` blue for pediatric branch/science, and include `"Schematic"` in the figure caption.)*
+*(Executor note: Owner approved 2026-11-25, Opus-reviewed. Draw as static white-background SVGs using `Helvetica, Arial, sans-serif`, `#1d1d1b` ink, `#2F6E6A` primary otology teal, `#B9382C` signal red for red flags/conflicts, `#2A5B84` blue for pediatric branch/science, and include `"Schematic"` in the figure caption.)*
 
-#### (a) Peds vs adult cholesteatoma management flowchart — **PENDING OWNER OK**
+#### (a) Peds vs adult cholesteatoma management flowchart — **Owner approved 2026-11-25, Opus-reviewed**
 
 - **Destination (if approved):** `images/oksat/cholesteatoma/peds-adult-management-flow.svg` (placed in §3.2).
 - **Canvas:** `viewBox="0 0 960 660"`, white `#ffffff` background, 12 px rounded rectangles (`rx="8"`), 1.5 px strokes, clean orthogonal arrows with triangular markers.
@@ -705,7 +705,7 @@ All textbook figures below are copied **unmodified** from `study-guide-test/` to
     - Bottom banner (`x=96, y=588, w=768, h=30`): `All CWU ears: regular otoscopic follow-up >= 10 years for retraction pockets or recurrent disease (E53)`
 - **Alt text:** Schematic flowchart comparing pediatric and adult cholesteatoma management from clinical diagnosis and CT/MRI indications through CWU versus CWD selection, pediatric obliteration and non-mandatory CWD rules, second-look timing, non-EPI DWI surveillance, and 10-year otoscopic follow-up.
 
-#### (b) Complication routes map — **PENDING OWNER OK**
+#### (b) Complication routes map — **Owner approved 2026-11-25, Opus-reviewed**
 
 - **Destination (if approved):** `images/oksat/cholesteatoma/complication-routes-map.svg` (placed in §4.1).
 - **Canvas:** `viewBox="0 0 960 640"`, white `#ffffff` background, central temporal-bone hub radiating cleanly along five anatomical directions (superior, posterior, medial-otic, medial-neural/anterior, inferior). Note on prompt wording: `chole_claims.md` does not include an epidural abscess claim, so the superior route uses only verified claim labels (`tegmen dural exposure -> encephalocele / CSF leak, meningitis, subdural empyema, temporal lobe or cerebellar abscess`).
@@ -749,3 +749,13 @@ All textbook figures below are copied **unmodified** from `study-guide-test/` to
       - `Petrous apicitis -> Gradenigo syndrome: CN VI diplopia, retrobulbar pain, persistent otorrhea` (`K15`)
       - `Petrous apex pneumatization: anterior 10% vs posterior 30%` (`C2`)
 - **Alt text:** Schematic map of intratemporal and intracranial complication pathways spreading from the middle ear and mastoid antrum: superiorly through the tegmen to meningitis, subdural empyema, and brain abscess; medially to lateral semicircular canal fistula and facial nerve; posteriorly to sigmoid sinus thrombophlebitis and otitic hydrocephalus; and inferiorly/anteromedially to Bezold abscess, pediatric postauricular subperiosteal abscess, and petrous apicitis.
+
+#### (c) Potsic staging — **Owner approved 2026-11-25, Opus-reviewed**
+
+- **Destination:** `images/oksat/cholesteatoma/potsic-staging.svg` (placed in §2.1).
+- **Alt text:** Four-panel schematic of Potsic staging for congenital cholesteatoma in a right tympanic membrane: Stage I single anterosuperior quadrant, Stage II multiple quadrants without ossicular or mastoid involvement, Stage III ossicular involvement without mastoid involvement, and Stage IV mastoid involvement.
+
+#### (d) EAONO/JOS STAM sites — **Owner approved 2026-11-25, Opus-reviewed**
+
+- **Destination:** `images/oksat/cholesteatoma/stam-sites.svg` (placed in §2.2).
+- **Alt text:** Lateral schematic of a right middle ear cleft showing the five EAONO/JOS STAM regions: attic (A), tympanic cavity (T), mastoid (M), supratubal recess (S1), and sinus tympani (S2), with Stage I through IV definitions.
