@@ -31,14 +31,14 @@ window.__OKSAT_CHAPTER = {
             title: 'Epidemiology, mastoiditis, subperiosteal abscesses, and petrous apicitis',
             blocks: [
                 { t: 'p', x: 'Intratemporal and intracranial complications occur in a **9:1 ratio** favoring COM/cholesteatoma over AOM, with postantibiotic mortality of **7–25%**. **Coalescent mastoiditis** is defined by erosion of mastoid air cell septations (versus **masked mastoiditis**, partially antibiotic-treated but still painful). **Postauricular subperiosteal mastoid abscess** occurs most often in very young children because the newborn mastoid cribriform area contains open channels between the mastoid interior and cortex. In acute coalescent mastoiditis, tenderness is over the **mastoid tip in adults**, whereas in **children with incomplete pneumatization** it is over the **fossa mastoidea near the antrum**. **Bezold abscess** results from pus perforating the thin medial cortex of the mastoid tip and tracking **medial to the SCM** into the neck. [[src|K15]] [[src|C2]]' },
-                { t: 'p', x: '**Petrous apicitis** is associated with **Gradenigo syndrome**: the triad of **diplopia (ipsilateral CN VI palsy)**, **retrobulbar pain**, and **persistent otorrhea**. The **anterior petrous apex** is pneumatized in **10%** of temporal bones (compared with **30%** for the posterior petrous apex). In **cochlear-implanted children** with acute mastoiditis and subperiosteal abscess, early **I&D, myringotomy/ventilation tube, and IV antibiotics** virtually always save the device. [[src|K15]] [[src|C2]] [[src|P16]]' },
+                { t: 'p', x: '**Petrous apicitis** is associated with **Gradenigo syndrome**: the triad of **diplopia (ipsilateral CN VI palsy)**, **retrobulbar pain**, and **persistent otorrhea**. The **anterior petrous apex** is pneumatized in **10%** of temporal bones (compared with **30%** for the posterior petrous apex). In **cochlear-implanted children** with acute mastoiditis and subperiosteal abscess, early **I&D, myringotomy/ventilation tube, and IV antibiotics** virtually always save the device; outside the cochlear-implant setting, standard care for a pediatric subperiosteal abscess is **IV ceftriaxone, a tympanostomy tube, and cortical mastoidectomy**. [[src|K15]] [[src|C2]] [[src|P16]]' },
                 {
                     t: 'table',
                     head: ['Complication feature', 'Pediatric', 'Adult'],
                     rows: [
                         ['Coalescent mastoiditis tenderness', 'Fossa mastoidea near antrum [[src|K15]]', 'Mastoid tip [[src|K15]]'],
                         ['Subperiosteal abscess path', 'Postauricular via open newborn cribriform channels [[src|K15]]', 'Bezold abscess medial to SCM through mastoid tip [[src|K15]]'],
-                        ['Facial palsy', 'AOM: abrupt, incomplete paresis, rapid full recovery [[src|K15]]', 'COM/cholesteatoma: erosive; 52–83% HB I–II after matrix removal [[src|K15]] [[src|K16]]'],
+                        ['Facial palsy (AOM vs COM/cholesteatoma)', 'AOM: abrupt, incomplete paresis, rapid full recovery [[src|K15]]', 'COM/cholesteatoma: erosive; 52–83% HB I–II after matrix removal [[src|K15]] [[src|K16]]'],
                         ['LST workup', 'Screen for prothrombotic disorders — 5 of 7 children [[src|K15]]', 'Contrast CT empty delta / MRV + mastoidectomy and IV antibiotics [[src|K15]]'],
                         ['Cochlear-implanted child with abscess', 'Early I&D + myringotomy/tube + IV antibiotics almost always saves implant [[src|P16]]', 'Pediatric focus [[src|P16]]'],
                     ],
@@ -123,7 +123,7 @@ window.__OKSAT_CHAPTER = {
                         { t: 'p', x: 'CT detects labyrinthine fistulae accurately in only **57–60%** of suspected cases, so surgeons must **presume a fistula in every cholesteatoma operation** until the matrix over the lateral canal is inspected directly. [[src|K15]]' },
                     ],
                 },
-                { t: 'p', x: 'In **open-cavity (CWD)** surgery with a labyrinthine fistula, cholesteatoma matrix is generally **left over the fistula**, whereas in **closed-cavity (CWU)** cases it is **removed with a 6-month second look**. If a semicircular canal lumen is entered during surgery, **potentially ototoxic ear drops must be avoided on the packing**. [[src|E52]] [[src|J8]]' },
+                { t: 'p', x: 'In **open-cavity (CWD)** surgery with a labyrinthine fistula, cholesteatoma matrix is generally **left over the fistula**, whereas in **closed-cavity (CWU)** cases it is **removed with a 6-month second look**. In an **only-hearing ear** or with a **large fistula**, the matrix is left on the fistula (open cavity). If a semicircular canal lumen is entered during surgery, **potentially ototoxic ear drops must be avoided on the packing**. [[src|E52]] [[src|J8]]' },
                 {
                     t: 'figure',
                     src: 'images/oksat/cholesteatoma/ct-lscc-fistula.jpg',

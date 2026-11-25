@@ -74,7 +74,7 @@ window.__OKSAT_CHAPTER = {
             n: '1.2',
             title: 'Tympanic membrane perforations and retraction pockets',
             blocks: [
-                { t: 'p', x: 'Conductive hearing loss from TM perforation affects low frequencies more, and for equal-sized perforations, **posterior perforations** cause greater hearing loss than anterior ones. **Marginal perforations** lack the fibrous annulus and are considered "unsafe" because EAC skin can easily advance into the middle ear to form cholesteatoma. [[src|E35]] [[src|E36]]' },
+                { t: 'p', x: 'Conductive hearing loss from TM perforation affects low frequencies more, and for equal-sized perforations, **posterior perforations** cause greater hearing loss than anterior ones (though current evidence from Merchant and Rosowski shows perforation size, not location, determines the loss). **Marginal perforations** lack the fibrous annulus and are considered "unsafe" because EAC skin can easily advance into the middle ear to form cholesteatoma. [[src|E35]] [[src|E36]]' },
                 {
                     t: 'call',
                     k: 'mech',

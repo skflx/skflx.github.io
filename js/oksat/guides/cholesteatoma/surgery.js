@@ -49,7 +49,7 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 { t: 'p', x: 'ICW (CWU) mastoidectomy is bounded superiorly by the **tegmen**, posteriorly by the **sigmoid sinus**, and anteriorly by the **ear canal**. **Koerner septum** (petrosquamous septum) is a flat bony sheet representing a false bottom that must be penetrated to enter the mastoid antrum. The **sinodural angle** between the tegmen and sigmoid sinus is also known as **Citelli angle**. [[src|J7]]' },
-                { t: 'p', x: 'The **facial recess** is bounded by the **chorda tympani and tympanic annulus laterally**, the **facial nerve medially**, and the **incus buttress superiorly**. During CWU posterior tympanotomy, the **ampulla of the LSCC** lies just medial to the facial nerve and must not be opened. The tympanic segment of the facial nerve is dehiscent in **25% to 55%** of temporal bones. **Silastic sheeting** placed through the facial recess toward the ET prevents adhesions between graft and denuded wall and promotes mucosal regeneration. [[src|K16]] [[src|E53]] [[src|C2]]' },
+                { t: 'p', x: 'The **facial recess** is bounded by the **chorda tympani and tympanic annulus laterally**, the **facial nerve medially**, and the **incus buttress superiorly**. During CWU posterior tympanotomy, the **LSCC** lies just superomedial to the second genu and must not be opened. The tympanic segment of the facial nerve is dehiscent in **25% to 55%** of temporal bones. **Silastic sheeting** placed through the facial recess toward the ET prevents adhesions between graft and denuded wall and promotes mucosal regeneration. [[src|K16]] [[src|E53]] [[src|C2]]' },
                 {
                     t: 'call',
                     k: 'trap',
@@ -71,7 +71,7 @@ window.__OKSAT_CHAPTER = {
                     cap: 'Residual cholesteatoma (left-behind matrix) versus recurrent cholesteatoma (de novo retraction pocket). Jackler, Ear Surgery Illustrated (Thieme, 2019), Fig. 8.64.',
                 },
                 { t: 'check', id: 'c1', q: 'Define residual versus recurrent cholesteatoma, and list the four most common sites of residual disease.', a: 'Residual is epithelium left behind at surgery; recurrent is a new retraction pocket forming de novo. Top residual sites: under the tympanic CN VII, around stapes/oval window, facial recess, and sinus tympani.' },
-                { t: 'check', id: 'c2', q: 'State the three boundaries of the facial recess and the inner ear structure lying immediately medial to the facial nerve during posterior tympanotomy.', a: 'Chorda tympani and tympanic annulus laterally, facial nerve medially, incus buttress superiorly; the ampulla of the lateral semicircular canal.' },
+                { t: 'check', id: 'c2', q: 'State the three boundaries of the facial recess and the inner ear structure lying just superomedial to the second genu during posterior tympanotomy.', a: 'Chorda tympani and tympanic annulus laterally, facial nerve medially, incus buttress superiorly; the lateral semicircular canal.' },
                 { t: 'check', id: 'c3', q: 'What surgical trap is Koerner septum, and why does a postauricular incision threaten the facial nerve in an infant?', a: 'Koerner septum is a flat bony false bottom that must be penetrated to enter the true antrum; incomplete mastoid tip development in infants and toddlers leaves CN VII superficial in the lower limb of the incision.' },
                 { t: 'practice', title: 'Apply it', refs: ['cholesteatoma:q20', 'cholesteatoma:q21', 'ear-anatomy:q63'] },
             ],
@@ -234,7 +234,15 @@ window.__OKSAT_CHAPTER = {
             n: '3.5',
             title: 'Ossiculoplasty and hearing rehabilitation',
             blocks: [
-                { t: 'p', x: 'An **ABG >15 dB** reverses the **512-Hz** Rinne test, whereas an **ABG >25 dB** reverses the **1024-Hz** Rinne test and suggests ossicular involvement. An **autologous incus** is the preferred material for OCR during second-stage tympanoplasty. When the stapes suprastructure is absent but the footplate, incus, and malleus are mobile, a stapes prosthesis crimped to the incus must be **shortened by 0.25 mm** to account for the intact footplate. **Laser removal of the stapes superstructure**—leaving a **high anterior crus** for ossiculoplasty—enables microdissection of cholesteatoma matrix from the footplate. Teenage patients often cope well with unilateral moderate CHL and decline hearing aids or ossiculoplasty. [[src|K17]] [[src|E51]] [[src|J8]] [[src|P16]]' },
+                { t: 'p', x: 'Tuning-fork Rinne reversal occurs at an **ABG of about 15 dB for 256 Hz**, **about 25 dB for 512 Hz**, and **about 35 dB for 1024 Hz** (suggesting ossicular involvement). An **autologous incus** is the preferred material for OCR during second-stage tympanoplasty. When the stapes suprastructure is absent but the footplate, incus, and malleus are mobile, a stapes prosthesis crimped to the incus must be **shortened by 0.25 mm** to account for the intact footplate. **Laser removal of the stapes superstructure**—leaving a **high anterior crus** for ossiculoplasty—enables microdissection of cholesteatoma matrix from the footplate. Teenage patients often cope well with unilateral moderate CHL and decline hearing aids or ossiculoplasty. [[src|K17]] [[src|E51]] [[src|J8]] [[src|P16]]' },
+                {
+                    t: 'call',
+                    k: 'trap',
+                    label: 'Source conflict',
+                    blocks: [
+                        { t: 'p', x: 'Tuning-fork Rinne reversal is keyed to standard US board values: **256 Hz** at about **15 dB** ABG, **512 Hz** at about **25 dB**, and **1024 Hz** at about **35 dB**. Kirtane Ch. 17 gives lower thresholds (**512 Hz >15 dB** and **1024 Hz >25 dB**). [[src|K17]]' },
+                    ],
+                },
                 {
                     t: 'table',
                     head: ['Option', 'Indication & expected outcome'],
@@ -261,7 +269,7 @@ window.__OKSAT_CHAPTER = {
                 },
                 { t: 'check', id: 'c1', q: 'Contrast expected adult PORP versus TORP hearing outcomes, and state how omitting cartilage interposition changes hydroxyapatite extrusion.', a: 'Two-thirds within 15 dB of bone for PORP vs within 25 dB for TORP; omitting cartilage doubled extrusion from 3.7% to 7.9%.' },
                 { t: 'check', id: 'c2', q: 'In children, how do incus interposition and long-term TORP outcomes compare, and what complication rates distinguish pediatric percutaneous BCDs?', a: 'Incus interposition achieves normal hearing in 75% vs poor long-term TORP (~1/3 at 5 years); pediatric percutaneous BCDs have a 44% revision rate, 8% traumatic fracture rate, and often need GA for soft-tissue overgrowth.' },
-                { t: 'check', id: 'c3', q: 'When is bone cement appropriate for incus erosion, and how does the 1024-Hz Rinne test alert you to ossicular involvement?', a: 'Distal incus gap <1–2 mm; a reversed 1024-Hz Rinne indicates an ABG >25 dB (vs >15 dB for 512 Hz), suggesting ossicular involvement.' },
+                { t: 'check', id: 'c3', q: 'When is bone cement appropriate for incus erosion, and how does the 1024-Hz Rinne test alert you to ossicular involvement?', a: 'Distal incus gap <1–2 mm; Rinne reverses at about 15 dB ABG for 256 Hz, about 25 dB for 512 Hz, and about 35 dB for 1024 Hz, suggesting ossicular involvement.' },
                 { t: 'practice', title: 'Apply it', refs: ['cholesteatoma:q31', 'cholesteatoma:q32', 'cholesteatoma:q33'] },
             ],
             drill: [{ m: 'cholesteatoma', c: ['ossiculoplasty-rehab'] }],

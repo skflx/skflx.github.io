@@ -104,7 +104,7 @@ window.__OKSAT_CHAPTER = {
             n: '2.3',
             title: 'Growth pathways and middle ear surgical landmarks',
             blocks: [
-                { t: 'p', x: 'Cholesteatoma growth is constrained by middle ear ligaments and mesenteries derived from embryological remnants of the first branchial arch pouches. The **notch of Rivinus** is the bony gateway to the epitympanum bordered by the anterior and posterior tympanic spines. The **cog** is a bony septum suspended from the tegmen tympani separating the anterior from the posterior epitympanum. Fetid otorrhea and hearing loss are the primary presenting complaints, and a **30-degree rigid endoscope** visualizes epitympanic retraction pocket extent missed by the microscope. [[src|J8]] [[src|C2]] [[src|E46]] [[src|E48]]' },
+                { t: 'p', x: 'Cholesteatoma growth is constrained by middle ear ligaments and mesenteries derived from embryological remnants of the first pharyngeal pouch. The **notch of Rivinus** is the bony gateway to the epitympanum bordered by the anterior and posterior tympanic spines. The **cog** is a bony septum suspended from the tegmen tympani separating the anterior from the posterior epitympanum. Fetid otorrhea and hearing loss are the primary presenting complaints, and a **30-degree rigid endoscope** visualizes epitympanic retraction pocket extent missed by the microscope. [[src|J8]] [[src|C2]] [[src|E46]] [[src|E48]]' },
                 {
                     t: 'table',
                     head: ['Growth route (frequency)', 'Pathway relative to ossicles', 'Key anatomical neighbors'],
