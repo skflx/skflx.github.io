@@ -224,6 +224,17 @@ window.OKSAT_MANIFEST = [
     desc: 'The internal auditory canal from the bone out: six walls, fundus and crests, rotating nerves, arterial loops, imaging, surgical corridors, clinical correlations, cases and the evidence; one concept per guide section.',
     data: 'js/oksat/modules/iac-anatomy.js',
   },
+  {
+    slug: 'cholesteatoma',
+    title: 'Cholesteatoma & Chronic Ear',
+    kicker: 'Self-Assessment · Otology',
+    subspecialty: 'otology',
+    count: 55,
+    accent: '#2F6E6A',
+    draft: true,
+    desc: 'Chronic otitis media, tympanoplasty, congenital and acquired cholesteatoma, imaging, mastoidectomy, ossiculoplasty, and complications.',
+    data: 'js/oksat/modules/cholesteatoma.js',
+  },
 ];
 
 /* Interactive learning: first-pass study guides (docs/authoring-oksat-guide.md).
@@ -314,6 +325,22 @@ window.OKSAT_GUIDES = [
       { id: 'clinical-correlations', k: 6, short: 'Clinical correlations', min: 40, sections: 9, data: 'js/oksat/guides/iac-anatomy/clinical-correlations.js' },
       { id: 'synthesis', k: 7, short: 'Synthesis cases', min: 45, sections: 6, data: 'js/oksat/guides/iac-anatomy/synthesis.js' },
       { id: 'appraisal', k: 8, short: 'The evidence', min: 20, sections: 5, data: 'js/oksat/guides/iac-anatomy/appraisal.js' },
+    ],
+  },
+  {
+    slug: 'cholesteatoma',
+    title: 'Cholesteatoma & Chronic Ear',
+    kicker: 'Otology / Neurotology',
+    subspecialty: 'otology',
+    accent: '#2F6E6A',
+    draft: true,
+    desc: 'Chronic otitis media, tympanoplasty, congenital and acquired cholesteatoma, imaging, mastoidectomy, ossiculoplasty, and complications—contrasting pediatric and adult management.',
+    chapters: [
+      { id: 'start', short: 'Start here', data: 'js/oksat/guides/cholesteatoma/start.js' },
+      { id: 'com-tm', k: 1, short: 'COM & tympanoplasty', min: 30, sections: 4, data: 'js/oksat/guides/cholesteatoma/com-tm.js' },
+      { id: 'cholesteatoma-dx', k: 2, short: 'Cholesteatoma & imaging', min: 35, sections: 4, data: 'js/oksat/guides/cholesteatoma/cholesteatoma-dx.js' },
+      { id: 'surgery', k: 3, short: 'Mastoidectomy & OCR', min: 40, sections: 5, data: 'js/oksat/guides/cholesteatoma/surgery.js' },
+      { id: 'complications', k: 4, short: 'Complications', min: 35, sections: 5, data: 'js/oksat/guides/cholesteatoma/complications.js' },
     ],
   },
 ];

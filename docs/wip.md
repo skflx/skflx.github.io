@@ -91,6 +91,8 @@ Interactive learning guides (`docs/authoring-oksat-guide.md`):
   planned and fully pinned, no chapter built. Ledger, chapter briefs (`plans/iac-briefs/`) and figure
   specs (`plans/iac-figures/`) are done; Gemini executes the serial queue in
   `plans/2026-11-23-iac-anatomy-handoff.md`, one PR per step, with a Sonnet review after each wave.
+- **Cholesteatoma & Chronic Ear** (`cholesteatoma`, brief `plans/quiz/2026-11-30-cholesteatoma-chronic-ear.md`, issue #385):
+  listed as **Draft**; four content chapters plus start and 55-item companion module contrasting pediatric vs adult management, with textbook figures credited in `images/oksat/cholesteatoma/ATTRIBUTION.md`.
 
 None of the newer modules is clinically verified except where its explanations say so.
 Otoplasty's explanations flag vault-versus-StatPearls discrepancies for owner review.
