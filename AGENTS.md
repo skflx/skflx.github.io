@@ -21,7 +21,7 @@ The owner decides the roster for each wave. Protocol: `docs/delegation.md`.
 
 ## Skills
 
-`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `gemini-delegate`, `oksat-guide`, `oksat-module`). Claude invokes them as skills; any other agent reads the file and follows it as written.
+`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `gemini-delegate`, `oksat-guide`, `oksat-module`, `quiz-prep`; third-party ones are listed in `.claude/skills/THIRD_PARTY_SKILLS.md`). Claude invokes them as skills; any other agent reads the file and follows it as written.
 
 ## What this is
 

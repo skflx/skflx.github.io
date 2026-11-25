@@ -6,6 +6,8 @@ wave (`AGENTS.md`, Models & roles).
 
 The roles (owner, orchestrator, executor, adversarial reviewer) and what each never does are in `AGENTS.md`, Models & roles.
 
+RR quiz topics use a lighter form of this protocol (one brief, one issue, two executor steps): `.claude/skills/quiz-prep/SKILL.md`.
+
 ## 1. What makes a WP delegable
 
 A WP goes to the executor only when all of these hold:

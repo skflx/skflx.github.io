@@ -1,6 +1,6 @@
 # Third-party skills
 
-Copied unmodified from upstream default branches (shallow clone; ponytail 2026-11-02, its sub-skills 2026-11-19). Do not edit this folder in place; to update, re-copy from upstream and bump the commit below.
+Copied unmodified from upstream default branches (shallow clone; ponytail 2026-11-02, its sub-skills 2026-11-19; grill-me and grilling 2026-11-25). Do not edit this folder in place; to update, re-copy from upstream and bump the commit below.
 
 | Skill folder | Upstream | Commit | Licence |
 |---|---|---|---|
@@ -10,5 +10,9 @@ Copied unmodified from upstream default branches (shallow clone; ponytail 2026-1
 | `ponytail-debt/` | dietrichgebert/ponytail, `skills/ponytail-debt` | 96608e0 | MIT |
 | `ponytail-gain/` | dietrichgebert/ponytail, `skills/ponytail-gain` | 96608e0 | MIT |
 | `ponytail-help/` | dietrichgebert/ponytail, `skills/ponytail-help` | 96608e0 | MIT |
+| `grill-me/` | mattpocock/skills, `skills/productivity/grill-me` | d653911 | MIT |
+| `grilling/` | mattpocock/skills, `skills/productivity/grilling` | d653911 | MIT |
 
 The upstream plugin's hooks (mode tracker, statusline, band) are not copied: they need a plugin install, so `ponytail-help`'s band and config sections do not apply here.
+
+`grill-me` only invokes `grilling` (it sets `disable-model-invocation`, so it runs when typed as `/grill-me`); both folders are needed.
