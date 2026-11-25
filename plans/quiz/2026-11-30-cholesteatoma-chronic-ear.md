@@ -634,7 +634,7 @@ Append to `js/oksat/modules/cholesteatoma.js` under domain `cases`, strictly at 
 
 Credits: this table is authoritative; the figure number comes from the file name (`fig-08-19` is Fig. 8.19). Figure numbers and pages quoted inline in §4 are placeholders: use this table.
 
-All textbook figures below are copied **unmodified** from `/Users/samipkafle/Library/CloudStorage/GoogleDrive-skflx.io@gmail.com/My Drive/skflx-repos/study-guide-test/` to `images/oksat/cholesteatoma/` and recorded in `images/oksat/cholesteatoma/ATTRIBUTION.md` (with source, figure number, author/edition, and rights note). Reused repo figure: `images/oksat/ear-anatomy/coronal-attic.svg` (§2.2, schematic).
+All textbook figures below are copied **unmodified** from `study-guide-test/` to `images/oksat/cholesteatoma/` and recorded in `images/oksat/cholesteatoma/ATTRIBUTION.md` (with source, figure number, author/edition, and rights note). Reused repo figure: `images/oksat/ear-anatomy/coronal-attic.svg` (§2.2, schematic).
 
 ### Textbook figures (1–2 per section)
 
