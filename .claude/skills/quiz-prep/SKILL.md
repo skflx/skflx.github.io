@@ -14,9 +14,10 @@ guide section. Every section ends with 2 to 3 `check` prompts, a `practice` bloc
 notes from `tools/skoto-notes.json`. Size: 3 to 5 content chapters, 15 to 25 sections, 40 to 70 items;
 a bigger topic expands only after the owner says so.
 
-**Roles:** orchestrator Opus (or Neon, Argon, Carbon when the owner swaps for price); executor Gemini
-Hydrogen; reviewer one frontier model from the *other* family. Sonnet, or a frontier Gemini at low
-effort, does mechanical sessions and stands in for Hydrogen. The owner merges and vets medicine.
+**Roles:** orchestrator Claude Opus; executor Gemini Hydrogen at medium effort (`gemini-4-hydrogen-medium`),
+sent by the orchestrator through the `/agy` skill; reviewer one frontier model from the *other* family.
+Hydrogen may escalate (see "Escalation"). The owner merges and vets medicine. Swap any of these when the
+owner says so; keep the process light.
 
 ## Order of work
 
@@ -49,12 +50,29 @@ Record the wall-clock time of steps 2, 4, 5, 7 and 8 in the issue; the owner use
 - **Skip what the pipeline drops:** no separate ledger, handoff or chapter briefs, no sub-issues, no
   appraisal chapter unless the faculty assigned papers.
 
-## The executor prompt (owner pastes it into a fresh Hydrogen session)
+## Sending executor work (orchestrator, via `/agy`)
+
+Run each executor step with `/agy` from the repo root, `--model gemini-4-hydrogen-medium --mode auto`
+(the step runs the verify commands). Prompt:
 
 ```
 Run step <A|B> of issue #<n>: follow .claude/skills/quiz-prep/SKILL.md "Executor protocol" exactly,
-with the brief plans/quiz/<file>.md. Do one step, open its PR, then stop and report.
+with the brief plans/quiz/<file>.md. Do one step, then stop and report.
 ```
+
+`/agy` forbids the executor from touching git, so protocol steps 1, 3 and 6 (fetch, branch, commit, push,
+PR, tick) are the orchestrator's: branch before the send, then review the diff and open the PR after it.
+
+**Escalation.** If a task is too hard for Hydrogen (a conflict it cannot key, an item it cannot write
+from the brief), it stops with `TOO HARD: <what> — want advisor input`, not a guess. The orchestrator
+then either answers in the brief or sends that one question to Neon (`gemini-4-neon-high`, or another
+frontier model on AGY) in `plan` mode, writes the answer into the brief, and resumes Hydrogen on the
+same `--conversation`.
+
+**Budget.** After every AGY send, report in the thread: the run's tokens (`usage.total_tokens`) and the
+running AGY total for the current 5-hour window and week, plus Claude's 5-hour and weekly percent used
+(`get_usage`). The AGY CLI does not expose its own remaining quota; if it fails on a limit, say so and
+pause. Warn the owner as soon as either side passes about 70% of a window, before starting the next step.
 
 ## Executor protocol
 
@@ -67,7 +85,7 @@ with the brief plans/quiz/<file>.md. Do one step, open its PR, then stop and rep
    not give.
 5. Verify: `node tools/stamp-assets.mjs`, then `check-data`, `lint-oksat <slug>`, `lint-oksat-guide <slug>`,
    `test-oksat-learn`, `test-oksat-engine`, `smoke-pages`. Fix until green; never weaken a test.
-6. Commit one short line, push, open a PR to `master` with `Closes #<n>` only on step B, and the tail of each
+6. (Orchestrator, when sent via `/agy`.) Commit one short line, push, open a PR to `master` with `Closes #<n>` only on step B, and the tail of each
    command. Tick the step in the issue. Never merge.
 7. Stop with `BLOCKED: <why>` in the PR when the brief lacks a fact, a practice ref contradicts the brief, a
    change outside Touch is needed, or the diff passes about 800 lines (open the PR with what is done).
