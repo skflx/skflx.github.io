@@ -128,7 +128,7 @@ a likely error exists.
 
 ### Synthesis cases (the last section)
 
-Three or four cases of 2–4 questions each, `section: 'Synthesis Cases'`, concept `case-<name>`. A case:
+Required in every module, a guide's companion included. Three or four cases of 2–4 questions each, `section: 'Synthesis Cases'`, concept `case-<name>`. A case:
 
 1. Opens with a short vignette giving **raw measurements or findings**, not the diagnosis, so the
    learner must apply the module's norms.

@@ -10,7 +10,8 @@ modules** (`/oksat-module`) for locked first attempts and spaced repetition. A g
 with its questions; a guide with nothing to drill into is unfinished.
 
 Spec: `docs/authoring-oksat-guide.md` (schema, blocks, markup, checkers, refs). Read it once, then
-work here. Shipped example: `ar-crs-aerd`.
+work here. Shipped examples: `ear-anatomy`, `iac-anatomy` (the standard shape: one companion module, one
+concept per section). For an RR quiz topic, start from `/quiz-prep`, which sets size and the model split.
 
 ## 0. Work with the owner
 
@@ -35,8 +36,9 @@ room: predict first, then explain, then check.
    you could not read.
 3. **Outline** chapters of 3 to 10 sections, 15 to 50 minutes each, as a ladder (foundations, entity,
    work-up, management, appraisal). Each chapter opens with a `tldr` of 3 to 6 bullets.
-4. **Write sections**, one idea each: teaching blocks, then 2 to 3 `check` prompts, then (where
-   questions exist) a `practice` block and a `drill` row. Anything beyond first pass goes in `deep`.
+4. **Write sections**, one idea each: teaching blocks, then 2 to 3 `check` prompts, then a `practice`
+   block (1 to 3 module items) and a `drill` row to the section's own concept, and `ref` rows to the
+   sk.oto notes (`tools/skoto-notes.json`). Anything beyond first pass goes in `deep`.
    Use a `tool` only for a criteria set the learner applies with a threshold.
 5. **Questions.** Read the target modules' items and concepts before inlining anything. Add only what
    is new: a vignette that applies a section, or a fact no item covers. A duplicate is skipped. New
@@ -59,7 +61,9 @@ room: predict first, then explain, then check.
    ```
    Then read the chapters in both themes and at phone width (`tools/smoke-lib.mjs`; screenshots are the
    only proof the page teaches rather than merely loads).
-10. **Docs pass** per `AGENTS.md` (Documentation second pass): `README.md`, `docs/wip.md`, the owning
+10. **Content review** before hand-off: traceability (every claim to a named source), pearls (every
+    item's `detailed` ends on one), distractors (from neighbouring lists, not absurdities).
+11. **Docs pass** per `AGENTS.md` (Documentation second pass): `README.md`, `docs/wip.md`, the owning
     spec. No counts that rot.
 
 ## 2. Converting an existing study guide

@@ -1,7 +1,6 @@
 # Quiz-prep pipeline: one guide and one module per quiz session
 
-- **Status**: Draft. Every default below is a recommendation pending the owner's grill answers
-  (§7); nothing in §5 is codified until they are in.
+- **Status**: Decided (grill rounds 1 and 2, §7). Playbook: `.claude/skills/quiz-prep/SKILL.md`.
 - **Created**: 2026-11-25
 - **Schedule**: the RR quiz sessions (Mondays). Work on a topic starts the Monday a week before its quiz.
 - **First run**: Hargunani, Cholesteatoma and chronic ear, quiz Mon 11/30.
@@ -78,26 +77,25 @@ From the IAC review wave:
 ## 4. Drop for quiz topics
 
 - The per-topic spec, ledger, handoff and per-chapter briefs as separate files: they collapse into one
-  quiz brief (§5.1, pending round 2).
+  quiz brief, `plans/quiz/<YYYY-MM-DD>-<slug>.md` from `plans/quiz/TEMPLATE.md`.
 - GitHub sub-issues per WP.
 - The appraisal chapter, unless the faculty assigned papers.
 
-Kept (owner, round 1): **Claude and Gemini in tandem** (division of labour in §5.1, pending round 2), and
+Kept (owner, round 1): **Claude and Gemini in tandem** (division of labour in §5), and
 **figures**: textbook figures first; a bespoke SVG only for a special case no source figure shows.
 
 ## 5. The pipeline
 
-One thread and one draft PR per quiz. Day 0 is the Monday a week before the quiz.
+One thread, one brief, one GitHub issue (steps as its task list), two executor PRs per quiz. Day 0 is
+the Monday a week before the quiz. The step table and the executor protocol are in
+`.claude/skills/quiz-prep/SKILL.md`; in short: intake (owner) → source map and grill (orchestrator) →
+brief → step A (Hydrogen) → spot-check (orchestrator) → step B (Hydrogen) → other-family review →
+merge with `draft: true` (owner).
 
-| Step | When | Who | Output |
-|---|---|---|---|
-| 1. Intake | Day 0 | owner | sources in the thread: faculty slides or papers, the RR deck, book chapters, Drive paths |
-| 2. Source map | Day 0 to 1 | Claude | every source read (or named as unreadable), ranked, with what each covers; posted in the thread |
-| 3. Grill | Day 1 | Claude asks, owner answers | `/grill-me` round on scope: chapter list, what the faculty is likely to test, the topic's contrast axis, what to skip |
-| 4. Build | Day 1 to 3 | Claude | guide chapters and module items written together, section by section (§3) |
-| 5. Verify | Day 3 | Claude | the commands in §6, then screenshots of a chapter and a module item in both themes and at phone width |
-| 6. Review | Day 3 | Claude | `/ponytail-review` on the diff + the content pass (§3.10); fixes pushed |
-| 7. Vet and ship | Day 3 to 6 | owner | owner reads the guide; merge with `draft: true` so it is live for study; vetting continues on the site |
+**Roles.** Orchestrator: Opus, or a frontier Gemini (Neon, Argon, Carbon are interchangeable by price).
+Executor: Hydrogen. Reviewer: a frontier model of the other family. Sonnet or a frontier Gemini at low
+effort: mechanical sessions, and the executor's stand-in. The judgment (source reading, keying, the
+brief) stays with the orchestrator; delegation saves the writing and verification loop.
 
 Sources rank, for keying an answer: **the faculty's own material** (what the quiz writer teaches) >
 board-review text > the RR deck > vault notes. Anything no source states is checked on PubMed or the web
@@ -120,6 +118,12 @@ Round 1 (owner, 2026-11-25): yes to 1 and 3 to 8. On 2: yes, and a topic that is
 expand after asking. Two amendments: Gemini waves stay (division of labour, round 2) and bespoke figures stay
 for special cases (§4).
 
+Round 2 (owner, 2026-11-25): Neon, Argon and Carbon are comparable frontier tiers, swapped by price;
+Hydrogen is the cheap executor. Yes to: Opus orchestrates, Hydrogen executes, other family reviews; one
+brief file per quiz; two steps with a spot-check between and one review at the end; one issue per quiz;
+special-case SVGs approved in the grill; Sonnet, Argon, Carbon for mechanical work and fallback. The split
+is piloted on Hargunani now, timing each step.
+
 1. Unit: guide + one companion module per quiz.
 2. Size: 3 to 5 chapters, module 40 to 70 items.
 3. Process: §4 drops apply to quiz topics.
@@ -131,13 +135,12 @@ for special cases (§4).
 8. Hargunani: the child-versus-adult contrast as a comparison table in every chapter plus paired
    child and adult synthesis cases, not a separate chapter.
 
-## 8. Codify (after round 1)
+## 8. Codified
 
-- `.claude/skills/quiz-prep/SKILL.md`: §5 as the order of work, §3 and §4 as rules, pointing at the two
-  OKSAT skills for schema and verification.
-- `.claude/skills/oksat-guide/SKILL.md` and `.claude/skills/oksat-module/SKILL.md`: the adopted rules
-  that are not quiz-specific (§3.1, 3.2, 3.7, 3.10).
-- `AGENTS.md` Skills list; `docs/wip.md`.
+- `.claude/skills/quiz-prep/SKILL.md` (order of work, roles, executor prompt and protocol);
+  `plans/quiz/TEMPLATE.md` (the brief).
+- `/oksat-guide` and `/oksat-module` carry the general rules (one companion module per guide, a concept
+  per section, the section ending, required cases, the content review pass).
 
 ## 9. Hargunani draft outline (pending sources)
 
