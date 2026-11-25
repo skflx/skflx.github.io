@@ -229,7 +229,7 @@ window.OKSAT_MANIFEST = [
     title: 'Cholesteatoma & Chronic Ear',
     kicker: 'Self-Assessment · Otology',
     subspecialty: 'otology',
-    count: 19,
+    count: 55,
     accent: '#2F6E6A',
     draft: true,
     desc: 'Chronic otitis media, tympanoplasty, congenital and acquired cholesteatoma, imaging, mastoidectomy, ossiculoplasty, and complications.',
@@ -339,6 +339,8 @@ window.OKSAT_GUIDES = [
       { id: 'start', short: 'Start here', data: 'js/oksat/guides/cholesteatoma/start.js' },
       { id: 'com-tm', k: 1, short: 'COM & tympanoplasty', min: 30, sections: 4, data: 'js/oksat/guides/cholesteatoma/com-tm.js' },
       { id: 'cholesteatoma-dx', k: 2, short: 'Cholesteatoma & imaging', min: 35, sections: 4, data: 'js/oksat/guides/cholesteatoma/cholesteatoma-dx.js' },
+      { id: 'surgery', k: 3, short: 'Mastoidectomy & OCR', min: 40, sections: 5, data: 'js/oksat/guides/cholesteatoma/surgery.js' },
+      { id: 'complications', k: 4, short: 'Complications', min: 35, sections: 5, data: 'js/oksat/guides/cholesteatoma/complications.js' },
     ],
   },
 ];

@@ -245,20 +245,31 @@
         'C57BL': 'C57 black (inbred laboratory mouse strain)',
 
         /* ---- cholesteatoma and chronic ear ---- */
+        'ABG': 'air-bone gap',
         'AOM': 'acute otitis media',
+        'BCD': 'bone conduction device',
         'CHL': 'conductive hearing loss',
         'COM': 'chronic otitis media',
         'CSOM': 'chronic suppurative otitis media',
         'CWD': 'canal wall down (mastoidectomy)',
+        'CWR': 'canal wall reconstruction (Gantz)',
         'CWU': 'canal wall up (mastoidectomy)',
         'EPI': 'echo-planar imaging',
         'ET': 'Eustachian tube',
         'HASTE': 'half-Fourier acquisition single-shot turbo spin-echo (non-EPI DWI MRI sequence)',
+        'ICW': 'intact canal wall (mastoidectomy)',
+        'LSCC': 'lateral semicircular canal',
+        'LST': 'lateral sinus thrombosis (sigmoid sinus thrombophlebitis)',
         'MIB-1': 'mindbomb E3 ubiquitin protein ligase 1 (Ki-67 proliferation marker)',
         'MMP': 'matrix metalloproteinase',
+        'MRV': 'magnetic resonance venography',
+        'OCR': 'ossicular chain reconstruction',
         'OM': 'otitis media',
+        'PORP': 'partial ossicular replacement prosthesis',
         'RP': 'retraction pocket',
+        'SCM': 'sternocleidomastoid',
         'TM': 'tympanic membrane',
+        'TORP': 'total ossicular replacement prosthesis',
     };
 
     const PLAIN = new Set([
@@ -275,8 +286,8 @@
         'kHz', 'DOI', 'CC', 'BY', 'SD', 'JNEUROSCI', 'ANOVA',
         /* IAC guide: units, modalities, author initials */
         '3D', 'EMG', 'RK',
-        /* cholesteatoma guide: proliferation marker */
-        'Ki-67',
+        /* cholesteatoma guide: proliferation marker & general clinical terms */
+        'GA', 'ICP', 'Ki-67', 'LP',
     ]);
     /* Roman numerals (Draf IIa, type III), interleukins and their chains by number, figure panels (1A, S4). */
     const PLAIN_RE = /^(?:(?:I{1,3}|IV|VI{0,3}|IX|XI{0,3})[ab]?|IL-\d+[A-F]?|[DE]4|S?\d[A-J]?)$/;
