@@ -52,12 +52,15 @@ Record the wall-clock time of steps 2, 4, 5, 7 and 8 in the issue; the owner use
 
 ## Sending executor work (orchestrator, via `/agy`)
 
-Run each executor step with `/agy` from the repo root, `--model gemini-4-hydrogen-medium --mode auto`
-(the step runs the verify commands). Prompt:
+Run each executor step with `/agy` from the repo root, `--model gemini-4-hydrogen-medium` and no
+`--mode` (this account has no `auto`; the default mode still edits files and runs commands, and `plan` is
+not enforced, so say "do not edit files" in any read-only prompt). Prompt:
 
 ```
-Run step <A|B> of issue #<n>: follow .claude/skills/quiz-prep/SKILL.md "Executor protocol" exactly,
-with the brief plans/quiz/<file>.md. Do one step, then stop and report.
+Run step <A|B> of issue #<n>: follow .claude/skills/quiz-prep/SKILL.md "Executor protocol" steps 4, 5
+and 7, with the brief plans/quiz/<file>.md. Skip steps 1, 2, 3 and 6. Touch only the brief's Touch list
+for this step. Do not create, switch, or delete git branches or worktrees. Do not commit, stash, or push.
+Leave all changes uncommitted. End your response with a list of files changed and anything left undone.
 ```
 
 `/agy` forbids the executor from touching git, so protocol steps 1, 3 and 6 (fetch, branch, commit, push,
@@ -66,7 +69,7 @@ PR, tick) are the orchestrator's: branch before the send, then review the diff a
 **Escalation.** If a task is too hard for Hydrogen (a conflict it cannot key, an item it cannot write
 from the brief), it stops with `TOO HARD: <what> — want advisor input`, not a guess. The orchestrator
 then either answers in the brief or sends that one question to Neon (`gemini-4-neon-high`, or another
-frontier model on AGY) in `plan` mode, writes the answer into the brief, and resumes Hydrogen on the
+frontier model on AGY) with "do not edit files" in the prompt, writes the answer into the brief, and resumes Hydrogen on the
 same `--conversation`.
 
 **Budget.** After every AGY send, report in the thread: the run's tokens (`usage.total_tokens`) and the
