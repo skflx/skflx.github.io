@@ -131,6 +131,15 @@ export const PAGES = [
     return figureReady(p, 'larynx');
   } },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
+  /* Postop hypocalcemia: the protocol text renders; a PTH below 10 builds the overnight plan with its citations.
+     Branch logic is tools/test-hypocalcemia.mjs. */
+  { path: 'hypocalcemia.html', ready: async (p) => {
+    await wait(p, () => document.getElementById('hc').getAttribute('data-ready') === '1' && document.querySelectorAll('.hc-src-item').length > 40);
+    await p.click('input[name="hc-setting"][value="ip"]');
+    await p.fill('#hc-in-pth', '8');
+    return wait(p, () => document.querySelectorAll('.hc-step').length >= 4 && document.querySelector('.hc-src-item.is-cited')
+      && !document.getElementById('hc-in-amCa').closest('.hc-q').hidden);
+  } },
   /* Search: the index is built (OKSAT modules loaded in frames, CPT table present); a query yields hits from both. */
   { path: 'search.html', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-search') === 'ready') },
   /* PDF chapter splitter: vendored libs loaded, negative interval guard terminates with 1-page parts,

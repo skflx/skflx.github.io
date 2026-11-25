@@ -822,7 +822,7 @@ const VENDOR_SHA384 = {
 };
 
 /* Pages that must make no third-party request at all. */
-const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html', 'search.html', 'ssb.html', 'OLSB.html', 'pdf-chapter-splitter.html']);
+const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html', 'hypocalcemia.html', 'search.html', 'ssb.html', 'OLSB.html', 'pdf-chapter-splitter.html']);
 
 function checkSecurity() {
   console.log('\nsecurity: vendored scripts + page policies');

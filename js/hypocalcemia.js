@@ -1,0 +1,778 @@
+/* =============================================================
+   hypocalcemia.js — hypocalcemia.html: the OHSU OTO-HNS postop
+   hypocalcemia protocol as a step-by-step plan.
+
+   Two halves in one IIFE:
+   1. evaluate(state): DOM-free. Walks the protocol (the verbatim text
+      is js/hypocalcemia-protocol.js) and returns the questions to ask,
+      the plan steps (each citing source ids) and a disposition. Where
+      the protocol is silent or contradicts itself, it follows the
+      owner's rules (the `added` items of js/hypocalcemia-protocol.js)
+      and cites them. tools/test-hypocalcemia.mjs runs it in Node and
+      fails if any input combination lands nowhere.
+   2. The page: builds every question once, shows the ones evaluate()
+      asks for, renders the plan and the protocol text, and copies the
+      plan as plain text. Nothing is stored: a reload is a clean slate.
+
+   Two owner rules sit on top of the text: corrected calcium is Payne
+   (Ca + 0.8 × (4.0 − albumin)), which the protocol names without a
+   formula; and a value exactly at a cutoff counts as exceeding it
+   (PTH 10 as above 10, calcium 8.5 as above 8.5), except where the
+   text writes the equality itself ("< or = 8.5", PTH 10–15 item 2;
+   "PTH 15 – 20", which keeps 20).
+   ============================================================= */
+(function () {
+    'use strict';
+
+    /* ---------------- 1. Engine ---------------- */
+
+    /* Plausible ranges: outside them a value is treated as a typo, not used. */
+    var RANGE = {
+        pth: [0, 3000], amPth: [0, 3000],
+        alb: [1, 6],
+        amCa: [3, 16], ca11: [3, 16], ca17: [3, 16],
+    };
+
+    var WHEN = [
+        ['rr', 'Recovery room'],
+        ['eve', 'Evening of surgery'],
+        ['am', 'POD 1 · morning'],
+        ['h11', 'POD 1 · 11:00 AM'],
+        ['pm', 'POD 1 · afternoon'],
+        ['h17', 'POD 1 · 5:00 PM'],
+        ['dc', 'Discharge'],
+        ['pod2', 'Next morning · before discharge'],
+        ['next', 'Morning after discharge'],
+    ];
+
+    function round2(n) { return Math.round(n * 100) / 100; }
+
+    function parseNum(raw) {
+        if (raw === null || raw === undefined) return null;
+        var t = String(raw).trim().replace(',', '.');
+        if (t === '') return null;
+        if (!/^\d*\.?\d+$/.test(t)) return NaN;
+        return parseFloat(t);
+    }
+
+    /* Payne. alb null → the value is taken as already corrected. */
+    function corrected(ca, alb) {
+        if (ca === null) return null;
+        if (alb === null) return round2(ca);
+        return round2(ca + 0.8 * (4.0 - alb));
+    }
+
+    /* Recovery-room tier. A value at a cutoff counts as exceeding it (owner):
+       10 is 10–15, 15 is 15–20. "15 – 20" is written inclusive, so 20 stays
+       in it (owner). */
+    function tierOf(p) {
+        if (p < 10) return 'lt10';
+        if (p < 15) return 'low';
+        if (p <= 20) return 'mid';
+        return 'gt20';
+    }
+
+    var TIER_LABEL = { lt10: '< 10', low: '10 – 15', mid: '15 – 20', gt20: '> 20' };
+
+    function evaluate(s) {
+        var R = { ask: {}, steps: [], dispo: null, invalid: {} };
+        var ivDone = false;
+
+        function ask(k, o) { R.ask[k] = o || {}; }
+        function step(when, kind, text, src) { R.steps.push({ when: when, kind: kind, text: text, src: src || [] }); }
+        function done(kind, text) { R.dispo = { kind: kind, text: text }; return R; }
+        function iv(when, text, src) {
+            step(when, 'iv', text, src);
+            if (!ivDone) { ivDone = true; step(when, 'iv', 'Order remote telemetry during IV calcium.', ['g.1']); }
+        }
+        function val(k) {
+            var n = parseNum(s[k]);
+            if (n === null) return null;
+            var r = RANGE[k];
+            if (isNaN(n) || (r && (n < r[0] || n > r[1]))) { R.invalid[k] = true; return null; }
+            return n;
+        }
+        var albRaw = parseNum(s.alb);
+        var alb = val('alb');
+        var albBad = albRaw !== null && alb === null;
+        function cc(k) { var v = val(k); return (v === null || albBad) ? null : corrected(v, alb); }
+        function waitCa(label) { return done('wait', albBad ? 'Check the albumin value (g/dL)' : 'Enter the ' + label + ' calcium'); }
+        var gfr = s.gfr === 'yes';
+
+        /* Renal criterion (ip.renal) before any overnight discharge. */
+        function blocked() {
+            if (!gfr) return false;
+            ask('cr');
+            if (!s.cr) {
+                step('dc', 'do', 'Before discharge: creatinine same as or better than preop (preop GFR below 60).', ['ip.renal']);
+                done('wait', 'Hold discharge: creatinine vs preop');
+                return true;
+            }
+            if (s.cr === 'worse') {
+                step('dc', 'stay', 'Creatinine worse than preop: stay another day, IV hydration, repeat BMP to confirm stable creatinine before discharge.', ['ip.renal']);
+                done('stay', 'Stay another day: IV hydration, repeat BMP');
+                return true;
+            }
+            step('dc', 'note', 'Creatinine same as or better than preop: renal criterion met.', ['ip.renal']);
+            return false;
+        }
+
+        /* General Rules #3: next-morning outpatient calcium. */
+        function outLab(src) {
+            ask('lab');
+            src = (src || []).concat('g.3');
+            if (!s.lab) { step('next', 'do', 'Outpatient calcium tomorrow morning. Choose lab: OHSU or external.', src); return; }
+            if (s.lab === 'local') {
+                step('next', 'do', 'Outpatient calcium tomorrow morning at OHSU (PPV 3rd floor or CHH). Order in EPIC via discharge orders or a new ambulatory order encounter.', src.concat('g.3.1'));
+                return;
+            }
+            step('next', 'do', 'External outpatient order for serum calcium. Instruct: morning blood draw, then call the surgeon’s office with the lab location.', src.concat('g.3.2'));
+            step('next', 'do', 'Sign out to Thyroid Parathyroid Center nurse or MAs in Area 4 (EPIC message to Thyroid Triage Pool, or Outlook secure message) to follow up the result next day.', ['g.3.3']);
+        }
+
+        /* Outpatient PTH 15–20 has its own lab wording (op.mid.1–3). */
+        function opLab() {
+            ask('lab');
+            if (!s.lab) { step('next', 'do', 'Calcium level tomorrow morning. Choose lab: OHSU or external.', ['op.mid']); return; }
+            if (s.lab === 'local') {
+                step('next', 'do', 'Outpatient EPIC order for ' + (gfr ? 'BMP instead of plasma calcium (preop GFR below 60: renal function, electrolytes, calcium)' : 'calcium level') + ' tomorrow morning at OHSU (PPV 3rd floor or CHH), via discharge orders or a new ambulatory order encounter.', ['op.mid.1']);
+                return;
+            }
+            step('next', 'do', 'External outpatient order for serum calcium. Instruct: morning blood draw, then call the surgeon’s office with the lab location.', ['op.mid.2']);
+            step('next', 'do', 'Sign out to Thyroid Parathyroid Center nurse or MAs in Area 4 (EPIC message or Outlook secure message) to follow up the result next day.', ['op.mid.3']);
+        }
+
+
+        /* PTH < 10, from the POD 1 AM calcium a (items 4–6 and the owner rules). */
+        function vlowFrom(a) {
+            if (a >= 8) {
+                step('am', 'note', '8 or above: no extra dose. Continue standing orders; check 11:00 AM calcium for trend.', ['x.ge8', 'x.cut']);
+                return trend11(a, ['x.ge8']);
+            }
+
+            var hint11 = { hint: '5:00 AM: ' + a };  /* items 4 and 6; item 5 uses trend11 */
+            if (a < 7) {
+                iv('am', 'Below 7, regardless of symptoms: 1 g IV calcium gluconate.', ['v.6']);
+                step('am', 'do', 'Increase calcitriol to 0.75 mcg BID and calcium to 900 mg elemental q8h.', ['v.6']);
+                ask('ca11', hint11); ask('sx11');
+                var b = cc('ca11');
+                if (b === null) return waitCa('11:00 AM');
+                if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
+                if (s.sx11 === 'yes') {
+                    iv('h11', 'Symptomatic: 1 g IV calcium. Repeat if still symptomatic.', ['v.6b']);
+                    step('h11', 'do', 'Calcium q6h; add magnesium to AM labs.', ['v.6b']);
+                    critVlow();
+                    return done('stay', 'Stay overnight: IV calcium, calcium q6h');
+                }
+                if (b < a) {
+                    iv('h11', 'Lower than 5:00 AM, asymptomatic: 1 g IV calcium (item 6b; owner rule over 6a).', ['x.6b', 'v.6b']);
+                    step('h11', 'do', 'Calcium q6h until next morning; add magnesium to AM labs.', ['v.6b']);
+                    critVlow();
+                    return done('stay', 'Stay overnight: IV calcium, calcium q6h');
+                }
+                step('h11', 'do', (b === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': keep same oral regimen. Calcium q6h until next morning; add magnesium to AM labs.', b === a ? ['v.6c', 'x.eq'] : ['v.6c']);
+                critVlow();
+                return done('stay', 'Stay overnight: same oral regimen, calcium q6h');
+            }
+
+            /* 7 ≤ a ≤ 8 */
+            ask('amSx');
+            if (!s.amSx) return done('wait', 'Symptomatic at 5:00 AM?');
+
+            if (s.amSx === 'yes') {
+                iv('am', 'Symptomatic: IV calcium gluconate 1 g over 2 hours. If symptoms persist, give another gram.', ['v.4']);
+                step('am', 'do', 'Calcium q6h. Magnesium level next morning.', ['v.4q6']);
+                ask('ca11', hint11); ask('sx11');
+                var d = cc('ca11');
+                if (d === null) return waitCa('11:00 AM');
+                if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
+                if (d >= 8) {
+                    step('h11', 'do', '8 or above: continue labs q6h.', ['v.4a']);
+                    if (s.sx11 === 'yes') step('h11', 'stay', 'Still symptomatic: escalate by clinical judgement; update attending.', ['x.sx']);
+                } else if (d >= 7) {
+                    if (s.sx11 === 'yes') {
+                        step('h11', 'stay', 'Still symptomatic at 7–8: escalate by clinical judgement. Item 4 allows another gram of IV calcium if symptoms persist; item 4b limits IV calcium to below 7.', ['x.sx', 'v.4', 'v.4b']);
+                    } else if (d < a) {
+                        step('h11', 'do', 'Asymptomatic and lower than 5:00 AM: extra TUMS tablet.', ['v.4b', 'g.2']);
+                    } else {
+                        step('h11', 'note', 'Asymptomatic and not lower than 5:00 AM: no extra dose; IV calcium only if symptomatic and below 7. Continue calcium q6h.', ['v.4b', 'v.4q6']);
+                    }
+                } else if (s.sx11 === 'yes') {
+                    iv('h11', 'Symptomatic and below 7: IV calcium.', ['v.4b']);
+                } else {
+                    iv('h11', 'Below 7 and asymptomatic: treat as item 6. 1 g IV calcium gluconate.', ['x.4lt7', 'v.6']);
+                    step('h11', 'do', 'Increase calcitriol to 0.75 mcg BID; calcium 900 mg elemental q8h.', ['x.4lt7', 'v.6']);
+                }
+                step('pod2', 'do', 'Monitor at least 12 hours after last IV calcium dose, then discharge on same calcium doses if calcium stable or trending up.', ['v.4c']);
+                renalCrit();
+                return done('stay', 'Stay: at least 12 h after the last IV calcium');
+            }
+
+            step('am', 'do', 'Asymptomatic: extra oral calcium 300 mg elemental (TUMS-EX, 1 tablet). Check calcium at 11:00 AM.', ['v.5', 'g.2']);
+            return trend11(a, []);
+        }
+
+        /* PTH < 10 after a 5:00 AM calcium a of 7 or above: item 5's 11:00 AM
+           and 5:00 PM trend, also used for 5:00 AM ≥ 8 (owner rule x.ge8).
+           Symptoms are asked at every check (x.sx); an equal value counts
+           as stable when asymptomatic (x.eq). */
+        function trend11(a, own) {
+            var hint = { hint: 'Compared with 5:00 AM: ' + a };
+            ask('ca11', hint); ask('sx11');
+            var e = cc('ca11');
+            if (e === null) return waitCa('11:00 AM');
+            if (!s.sx11) return done('wait', 'Symptomatic at 11:00 AM?');
+            if (s.sx11 === 'yes') {
+                step('h11', 'stay', 'Symptomatic: escalate by clinical judgement; update attending.', ['x.sx']);
+                return done('stay', 'Symptomatic at 11:00 AM: escalate by clinical judgement');
+            }
+            if (e >= a) {
+                if (blocked()) return R;
+                step('dc', 'dc', (e === a ? 'Same as 5:00 AM and asymptomatic (counts as higher)' : 'Higher than 5:00 AM') + ': may discharge home on calcium 900 mg elemental q8h and calcitriol 0.5 mcg BID.', ['v.5a'].concat(own, e === a ? ['x.eq'] : []));
+                outLab(['v.5a']);
+                return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
+            }
+            step('h11', 'do', 'Lower than 5:00 AM: one extra dose of calcium. Check calcium at 5:00 PM.', ['v.5b'].concat(own));
+            ask('ca17', hint); ask('sx17');
+            var f = cc('ca17');
+            if (f === null) return waitCa('5:00 PM');
+            if (!s.sx17) return done('wait', 'Symptomatic at 5:00 PM?');
+            if (f >= a) {
+                if (s.sx17 === 'yes') {
+                    step('h17', 'stay', 'Stable or improved but symptomatic: escalate by clinical judgement; update attending.', ['x.sx']);
+                    return done('stay', 'Symptomatic at 5:00 PM: escalate by clinical judgement');
+                }
+                if (blocked()) return R;
+                step('dc', 'dc', 'Stable or improved from morning: may discharge home on calcium 900 mg elemental q8h and calcitriol 0.5 mcg BID.', ['v.5b.i'].concat(own));
+                outLab(['v.5b.i']);
+                return done('dc', 'Discharge on calcium 900 mg q8h and calcitriol 0.5 mcg BID');
+            }
+            if (s.sx17 === 'yes') {
+                iv('h17', 'Lower and symptomatic: 1 g IV calcium.', ['v.5b.iii'].concat(own));
+                step('h17', 'do', 'One extra TUMS; increase calcitriol to 1 mcg BID. Calcium q6h until next morning.', ['v.5b.iii', 'g.2']);
+                critVlow();
+                return done('stay', 'Stay overnight: IV calcium, calcitriol 1 mcg BID');
+            }
+            step('h17', 'do', 'Lower and asymptomatic: one extra TUMS; increase calcitriol to 0.75 mcg BID. Calcium q6h until next morning.', ['v.5b.ii', 'g.2'].concat(own));
+            critVlow();
+            return done('stay', 'Stay overnight: calcitriol 0.75 mcg BID, calcium q6h');
+        }
+
+        function renalCrit() {
+            if (gfr) step('pod2', 'do', 'Renal insufficiency: creatinine must also be same as or better than preop. If worse, another day of IV hydration and repeat BMP.', ['ip.renal']);
+        }
+        function critLow() {
+            step('pod2', 'do', 'Discharge next morning only if asymptomatic, no clinical signs of hypocalcemia, and corrected calcium above 7.8 mg/dL and trending up.', ['ip.low.crit']);
+            renalCrit();
+        }
+        function critVlow() {
+            step('pod2', 'do', 'Discharge next morning only if asymptomatic, no clinical signs of hypocalcemia (e.g. EKG change), and corrected calcium above 7.8 mg/dL and trending up. Discharge on in-hospital calcium and calcitriol doses unless attending says otherwise.', ['v.crit']);
+            renalCrit();
+        }
+
+        /* ---- scope ---- */
+        ask('excluded');
+        if (s.excluded === 'yes') {
+            step('rr', 'stop', 'Not for secondary hyperparathyroidism on dialysis or tertiary hyperparathyroidism; separate protocol.', ['scope', 'v.2']);
+            return done('stop', 'This protocol does not apply');
+        }
+        ask('setting');
+        if (!s.setting) return done('wait', 'Choose the setting');
+        ask('gfr');
+        ask('pth');
+        ask('tier');
+
+        var pth = val('pth');
+        var tier = pth !== null ? tierOf(pth) : (TIER_LABEL[s.tier] ? s.tier : null);
+        if (!tier) return done('wait', R.invalid.pth ? 'Check the PTH value' : 'Enter the recovery-room PTH');
+        R.tier = tier;
+
+
+        /* ---- outpatient, same-day discharge ---- */
+        if (s.setting === 'op') {
+            if (tier === 'gt20') {
+                step('rr', 'dc', 'Discharge home today. No calcium supplements.', ['op.gt20']);
+                return done('dc', 'Discharge home, no supplements');
+            }
+            if (tier === 'mid') {
+                step('rr', 'dc', 'Discharge home today on calcium carbonate 300 mg elemental q8h (TUMS-EX, 1 tablet).', ['op.mid', 'g.2']);
+                opLab();
+                return done('dc', 'Discharge home on calcium 300 mg q8h; calcium tomorrow AM');
+            }
+            step('rr', 'stay', 'PTH below 15: admit overnight, Observation status (not Inpatient). Overnight orders follow.', ['op.lt15', 'ip.check']);
+        }
+
+        /* ---- overnight or inpatient ---- */
+        if (tier === 'gt20') {
+            if (gfr) {
+                step('am', 'do', 'AM BMP (history of renal insufficiency).', ['ip.gt20']);
+                if (blocked()) return R;
+            } else {
+                step('am', 'note', 'No AM labs needed.', ['ip.gt20']);
+            }
+            step('dc', 'dc', 'Discharge without supplements.', ['ip.gt20']);
+            return done('dc', 'Discharge, no supplements');
+        }
+
+        if (tier === 'mid') {
+            step('rr', 'do', 'Start calcium carbonate 300 mg elemental q8h (TUMS-EX, 1 tablet).', ['ip.mid', 'g.2']);
+            step('am', 'do', gfr ? 'AM BMP instead of plasma calcium (preop GFR below 60: renal function, electrolytes and calcium).' : 'AM calcium level.', ['ip.mid']);
+            ask('alb'); ask('amCa', { label: 'POD 1 AM calcium' });
+            var c = cc('amCa');
+            if (c === null) return waitCa('AM');
+            if (c >= 8.5) {
+                if (blocked()) return R;
+                step('dc', 'dc', 'Discharge without any supplements.', ['ip.mid.1']);
+                return done('dc', 'Discharge, no supplements');
+            }
+            if (blocked()) return R;
+            step('dc', 'dc', 'Discharge on calcium 300 mg elemental q8h (TUMS-EX, 1 tablet).', ['ip.mid.2', 'ip.mid.2a']);
+            outLab(['ip.mid.2b']);
+            return done('dc', 'Discharge on calcium 300 mg q8h; calcium tomorrow AM');
+        }
+
+        if (tier === 'low') {
+            step('rr', 'do', 'Start calcium carbonate 600 mg elemental q8h with food (TUMS-EX, 2 tablets). Order "every 8 hours", not TID.', ['ip.low', 'g.2']);
+            step('am', 'do', 'AM labs: PTH (select Urgent) and ' + (gfr ? 'BMP (preop GFR below 60).' : 'plasma calcium.'), ['ip.low']);
+            step('pm', 'do', 'Update attending in the afternoon.', ['ip.low.att']);
+            ask('alb'); ask('amPth'); ask('amCa', { label: 'POD 1 AM calcium' });
+            var p2 = val('amPth');
+            var c1 = cc('amCa');
+            if (p2 === null) return done('wait', R.invalid.amPth ? 'Check the AM PTH value' : 'Enter the AM PTH');
+            if (c1 === null) return waitCa('AM');
+            if (p2 >= 10) {
+                /* "< or = 8.5" is written here, so 8.5 stays on the supplement side. */
+                if (c1 > 8.5) {
+                    if (blocked()) return R;
+                    step('dc', 'dc', 'Discharge without supplements.', ['ip.low.1']);
+                    return done('dc', 'Discharge, no supplements');
+                }
+                if (blocked()) return R;
+                step('dc', 'dc', 'Discharge on calcium 600 mg elemental q8h (TUMS-EX, 2 tablets).', ['ip.low.2', 'ip.low.2a']);
+                outLab(['ip.low.2b']);
+                return done('dc', 'Discharge on calcium 600 mg q8h; calcium tomorrow AM');
+            }
+            if (c1 < 8.5) {
+                step('am', 'do', 'AM PTH below 10 with calcium below 8.5: move to PTH < 10 pathway. Start calcitriol 0.5 mcg BID and calcium 900 mg elemental q8h with food (TUMS-EX, 3 tablets); plasma calcium q6h from 11:00 AM; AM magnesium, replace to normal range.', ['x.low', 'v.1', 'v.2', 'v.3', 'g.2']);
+                R.tier = 'lt10';
+                return vlowFrom(c1);
+            }
+            step('am', 'do', 'Start calcitriol 0.25 mcg BID. Repeat calcium at 11:00 AM.', ['ip.low.3']);
+            ask('ca11');
+            var c11 = cc('ca11');
+            if (c11 === null) return waitCa('11:00 AM');
+            if (c11 >= 8.5) {
+                if (blocked()) return R;
+                step('dc', 'dc', 'Discharge on calcium 600 mg elemental q8h and calcitriol 0.25 mcg BID.', ['ip.low.3a', 'ip.low.3a.i']);
+                outLab(['ip.low.3a.ii']);
+                return done('dc', 'Discharge on calcium 600 mg q8h and calcitriol 0.25 mcg BID');
+            }
+            step('h11', 'do', 'Increase calcitriol to 0.5 mcg BID. Check calcium at 5:00 PM.', ['ip.low.3b']);
+            ask('ca17');
+            var c17 = cc('ca17');
+            if (c17 === null) return waitCa('5:00 PM');
+            if (c17 >= 8.5) {
+                if (blocked()) return R;
+                step('dc', 'dc', 'Discharge home on calcium 600 mg q8h and calcitriol 0.5 mcg BID.', ['ip.low.3b.i', 'ip.low.3b.i.1']);
+                outLab(['ip.low.3b.i.2']);
+                return done('dc', 'Discharge on calcium 600 mg q8h and calcitriol 0.5 mcg BID');
+            }
+            step('h17', 'stay', 'One extra dose of calcium 300 mg. Keep in hospital; calcium q6h.', ['ip.low.3b.ii']);
+            critLow();
+            return done('stay', 'Stay overnight: extra calcium 300 mg, calcium q6h');
+        }
+
+        /* tier === 'lt10' */
+        step('eve', 'do', 'Start calcitriol 0.5 mcg BID and calcium carbonate 900 mg elemental q8h with food (TUMS-EX, 3 tablets). Order "every 8 hours", not TID. First dose this evening.', ['v.1', 'g.2']);
+        step('eve', 'do', 'Order BMP and magnesium for POD 1 5:00 AM. Replace magnesium to normal range.', ['v.2', 'v.3']);
+        step('eve', 'do', 'Order plasma calcium q6h from POD 1 11:00 AM. Order defaults to now: change time to "tomorrow 11:00 am".', ['v.2']);
+        step('eve', 'note', 'No calcium level tonight unless hypocalcemia symptoms (perioral, bilateral hands/feet numbness or tingling).', ['v.2']);
+        step('pm', 'do', 'Update attending in the afternoon.', ['v.att']);
+
+        ask('dos');
+        if (s.dos === 'sx') {
+            ask('cramp');
+            if (s.cramp === 'yes') {
+                iv('eve', 'Hand or leg cramping or spasm: order 1 g IV calcium; draw STAT calcium immediately, before infusion.', ['v.dos']);
+            } else if (s.cramp === 'no') {
+                ask('dose');
+                if (s.dose === 'not') step('eve', 'do', 'No cramping, evening dose not yet given: nurse gives ordered oral supplement now. Order and check STAT calcium.', ['v.dos2']);
+                else if (s.dose === 'given') step('eve', 'do', 'No cramping, evening dose already given: one additional 300 mg elemental TUMS. Order and check STAT calcium.', ['v.dos2', 'g.2']);
+                else step('eve', 'do', 'No cramping: evening oral dose given?', ['v.dos2']);
+            } else {
+                step('eve', 'do', 'Symptoms this evening: assess for hand or leg cramping or spasm.', ['v.dos']);
+            }
+        }
+
+        ask('alb'); ask('amCa', { label: 'POD 1 5:00 AM calcium' });
+        var a = cc('amCa');
+        if (a === null) return waitCa('5:00 AM');
+
+        return vlowFrom(a);
+    }
+
+    var api = { evaluate: evaluate, corrected: corrected, tierOf: tierOf, parseNum: parseNum, WHEN: WHEN, RANGE: RANGE };
+    try { window.HypoCa = api; } catch (e) { /* not a browser */ }
+
+    /* ---------------- 2. Page ---------------- */
+
+    var doc;
+    try { doc = window.document; } catch (e) { return; }
+    var root = doc && doc.getElementById('hc');
+    if (!root) return;
+
+    var SRC = window.__HYPOCA_SOURCE || { sections: [] };
+    var BY_ID = {};
+    (function index(items) {
+        items.forEach(function (it) { BY_ID[it.id] = it; if (it.kids) index(it.kids); });
+    })([].concat.apply([], SRC.sections.map(function (sec) { return sec.items; })));
+
+    var YN = [['no', 'No'], ['yes', 'Yes']];
+    /* Every question, in page order. group = the heading it sits under. */
+    var QUESTIONS = [
+        { k: 'excluded', g: 'pt', type: 'radio', label: 'Secondary HPT on dialysis, or tertiary HPT?', opts: YN },
+        { k: 'setting', g: 'pt', type: 'radio', label: 'Setting', opts: [['op', 'Outpatient, same-day discharge'], ['ip', 'Overnight or inpatient']] },
+        { k: 'gfr', g: 'pt', type: 'radio', label: 'Preop GFR below 60 (renal insufficiency)?', opts: YN },
+        { k: 'pth', g: 'rr', type: 'num', label: 'Intraop PTH, recovery room', unit: 'pg/mL' },
+        { k: 'tier', g: 'rr', type: 'radio', label: 'or choose the tier', opts: [['lt10', '< 10'], ['low', '10 – 15'], ['mid', '15 – 20'], ['gt20', '> 20']] },
+        { k: 'dos', g: 'eve', type: 'radio', label: 'Hypocalcemia symptoms?', hint: 'Perioral, or bilateral hands/feet numbness or tingling', opts: [['none', 'None'], ['sx', 'Symptoms']] },
+        { k: 'cramp', g: 'eve', type: 'radio', label: 'Hand or leg cramping or spasm?', opts: YN },
+        { k: 'dose', g: 'eve', type: 'radio', label: 'Ordered evening oral dose given?', opts: [['not', 'Not yet'], ['given', 'Given']] },
+        { k: 'alb', g: 'am', type: 'num', label: 'Albumin (optional)', unit: 'g/dL', hint: 'Corrects all calcium values: Ca + 0.8 × (4.0 − albumin). Blank = values already corrected.' },
+        { k: 'amPth', g: 'am', type: 'num', label: 'AM PTH (urgent)', unit: 'pg/mL' },
+        { k: 'amCa', g: 'am', type: 'ca', label: 'POD 1 AM calcium', unit: 'mg/dL' },
+        { k: 'amSx', g: 'am', type: 'radio', label: 'Symptomatic at 5:00 AM?', opts: YN },
+        { k: 'ca11', g: 'h11', type: 'ca', label: '11:00 AM calcium', unit: 'mg/dL' },
+        { k: 'sx11', g: 'h11', type: 'radio', label: 'Symptomatic at 11:00 AM?', opts: YN },
+        { k: 'ca17', g: 'h17', type: 'ca', label: '5:00 PM calcium', unit: 'mg/dL' },
+        { k: 'sx17', g: 'h17', type: 'radio', label: 'Symptomatic at 5:00 PM?', opts: YN },
+        { k: 'cr', g: 'dc', type: 'radio', label: 'Creatinine vs preop', opts: [['same', 'Same or better'], ['worse', 'Worse']] },
+        { k: 'lab', g: 'dc', type: 'radio', label: 'Tomorrow-morning lab', opts: [['local', 'OHSU'], ['ext', 'External lab']] },
+    ];
+    var GROUPS = [
+        ['pt', 'Patient'], ['rr', 'Recovery room'], ['eve', 'Evening of surgery'],
+        ['am', 'POD 1 · morning'], ['h11', 'POD 1 · 11:00 AM'], ['h17', 'POD 1 · 5:00 PM'], ['dc', 'Discharge'],
+    ];
+    var DEFAULTS = { excluded: 'no', gfr: 'no', dos: 'none' };
+
+    var state = {};
+    function reset() {
+        state = {};
+        QUESTIONS.forEach(function (q) { state[q.k] = DEFAULTS[q.k] || (q.type === 'radio' ? null : ''); });
+    }
+    reset();
+
+    function el(tag, cls, text) {
+        var n = doc.createElement(tag);
+        if (cls) n.className = cls;
+        if (text !== undefined && text !== null) n.textContent = text;
+        return n;
+    }
+
+    /* ---- build the questions once (focus survives every re-render) ---- */
+    var form = doc.getElementById('hc-form');
+    var nodes = {}, groupNodes = {};
+    GROUPS.forEach(function (g) {
+        var sec = el('section', 'hc-group');
+        sec.setAttribute('aria-labelledby', 'hc-g-' + g[0]);
+        var h = el('h2', 'site-kicker hc-group-h', g[1]);
+        h.id = 'hc-g-' + g[0];
+        sec.appendChild(h);
+        groupNodes[g[0]] = sec;
+        form.appendChild(sec);
+    });
+
+    QUESTIONS.forEach(function (q) {
+        var wrap, input = null, out = null, hint = null;
+        if (q.type === 'radio') {
+            wrap = el('fieldset', 'hc-q hc-q-radio');
+            wrap.appendChild(el('legend', 'hc-label', q.label));
+            if (q.hint) wrap.appendChild(el('p', 'hc-hint', q.hint));
+            var seg = el('div', 'hc-seg');
+            q.opts.forEach(function (o) {
+                var lab = el('label', 'hc-opt');
+                var r = doc.createElement('input');
+                r.type = 'radio'; r.name = 'hc-' + q.k; r.value = o[0];
+                r.addEventListener('change', function () { onRadio(q.k, o[0]); });
+                lab.appendChild(r);
+                lab.appendChild(el('span', null, o[1]));
+                seg.appendChild(lab);
+            });
+            wrap.appendChild(seg);
+        } else {
+            wrap = el('div', 'hc-q hc-q-num');
+            var id = 'hc-in-' + q.k;
+            var l = el('label', 'hc-label', q.label);
+            l.htmlFor = id;
+            wrap.appendChild(l);
+            var row = el('div', 'hc-num-row');
+            input = doc.createElement('input');
+            input.id = id; input.type = 'text'; input.inputMode = 'decimal';
+            input.autocomplete = 'off'; input.spellcheck = false;
+            input.addEventListener('input', function () { onNum(q.k, input.value); });
+            row.appendChild(input);
+            row.appendChild(el('span', 'hc-unit', q.unit));
+            out = el('output', 'hc-out');
+            out.htmlFor = id;
+            row.appendChild(out);
+            wrap.appendChild(row);
+            hint = el('p', 'hc-hint', q.hint || '');
+            wrap.appendChild(hint);
+        }
+        wrap.hidden = true;
+        groupNodes[q.g].appendChild(wrap);
+        nodes[q.k] = { q: q, wrap: wrap, input: input, out: out, hint: hint };
+    });
+
+    function onRadio(k, v) {
+        state[k] = v;
+        if (k === 'tier') { state.pth = ''; if (nodes.pth.input) nodes.pth.input.value = ''; }
+        render();
+    }
+    function onNum(k, v) {
+        state[k] = v;
+        if (k === 'pth') { state.tier = null; }
+        render();
+    }
+
+    /* ---- protocol text, built once; cited items are marked per render ---- */
+    var srcHost = doc.getElementById('hc-source-body');
+    var srcNodes = {};
+    function buildItems(items, depth) {
+        var ul = el('ul', 'hc-src-list' + (depth ? ' hc-src-sub' : ''));
+        items.forEach(function (it) {
+            var li = el('li', 'hc-src-item' + (it.added ? ' is-added' : ''));
+            li.id = 'src-' + it.id;
+            li.tabIndex = -1;
+            var p = el('p', 'hc-src-text');
+            if (it.added) p.appendChild(el('span', 'hc-src-added', 'Owner rule'));
+            if (it.n) p.appendChild(el('span', 'hc-src-n', it.n));
+            p.appendChild(doc.createTextNode(it.text));
+            li.appendChild(p);
+            if (it.kids) li.appendChild(buildItems(it.kids, depth + 1));
+            ul.appendChild(li);
+            srcNodes[it.id] = li;
+        });
+        return ul;
+    }
+    if (srcHost) {
+        SRC.sections.forEach(function (sec) {
+            var s = el('section', 'hc-src-sec');
+            if (sec.title) s.appendChild(el('h3', 'hc-src-h', sec.title));
+            s.appendChild(buildItems(sec.items, 0));
+            srcHost.appendChild(s);
+        });
+    }
+
+    /* ---- render ---- */
+    var planHost = doc.getElementById('hc-plan-body');
+    var dispoHost = doc.getElementById('hc-dispo');
+    var dock = doc.getElementById('hc-dock');
+    var dockText = doc.getElementById('hc-dock-text');
+    var quotesBox = doc.getElementById('hc-quotes');
+    var last = null;
+
+    var DISPO_KICKER = { wait: 'Next', dc: 'Discharge', stay: 'In hospital', stop: 'Stop' };
+    var KIND_LABEL = { iv: 'IV calcium', stop: 'Stop', dc: 'Discharge', stay: 'Stay' };
+
+    function fmt(n) { return String(round2(n)); }
+
+    function render() {
+        var R = evaluate(state);
+        last = R;
+
+        /* questions */
+        QUESTIONS.forEach(function (q) {
+            var n = nodes[q.k];
+            var a = R.ask[q.k];
+            n.wrap.hidden = !a;
+            if (!a) return;
+            if (q.type === 'radio') {
+                var cur = state[q.k];
+                if (q.k === 'tier' && !cur && R.tier) cur = R.tier;
+                n.wrap.querySelectorAll('input').forEach(function (r) { r.checked = r.value === cur; });
+                return;
+            }
+            var label = n.wrap.querySelector('.hc-label');
+            label.textContent = (a.label || q.label);
+            var bad = !!R.invalid[q.k];
+            n.input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+            var hintText = a.hint || q.hint || '';
+            if (bad) hintText = 'Implausible value (' + q.unit + ').';
+            n.hint.textContent = hintText;
+            n.hint.hidden = !hintText;
+            n.hint.classList.toggle('is-bad', bad);
+            n.out.textContent = '';
+            if (q.type === 'ca') {
+                var v = parseNum(state[q.k]);
+                var alb = parseNum(state.alb);
+                var albOk = alb !== null && !isNaN(alb) && alb >= RANGE.alb[0] && alb <= RANGE.alb[1];
+                if (v !== null && !bad) {
+                    if (albOk) n.out.textContent = 'corrected ' + fmt(corrected(v, alb));
+                    else if (alb === null) n.out.textContent = 'used as corrected';
+                }
+            }
+        });
+        GROUPS.forEach(function (g) {
+            var sec = groupNodes[g[0]];
+            sec.hidden = !sec.querySelector('.hc-q:not([hidden])');
+        });
+
+        /* disposition */
+        dispoHost.textContent = '';
+        dispoHost.className = 'hc-dispo is-' + R.dispo.kind;
+        dispoHost.appendChild(el('p', 'site-kicker hc-dispo-k', DISPO_KICKER[R.dispo.kind] || ''));
+        dispoHost.appendChild(el('p', 'hc-dispo-t', R.dispo.text));
+        if (dock) {
+            ['wait', 'dc', 'stay', 'stop'].forEach(function (k) { dock.classList.toggle('is-' + k, k === R.dispo.kind); });
+            dockText.textContent = R.dispo.text;
+        }
+
+        /* plan */
+        var showQuotes = !quotesBox || quotesBox.checked;
+        planHost.textContent = '';
+        var steps = R.steps.map(function (st, i) { return { st: st, i: i }; });
+        var order = {};
+        WHEN.forEach(function (w, i) { order[w[0]] = i; });
+        steps.sort(function (x, y) { return (order[x.st.when] - order[y.st.when]) || (x.i - y.i); });
+        var quoted = {}, cited = {};
+        var curWhen = null, ol = null;
+        steps.forEach(function (o) {
+            var st = o.st;
+            if (st.when !== curWhen) {
+                curWhen = st.when;
+                var label = WHEN[order[st.when]][1];
+                planHost.appendChild(el('h3', 'site-kicker hc-when', label));
+                ol = el('ol', 'hc-steps');
+                planHost.appendChild(ol);
+            }
+            var li = el('li', 'hc-step is-' + st.kind);
+            if (KIND_LABEL[st.kind]) li.appendChild(el('span', 'hc-step-k', KIND_LABEL[st.kind]));
+            li.appendChild(el('p', 'hc-step-t', st.text));
+            var refs = el('p', 'hc-refs');
+            st.src.forEach(function (id, j) {
+                var it = BY_ID[id];
+                if (!it) return;
+                cited[id] = true;
+                if (showQuotes && !quoted[id]) {
+                    quoted[id] = true;
+                    var bq = el('blockquote', 'hc-quote' + (it.added ? ' is-added' : ''));
+                    var qp = el('p');
+                    if (it.added) qp.appendChild(el('span', 'hc-src-added', 'Owner rule'));
+                    qp.appendChild(doc.createTextNode((it.n ? it.n + ' ' : '') + it.text));
+                    bq.appendChild(qp);
+                    li.appendChild(bq);
+                }
+                var a = el('a', 'hc-ref', it.ref);
+                a.href = '#src-' + id;
+                a.setAttribute('data-src', id);
+                if (j) refs.appendChild(doc.createTextNode(' · '));
+                refs.appendChild(a);
+            });
+            if (refs.childNodes.length) li.appendChild(refs);
+            ol.appendChild(li);
+        });
+        if (!steps.length) planHost.appendChild(el('p', 'hc-empty', 'No plan yet.'));
+
+        Object.keys(srcNodes).forEach(function (id) { srcNodes[id].classList.toggle('is-cited', !!cited[id]); });
+    }
+
+    /* ---- plain-text plan ---- */
+    function planText() {
+        var R = last || evaluate(state);
+        var lines = [(SRC.name || 'Shindo Protocol') + ': postop hypocalcemia (' + (SRC.origin || 'OHSU') + ')', ''];
+        QUESTIONS.forEach(function (q) {
+            if (!R.ask[q.k]) return;
+            var v = state[q.k];
+            if (q.k === 'tier' && !v) return;
+            if (v === null || v === '') return;
+            var label = (R.ask[q.k].label || q.label).replace(/^or choose the tier$/, 'PTH tier');
+            if (q.type === 'radio') {
+                var opt = q.opts.filter(function (o) { return o[0] === v; })[0];
+                lines.push(label + ': ' + (opt ? opt[1] : v));
+            } else {
+                var line = label + ': ' + String(v).trim() + ' ' + q.unit;
+                if (q.type === 'ca') {
+                    var c = parseNum(v), alb = parseNum(state.alb);
+                    if (c !== null && !isNaN(c) && alb !== null && !isNaN(alb)) line += ' (corrected ' + fmt(corrected(c, alb)) + ')';
+                }
+                lines.push(line);
+            }
+        });
+        lines.push('', (DISPO_KICKER[R.dispo.kind] || '') + ': ' + R.dispo.text);
+        var order = {};
+        WHEN.forEach(function (w, i) { order[w[0]] = i; });
+        var steps = R.steps.map(function (st, i) { return { st: st, i: i }; })
+            .sort(function (x, y) { return (order[x.st.when] - order[y.st.when]) || (x.i - y.i); });
+        var cur = null;
+        steps.forEach(function (o) {
+            if (o.st.when !== cur) { cur = o.st.when; lines.push('', WHEN[order[cur]][1]); }
+            var refs = o.st.src.map(function (id) { return BY_ID[id] ? BY_ID[id].ref : null; }).filter(Boolean);
+            var tag = o.st.kind === 'iv' ? '[IV] ' : '';
+            lines.push('- ' + tag + o.st.text + (refs.length ? ' [' + refs.join('; ') + ']' : ''));
+        });
+        lines.push('', 'Corrected Ca = Ca + 0.8 × (4.0 − albumin), Payne (owner rule).');
+        return lines.join('\n');
+    }
+
+    var copyBtn = doc.getElementById('hc-copy');
+    var status = doc.getElementById('hc-status');
+    function say(t) { if (status) { status.textContent = t; setTimeout(function () { if (status.textContent === t) status.textContent = ''; }, 2500); } }
+    function fallbackCopy(text) {
+        var ta = el('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.className = 'visually-hidden';
+        doc.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = doc.execCommand('copy'); } catch (e) { ok = false; }
+        doc.body.removeChild(ta);
+        say(ok ? 'Plan copied.' : 'Copy failed: select and copy manually.');
+    }
+    if (copyBtn) copyBtn.addEventListener('click', function () {
+        var text = planText();
+        try {
+            navigator.clipboard.writeText(text).then(function () { say('Plan copied.'); }, function () { fallbackCopy(text); });
+        } catch (e) { fallbackCopy(text); }
+    });
+
+    var resetBtn = doc.getElementById('hc-reset');
+    if (resetBtn) resetBtn.addEventListener('click', function () {
+        reset();
+        QUESTIONS.forEach(function (q) { if (nodes[q.k].input) nodes[q.k].input.value = ''; });
+        render();
+        say('Cleared.');
+        try { (nodes.setting.wrap.querySelector('input') || form).focus(); } catch (e) { /* no-op */ }
+    });
+
+    if (quotesBox) quotesBox.addEventListener('change', render);
+
+    /* A citation jumps to its item in the protocol text and marks it. */
+    root.addEventListener('click', function (ev) {
+        var a = ev.target.closest && ev.target.closest('a[data-src]');
+        if (!a) return;
+        var li = srcNodes[a.getAttribute('data-src')];
+        if (!li) return;
+        ev.preventDefault();
+        var det = doc.getElementById('hc-source');
+        if (det && det.tagName === 'DETAILS') det.open = true;
+        li.classList.remove('is-hit');
+        void li.offsetWidth;
+        li.classList.add('is-hit');
+        try { li.scrollIntoView({ block: 'center' }); li.focus({ preventScroll: true }); } catch (e) { /* no-op */ }
+    });
+
+    /* Phone dock: hidden while the plan itself is on screen. */
+    try {
+        var planEl = doc.getElementById('hc-plan');
+        if (dock && planEl && 'IntersectionObserver' in window) {
+            new IntersectionObserver(function (es) {
+                dock.classList.toggle('is-away', es[0].isIntersecting);
+            }).observe(planEl);
+        }
+    } catch (e) { /* no-op: the dock just stays */ }
+
+    root.setAttribute('data-ready', '1');
+    render();
+})();

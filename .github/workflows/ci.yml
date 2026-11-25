@@ -64,6 +64,10 @@ jobs:
       - name: Check committed data
         run: node tools/check-data.mjs
 
+      # Postop hypocalcemia protocol logic, every branch; zero deps.
+      - name: Test hypocalcemia protocol
+        run: node tools/test-hypocalcemia.mjs
+
       # Every OKSAT module against the quality spec; zero deps, instant.
       - name: Lint OKSAT modules
         run: node tools/lint-oksat.mjs

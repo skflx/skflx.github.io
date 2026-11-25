@@ -11,7 +11,7 @@
      - nothing is fetched before the first Cmd/Ctrl-K: no palette.js,
        no contentIndex.json
      - Ctrl+K opens #cmd-k-palette, focus lands in the box
-     - the empty box lists the six site pages only
+     - the empty box lists the seven site pages only
      - typing filters; a wiki query lists the stubbed note
      - a second open does not fetch the wiki index again
      - Esc closes and focus returns to the element that had it
@@ -124,7 +124,7 @@ try {
         await corporaIn(p);
         await wikiSettled(p);
         const pagesOnly = await optTitles(p);
-        check(pagesOnly.length === 6, 'empty box lists the six site pages', `${pagesOnly.length}: ${pagesOnly.join(' | ')}`);
+        check(pagesOnly.length === 7, 'empty box lists the seven site pages', `${pagesOnly.length}: ${pagesOnly.join(' | ')}`);
         check(!(await p.$$eval('#cmdk-list .cmdk-group', (gs) => gs.map((g) => g.textContent))).some((t) => /Wiki|OKSAT|CPT/.test(t)),
             'empty box shows the Site pages group only');
 
@@ -226,7 +226,7 @@ try {
         await p.waitForTimeout(300);
         check(await isOpen(p), 'the palette still opens when the wiki index fails');
         const pages = await optTitles(p);
-        check(pages.length === 6, 'site pages still list with the wiki index failed', `${pages.length}`);
+        check(pages.length === 7, 'site pages still list with the wiki index failed', `${pages.length}`);
         await p.fill('#cmdk-input', 'otoplasty');
         await p.waitForFunction(() => document.querySelectorAll('#cmdk-list [role="option"]').length > 0, null, { timeout: 10000 });
         const hits = await optTitles(p);

@@ -126,6 +126,26 @@ vendored (`js/vendor/README.md`). Reads the PDF in memory; writes nothing to sto
 
 ---
 
+## Shindo Protocol: postop hypocalcemia (`hypocalcemia.html`)
+
+**State:** listed tool (one-pager Tools, hero index, palette). The OHSU OTO-HNS
+protocol, verbatim in `js/hypocalcemia-protocol.js`, driven by a DOM-free
+`evaluate()` in `js/hypocalcemia.js`: questions appear as the protocol needs
+them, the plan groups steps by time and quotes each cited line, and the full
+text sits below with cited lines ruled. The owner's rules for what the text
+leaves open are marked "Owner rule" in their sections (`added: true`, ids
+`x.*`): cutoffs count as exceeding unless the text writes the equality; Payne;
+PTH in pg/mL; PTH < 10 always checks the 11 AM calcium for its trend (5 AM ≥ 8
+follows item 5); an equal value counts as stable when asymptomatic; symptoms
+are asked at every PTH < 10 check and escalated by clinical judgement; item 4
+below 7 is treated as item 6; 6b over 6a; PTH 10–15 with AM PTH < 10 and
+calcium < 8.5 moves to the PTH < 10 pathway. No input combination is left
+unspecified. No storage.
+
+**Next (owner):** vet the step wording against the quoted lines.
+
+---
+
 ## Atlas (`atlas.html`)
 
 **State:** unlisted (`noindex`). Hand-authored midsagittal SVG; values are draft until
